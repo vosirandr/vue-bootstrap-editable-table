@@ -3,11 +3,42 @@ _Тестовое задание для фронт-енд разработчик
 
 Результатом данного задания должен быть vue-компонент (с сетью вложенных компонентов) в виде конструктора таблицы, который принимает на вход данные и отрисовывает конструктор-таблицу.
 
-  Empty cell  |  Name  |  Text  |  Image  |  Number  | *[Add column]*
---------------|--------|--------|---------|----------|---------
-  Empty cell  |  Name 1  | Raw description text |  <img height="15" src="https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-image-512.png" alt="Image 1">  | 42 |
-  Empty cell  |  Name 2  | Another description  |  <img height="15" src="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcRIbx6cBvdznxOwpCO0RK5zhHhWh0x08azCGzCtjpNUNkJZtq46&usqp=CAU" alt="Image 2">  | 21 |
-  **Total**  |    -    |    -    |    -    |  **63** *[Sum]* |
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Text</th>
+      <th>Image</th>
+      <th>Number</th>
+      <th><i>[Add column]</i></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Name 1</td>
+      <td>Raw description text</td>
+      <td><img height="15" src="https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-image-512.png" alt="Image 1"></td>
+      <td>42</td>
+    </tr>
+    <tr>
+      <td>Name 2</td>
+      <td>Raw description text 2</td>
+      <td><img height="15" src="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcRIbx6cBvdznxOwpCO0RK5zhHhWh0x08azCGzCtjpNUNkJZtq46&usqp=CAU" alt="Image 2"></td>
+      <td>21</td>
+    </tr>
+  </tbody>
+  <tfoot>
+    <tr>
+      <th>Total</th>
+      <th></th>
+      <th></th>
+      <th>63 <i>[Sum]<i></th>
+    </tr>
+    <tr>
+      <th><i>[Add row]</i></th>
+    </tr>
+  </tfoot>
+</table>
 
 ## Требования к таблице
 
@@ -16,7 +47,8 @@ _Тестовое задание для фронт-енд разработчик
 - [x] Каждая колонка имеет один из типов данных: текст, ссылка на картинку, число
 - [x] При клике на ячейку в колонке, ячейка переходит в режим редактирования и пользователь может поменять ее значение. При потере фокуса происходит валидация значения по типу данных, если все ок, то режим редактирования отключается, иначе показывает ошибка
 - [x] В заголовке таблицы справа есть кнопка [Add column] - это кнопка-дропдаун с выбором типа значений колонки для добавления, выбрав тип, в конец таблицы добавляется новая колонка с пустыми ячейками.
-- [x] Последняя строка таблицы идет Total, которая пока будет использоваться для колонки с числовым типом. *[Sum]* - это кнопка-дропдаун (sum по-умолчанию), который производит подсчеты значений в колонке с типом Число. Пока нужно реализовать следующие алгоритмы: sum, mean, median, min, max, count
+- [x] В первой колонке, в последней строчке, находится кнопка **_[Add row]_**, которая добавляет новую строчку
+- [x] Предпоследняя строка таблицы идет Total, которая пока будет использоваться для колонки с числовым типом. **_[Sum]_** - это кнопка-дропдаун (sum по-умолчанию), который производит подсчеты значений в колонке с типом Число. Пока нужно реализовать следующие алгоритмы: sum, mean, median, min, max, count
 - [x] Каждое изменение таблицы на "горячую" сохраняется в БД
 - [x] При перезагрузке страницы данные берутся из БД
 
