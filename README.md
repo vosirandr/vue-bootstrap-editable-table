@@ -74,7 +74,7 @@ _Тестовое задание для фронт-енд разработчик
   - Изменение свойств, добавление или удаление строк и столбцов
 - [ ] Описать как работать с колл-беками в `API.md`
 - [ ] Если не настроены колл-беки, сделать дефолтные, которые просто обращаются к БД (Vuex + localstorage)
-- [ ] Подготовить для npm, чтобы можно было вставлять в разные проекты (см. [как тут](https://www.freecodecamp.org/news/how-to-make-a-beautiful-tiny-npm-package-and-publish-it-2881d4307f78/))
+- [ ] Подготовить для npm, чтобы можно было вставлять в разные проекты (см. [как тут](https://www.freecodecamp.org/news/how-to-make-a-beautiful-tiny-npm-package-and-publish-it-2881d4307f78/)). `bootstrap-vue/nuxt` должно остаться в dependencies 
 
 ## Требования к технологиям
 
