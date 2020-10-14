@@ -20,9 +20,13 @@
           Add column
         </template>
 
-        <b-dropdown-item href="#" @click="$emit('add-col', 'text')">Text</b-dropdown-item>
-        <b-dropdown-item href="#" @click="$emit('add-col', 'image')">Image</b-dropdown-item>
-        <b-dropdown-item href="#" @click="$emit('add-col', 'number')">Number</b-dropdown-item>
+        <b-dropdown-item
+          v-for="type in types"
+          :key="type"
+          @click="$emit('add-col', type)"
+        >
+          {{ type | capitalize }}
+        </b-dropdown-item>
       </b-dropdown>
 
       <icon-button style="margin-left: 10px;" @click="$emit('delete-mode', !deleteMode)" />
@@ -43,6 +47,11 @@ export default {
   props: {
     fields: { type: Array, required: true },
     deleteMode: { type: Boolean, default: false }
+  },
+  data () {
+    return {
+      types: ['text', 'image', 'number'],
+    }
   },
   methods: {
     onClickDelete(fieldName) {

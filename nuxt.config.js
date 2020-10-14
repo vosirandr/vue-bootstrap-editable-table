@@ -16,7 +16,10 @@ module.exports = {
   /*
   ** Customize the progress bar color
   */
-  plugins: ['~plugins/click-outside-directive'],
+  plugins: [
+    '~plugins/click-outside-directive',
+    '~plugins/filters'
+  ],
   loading: { color: '#3B8070' },
   /*
   ** Build configuration
