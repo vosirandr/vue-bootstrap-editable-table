@@ -136,7 +136,7 @@ export default {
     display: flex;
     flex-flow: column nowrap;
     flex: 1 1 auto;
-    /* min-width: 1024px; */
+    width: fit-content;
     /* design */
     font-size: 1rem;
     margin: 0.5rem;

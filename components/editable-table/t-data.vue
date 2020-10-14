@@ -27,14 +27,12 @@ export default {
 <style>
   .td {
     display: flex;
-    flex-flow: row nowrap;
-    flex-grow: 1;
-    flex-basis: 0;
     word-break: break-word;
     align-items: center;
     justify-content: center;
     /* overflow: auto; */
     text-overflow: ellipsis;
+    width: 150px;
     min-width: 0px;
     min-height: 38px;
     /* white-space: nowrap; */
