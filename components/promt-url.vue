@@ -20,7 +20,7 @@
           :state="urlState"
           required
           @input="onInputValue"
-        ></b-form-input>
+        />
       </b-form-group>
     </form>
   </b-modal>

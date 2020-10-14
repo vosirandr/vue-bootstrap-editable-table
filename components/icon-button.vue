@@ -1,6 +1,6 @@
 <template>
   <button class="icon-button" type="button" @click="$emit('click', $event)">
-    <b-img rounded src="~/assets/icons/remove.svg" width="15" height="15" alt="del"></b-img>
+    <b-img rounded src="~/assets/icons/remove.svg" width="15" height="15" alt="del"/>
   </button>
 </template>
 

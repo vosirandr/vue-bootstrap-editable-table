@@ -1,12 +1,14 @@
 <template>
   <div class="table-value">
-    <b-img v-if="hasImageUrl"
+    <b-img
+      v-if="hasImageUrl"
       :src="value"
       :height="imageSize.height"
       :width="imageSize.width"
-    ></b-img>
+    />
 
-    <b-form-textarea v-else-if="edit && field.type === 'text'"
+    <b-form-textarea
+      v-else-if="edit && field.type === 'text'"
       :value="localValue"
       @click.stop="onEditorClick"
       size="sm"
@@ -15,15 +17,16 @@
       :state="isValidValue"
       @change="onChangeValue"
       @input="onInputValue"
-    ></b-form-textarea>
+    />
 
-    <b-form-input v-else-if="edit && field.type === 'number'"
+    <b-form-input
+      v-else-if="edit && field.type === 'number'"
       :value="localValue"
       :state="isValidValue"
       @click.stop="onEditorClick"
       @change="onChangeValue"
       @input="onInputValue"
-    ></b-form-input>
+    />
 
     <span v-else>
       {{(value === undefined) ? '' : formatValue}}

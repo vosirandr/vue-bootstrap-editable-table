@@ -1,13 +1,15 @@
 <template>
   <div class="tr th">
-    <t-data v-for="field in fields"
+    <t-data
+      v-for="field in fields"
       :key="field.name"
       :grow="field.grow"
     >
-      <button v-if="field.name !== 'name' && deleteMode"
+      <button
+        v-if="field.name !== 'name' && deleteMode"
         class="clear-btn-style del-btn top-position"
         @click="onClickDelete(field.name)"
-      ></button>
+      />
 
       {{field.caption}}
     </t-data>

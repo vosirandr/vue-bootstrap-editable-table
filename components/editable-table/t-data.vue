@@ -1,10 +1,11 @@
 <template>
-  <div class="td"
+  <div
+    class="td"
     :class="{ 'td-design': !empty, 'empty-td-design': empty }"
     :style="tdStyle"
     @click="$emit('click')"
   >
-    <slot></slot>
+    <slot/>
   </div>
 </template>
 

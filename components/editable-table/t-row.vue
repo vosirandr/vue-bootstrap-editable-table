@@ -1,6 +1,7 @@
 <template>
   <div class="tr striped">
-    <t-data v-for="field in fields" :key="field.name"
+    <t-data
+      v-for="field in fields" :key="field.name"
       :grow="field.grow"
       @click="onCellClick(field.name)"
     >
@@ -10,15 +11,16 @@
         :edit="editField === field.name"
         @change="onValueChange($event, field.name)"
         @change-valid="onValidChange($event, field.name)"
-      ></t-value>
+      />
 
-      <button v-if="field.name === 'name' && deleteMode"
+      <button
+        v-if="field.name === 'name' && deleteMode"
         class="clear-btn-style del-btn left-position"
         @click="onClickDelete(field.name)"
-      ></button>
+      />
     </t-data>
 
-    <t-data empty></t-data>
+    <t-data empty/>
   </div>
 </template>
 

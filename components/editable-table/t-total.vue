@@ -26,7 +26,7 @@
       </div>
     </t-data>
 
-    <t-data empty></t-data>
+    <t-data empty/>
   </div>
 </template>
 

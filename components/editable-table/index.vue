@@ -6,10 +6,11 @@
       @add-col="$emit('add-col', $event)"
       @del-col="$emit('del-col', $event)"
       @delete-mode="deleteMode = $event"
-    ></t-head>
+    />
 
     <div class="table-body" v-click-outside="onClickOutside">
-      <t-row v-for="row in rows" :key="String(row.name).replace(/ /g, '_')"
+      <t-row
+        v-for="row in rows" :key="String(row.name).replace(/ /g, '_')"
         :fields="fields"
         :value="row"
         :editField="(row.name === editableCell.row) ? editableCell.field : undefined"
@@ -18,25 +19,25 @@
         @del-row="onDeleteRow(row.name)"
         @change="onChangeValueInCell"
         @change-valid="onChangeValidInCell"
-      ></t-row>
+      />
     </div>
 
     <t-total
       :fields="fields"
       :value="aggregatedData"
       @change-aggregating="$emit('change-aggregating', $event)"
-    ></t-total>
+    />
 
     <t-add-row
       :fields="fields"
       @add-row="$emit('add-row')"
-    ></t-add-row>
+    />
 
     <promt-url
       v-model="url"
       @change="onChangeValueInCell"
       @change-valid="onChangeValidInCell"
-    ></promt-url>
+    />
   </div>
 </template>
 

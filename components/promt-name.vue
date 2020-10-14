@@ -19,7 +19,7 @@
           v-model="name"
           :state="nameState"
           required
-        ></b-form-input>
+        />
       </b-form-group>
     </form>
   </b-modal>
