@@ -5,7 +5,8 @@
       :grow="field.grow"
       @click="onCellClick(field.name)"
     >
-      <t-value
+      <component
+        :is="getCellComponent(field.type)"
         v-model="value[field.name]"
         :field="field"
         :edit="editField === field.name"
@@ -25,13 +26,12 @@
 </template>
 
 <script>
-import tValue from './t-value.vue'
+import getCellComponent from "./t-value/getCellComponent";
 import tData from './t-data.vue'
 
 export default {
   name: 't-row',
   components: {
-    tValue,
     tData
   },
   props: {
@@ -41,6 +41,7 @@ export default {
     deleteMode: { type: Boolean, default: false }
   },
   methods: {
+    getCellComponent,
     onCellClick(fieldName) {
       this.$emit('click', { fieldName, rowName: this.value['name'] });
     },
