@@ -50,7 +50,7 @@ export default {
   },
   data () {
     return {
-      types: ['text', 'image', 'number'],
+      types: ['text', 'image', 'number', 'date'],
     }
   },
   methods: {

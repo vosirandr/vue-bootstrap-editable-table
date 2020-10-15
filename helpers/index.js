@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 export const isNull = val => val === null;
 
 export const isUndefined = val => val === undefined;
@@ -56,6 +58,7 @@ export const validateType = (type, value) => {
     case 'text': return isString(value);
     case 'number': return isNumber(value);
     case 'image': return isCorrectUrl(value);
+    case 'date': return moment(value).isValid()
     default: return true;
   }
 };
