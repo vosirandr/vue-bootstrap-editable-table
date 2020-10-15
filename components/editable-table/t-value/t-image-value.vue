@@ -23,9 +23,7 @@
 
   export default {
     name: 't-image-value',
-    mixins: [
-      tValue,
-    ],
+    extends: tValue,
     computed: {
       imageSize() {
         return (isUndefinedOrNullOrEmpty(this.field.imageSize)

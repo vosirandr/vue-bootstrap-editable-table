@@ -22,8 +22,6 @@
 
   export default {
     name: 't-text-value',
-    mixins: [
-      tValue,
-    ],
+    extends: tValue,
   }
 </script>

@@ -24,9 +24,7 @@
 
   export default {
     name: 't-number-value',
-    mixins: [
-      tValue,
-    ],
+    extends: tValue,
     computed: {
       formatValue() {
         return formatFloat(this.value);
