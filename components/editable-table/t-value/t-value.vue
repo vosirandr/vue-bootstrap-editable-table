@@ -25,14 +25,13 @@ export default {
     }
   },
   methods: {
-    onChangeValue(value) {
+    setValue(value) {
+      this.checkValid(value);
       if (this.isValidValue) {
-        this.localValue = value;
         this.$emit('change', value);
       }
     },
-    onInputValue(value) {
-      console.log('input', value)
+    checkValid(value) {
       if (this.isValidValue !== this.validate(value)) {
         this.isValidValue = !this.isValidValue;
         this.$emit('change-valid', this.isValidValue);

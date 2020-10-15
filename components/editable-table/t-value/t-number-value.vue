@@ -2,10 +2,10 @@
   <div class="table-value">
     <b-form-input
       v-if="edit && field.type === 'number'"
-      :value="localValue"
+      v-model="localValue"
       :state="isValidValue"
-      @change="onChangeValue"
-      @input="onInputValue"
+      @change="setValue"
+      @input="checkValid"
     />
 
     <span v-else>{{formatValue}}</span>

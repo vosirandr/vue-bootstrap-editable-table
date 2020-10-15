@@ -2,13 +2,13 @@
   <div class="table-value">
     <b-form-textarea
       v-if="edit"
-      :value="localValue"
+      v-model="localValue"
       size="sm"
       rows="2"
       max-rows="3"
       :state="isValidValue"
-      @change="onChangeValue"
-      @input="onInputValue"
+      @change="setValue"
+      @input="checkValid"
     />
 
     <span v-else>{{formatValue}}</span>
