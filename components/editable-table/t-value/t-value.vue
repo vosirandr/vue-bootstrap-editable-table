@@ -25,7 +25,6 @@ export default {
     }
   },
   methods: {
-    onEditorClick() {},
     onChangeValue(value) {
       if (this.isValidValue) {
         this.localValue = value;
