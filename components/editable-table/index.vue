@@ -101,8 +101,6 @@ export default {
         this.url.field = field;
         this.url.rowName = rowName;
         this.$bvModal.show('modal-promt-url');
-      } else if (this.editableCell.field === fieldName) {
-        this.editableCell.field = undefined;
       } else {
         this.editableCell.field = fieldName;
       }
