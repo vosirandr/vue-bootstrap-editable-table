@@ -1,6 +1,6 @@
 <template>
   <div class="table-value">
-    <span>{{formatValue}}</span>
+    {{formatValue}}
   </div>
 </template>
 
@@ -32,6 +32,7 @@ export default {
       }
     },
     onInputValue(value) {
+      console.log('input', value)
       if (this.isValidValue !== this.validate(value)) {
         this.isValidValue = !this.isValidValue;
         this.$emit('change-valid', this.isValidValue);

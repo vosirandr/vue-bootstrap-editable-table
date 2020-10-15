@@ -6,10 +6,6 @@
       :height="imageSize.height"
       :width="imageSize.width"
     />
-
-    <span v-else @click="$emit('edit')">
-      {{formatValue}}
-    </span>
   </div>
 </template>
 

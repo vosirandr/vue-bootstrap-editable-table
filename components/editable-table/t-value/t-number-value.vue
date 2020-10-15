@@ -8,9 +8,7 @@
       @input="onInputValue"
     />
 
-    <span v-else @click="$emit('edit')">
-      {{formatValue}}
-    </span>
+    <span v-else>{{formatValue}}</span>
   </div>
 </template>
 
