@@ -32,11 +32,9 @@ export default {
       }
     },
     onInputValue(value) {
-      const isValid = this.validate(value);
-
-      if (this.isValidValue !== isValid) {
-        this.isValidValue = isValid;
-        this.$emit('change-valid', isValid);
+      if (this.isValidValue !== this.validate(value)) {
+        this.isValidValue = !this.isValidValue;
+        this.$emit('change-valid', this.isValidValue);
       }
     },
     validate(value) {
