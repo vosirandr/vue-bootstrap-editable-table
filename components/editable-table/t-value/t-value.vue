@@ -14,7 +14,7 @@ export default {
   props: ['value', 'field', 'edit'],
   data() {
     return {
-      localValue: this.value,
+      localValue: this.convertValueToLocal(this.value),
       isValidValue: true
     }
   },
@@ -28,7 +28,8 @@ export default {
     setValue(value) {
       this.checkValid(value);
       if (this.isValidValue) {
-        this.$emit('change', value);
+        const externalValue = this.convertValueToExternal(value);
+        this.$emit('change', externalValue);
       }
     },
     checkValid(value) {
@@ -40,6 +41,12 @@ export default {
     validate(value) {
       return validateType(this.field.type, value);
     },
+    convertValueToLocal (value) {
+      return value;
+    },
+    convertValueToExternal (value) {
+      return value;
+    }
   }
 }
 </script>
