@@ -1,7 +1,7 @@
 <template>
   <div class="table-value">
     <b-form-input
-      v-if="edit && field.type === 'number'"
+      v-if="edit"
       v-model="localValue"
       :state="isValidValue"
       @change="setValue"
@@ -30,12 +30,7 @@
     },
     methods: {
       validate(value) {
-        let val = value;
-        if (this.field.type === 'number') {
-          val = unFormatFloat(val);
-        }
-
-        return validateType(this.field.type, val);
+        return validateType(this.field.type, unFormatFloat(value));
       },
     }
   }
