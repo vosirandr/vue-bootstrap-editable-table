@@ -32,17 +32,10 @@
       :fields="fields"
       @add-row="$emit('add-row')"
     />
-
-    <promt-url
-      v-model="url"
-      @change="onChangeValueInCell"
-      @change-valid="onChangeValidInCell"
-    />
   </div>
 </template>
 
 <script>
-import PromtUrl from '~/components/promt-url.vue';
 import tAddRow from './t-add-row.vue'
 import tTotal from './t-total.vue'
 import tHead from './t-head.vue'
@@ -51,7 +44,6 @@ import tRow from './t-row.vue'
 export default {
   name: 'editable-table',
   components: {
-    PromtUrl,
     tAddRow,
     tTotal,
     tHead,
@@ -69,11 +61,6 @@ export default {
         row: undefined,
         isValid: true
       },
-      url: {
-        value: '',
-        field: null,
-        rowName: null
-      },
       deleteMode: false
     }
   },
@@ -89,18 +76,8 @@ export default {
         this.editableCell.row = rowName;
       }
 
-      const field = this.fields.find(el => el.name === fieldName);
-
       if (fieldName === 'name') {
         this.editableCell.field = undefined;
-      } else if (field.type === 'image') {
-        const row = this.rows.find(el => el.name === rowName);
-        if (!row) return;
-
-        this.url.value = row[fieldName];
-        this.url.field = field;
-        this.url.rowName = rowName;
-        this.$bvModal.show('modal-promt-url');
       } else {
         this.editableCell.field = fieldName;
       }

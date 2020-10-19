@@ -59,7 +59,7 @@ export const validateType = (type, value) => {
   switch(type) {
     case 'text': return isString(value);
     case 'number': return isNumber(value);
-    case 'image': return isCorrectUrl(value);
+    case 'url': return isCorrectUrl(value);
     case 'date': return moment(value).isValid()
     default: return true;
   }

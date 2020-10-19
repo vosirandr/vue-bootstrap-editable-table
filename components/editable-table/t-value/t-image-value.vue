@@ -1,7 +1,7 @@
 <template>
   <t-data
     :grow="field.grow"
-    @click="$emit('click')"
+    @click="promtShown = true"
   >
     <b-img
       v-if="hasImageUrl"
@@ -9,10 +9,19 @@
       :height="imageSize.height"
       :width="imageSize.width"
     />
+
+    <promt-url
+      ref="modal"
+      v-if="promtShown"
+      :url="value"
+      @submit="setValue"
+      @close="promtShown = false"
+    />
   </t-data>
 </template>
 
 <script>
+  import PromtUrl from '~/components/promt-url.vue';
   import {
     isUndefinedOrNullOrEmpty,
   } from '~/helpers';
@@ -23,6 +32,14 @@
   export default {
     name: 't-image-value',
     extends: tValue,
+    components: {
+      PromtUrl,
+    },
+    data () {
+      return {
+        promtShown: false,
+      }
+    },
     computed: {
       imageSize() {
         return (isUndefinedOrNullOrEmpty(this.field.imageSize)
