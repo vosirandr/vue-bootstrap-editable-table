@@ -1,10 +1,14 @@
 <template>
-  <div class="table-value">
-    {{formatValue}}
-  </div>
+  <t-data
+    :grow="field.grow"
+    @click="$emit('click')"
+  >
+    <div>{{formatValue}}</div>
+  </t-data>
 </template>
 
 <script>
+import tData from '../t-data';
 import {
   validateType,
 } from '~/helpers';
@@ -12,6 +16,9 @@ import {
 export default {
   name: 't-value',
   props: ['value', 'field', 'edit'],
+  components: {
+    tData,
+  },
   data() {
     return {
       localValue: this.convertValueToLocal(this.value),
@@ -50,9 +57,3 @@ export default {
   }
 }
 </script>
-
-<style>
-  .table-value {
-    flex-grow: 1;
-  }
-</style>

@@ -1,12 +1,15 @@
 <template>
-  <div class="table-value">
+  <t-data
+    :grow="field.grow"
+    @click="$emit('click')"
+  >
     <b-img
       v-if="hasImageUrl"
       :src="value"
       :height="imageSize.height"
       :width="imageSize.width"
     />
-  </div>
+  </t-data>
 </template>
 
 <script>

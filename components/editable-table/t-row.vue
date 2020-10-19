@@ -1,25 +1,22 @@
 <template>
   <div class="tr striped">
-    <t-data
-      v-for="field in fields" :key="field.name"
-      :grow="field.grow"
+    <component
+      v-for="field in fields"
+      :key="field.name"
+      :is="getCellComponent(field.type)"
+      v-model="value[field.name]"
+      :field="field"
+      :edit="editField === field.name"
       @click="onCellClick(field.name)"
+      @change="onValueChange($event, field.name)"
+      @change-valid="onValidChange($event, field.name)"
     >
-      <component
-        :is="getCellComponent(field.type)"
-        v-model="value[field.name]"
-        :field="field"
-        :edit="editField === field.name"
-        @change="onValueChange($event, field.name)"
-        @change-valid="onValidChange($event, field.name)"
-      />
-
       <button
         v-if="field.name === 'name' && deleteMode"
         class="clear-btn-style del-btn left-position"
         @click="onClickDelete(field.name)"
       />
-    </t-data>
+    </component>
 
     <t-data empty/>
   </div>

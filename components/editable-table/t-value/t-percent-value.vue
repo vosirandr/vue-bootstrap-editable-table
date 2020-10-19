@@ -1,5 +1,8 @@
 <template>
-  <div class="table-value">
+  <t-data
+    :grow="field.grow"
+    @click="$emit('click')"
+  >
     <b-form-input
       v-if="edit"
       v-model="localValue"
@@ -9,7 +12,7 @@
     />
 
     <span v-else>{{formatValue}}</span>
-  </div>
+  </t-data>
 </template>
 
 <script>
