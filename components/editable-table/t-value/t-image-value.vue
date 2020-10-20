@@ -1,7 +1,7 @@
 <template>
   <t-data
     :grow="field.grow"
-    @click="promtShown = true"
+    @click="modalShown = true"
   >
     <b-img
       v-if="hasImageUrl"
@@ -12,10 +12,10 @@
 
     <promt-url
       ref="modal"
-      v-if="promtShown"
+      v-if="modalShown"
       :url="value"
       @submit="setValue"
-      @close="promtShown = false"
+      @close="modalShown = false"
     />
   </t-data>
 </template>
@@ -37,7 +37,7 @@
     },
     data () {
       return {
-        promtShown: false,
+        modalShown: false,
       }
     },
     computed: {

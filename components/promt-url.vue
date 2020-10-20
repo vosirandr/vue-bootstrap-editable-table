@@ -26,6 +26,7 @@
   import { validateType } from '~/helpers';
 
   export default {
+    name: "promt-url",
     props: {
       url: String,
     },
