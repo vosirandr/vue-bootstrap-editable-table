@@ -11,7 +11,6 @@
     />
 
     <promt-url
-      ref="modal"
       v-if="modalShown"
       :url="value"
       @submit="setValue"

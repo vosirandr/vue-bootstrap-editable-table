@@ -31,7 +31,6 @@
       </b-col>
     </b-row>
 
-    <promt-name v-model="newColumn.name" @change="onEnterColumnName" />
   </b-container>
 </template>
 
@@ -39,7 +38,6 @@
 import { mapActions, mapGetters } from 'vuex';
 
 import AppLogo from '~/components/app-logo.vue';
-import PromtName from '~/components/promt-name.vue';
 import EditableTable from '../components/editable-table';
 
 import DateColumnType from "../components/editable-table/column-types/DateColumnType";
@@ -52,7 +50,6 @@ import TextColumnType from "../components/editable-table/column-types/TextColumn
 export default {
   components: {
     AppLogo,
-    PromtName,
     EditableTable
   },
   data() {
@@ -65,10 +62,6 @@ export default {
         PercentColumnType,
         JsonColumnType,
       ],
-      newColumn: {
-        name: '',
-        type: ''
-      },
       isLoading: true
     }
   },
@@ -118,25 +111,19 @@ export default {
         value: aggregation
       });
     },
-    onAddCol(type) {
-      this.newColumn.name = '';
-      this.newColumn.type = type;
-      this.$bvModal.show('modal-promt-name');
-    },
-    async onDelCol(colName) {
-      await this.fieldDelete({ name: colName });
-    },
-    async onEnterColumnName(caption) {
-      const type = this.newColumn.type;
+    async onAddCol({ type, name }) {
       const order = this.tableFields.length;
 
       await this.fieldCreate({
-        caption,
+        caption: name,
         type,
         order,
         aggregate: (type === 'number') ? 'sum' : null
       });
-    }
+    },
+    async onDelCol(colName) {
+      await this.fieldDelete({ name: colName });
+    },
   }
 }
 </script>

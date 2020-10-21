@@ -23,7 +23,7 @@
         <b-dropdown-item
           v-for="type in types"
           :key="type"
-          @click="$emit('add-col', type)"
+          @click="columnType = type"
         >
           {{ type | capitalize }}
         </b-dropdown-item>
@@ -31,22 +31,35 @@
 
       <icon-button style="margin-left: 10px;" @click="$emit('delete-mode', !deleteMode)" />
     </t-data>
+
+    <promt-name
+      v-if="columnType"
+      @submit="addColumn"
+      @close="columnType = null"
+    />
   </div>
 </template>
 
 <script>
 import tData from './t-data.vue';
 import IconButton from '~/components/icon-button.vue';
+import PromtName from '../promt-name';
 
 export default {
   name: 't-head',
   components: {
     tData,
-    IconButton
+    IconButton,
+    PromtName,
   },
   props: {
     fields: { type: Array, required: true },
     deleteMode: { type: Boolean, default: false }
+  },
+  data () {
+    return {
+      columnType: null,
+    }
   },
   computed: {
     types () {
@@ -58,6 +71,9 @@ export default {
     onClickDelete(fieldName) {
       this.$emit('del-col', fieldName);
     },
+    addColumn (name) {
+      this.$emit('add-col', { type: this.columnType, name });
+    }
   }
 }
 </script>
