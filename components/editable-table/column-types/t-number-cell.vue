@@ -17,29 +17,23 @@
 
 <script>
   import {
-    formatPercents,
+    formatFloat,
     validateType,
     unFormatFloat,
   } from '~/helpers';
-  import tValue from './t-value';
+  import tTypedCell from './t-typed-cell';
 
   export default {
-    name: 't-number-value',
-    extends: tValue,
+    name: 't-number-cell',
+    extends: tTypedCell,
     computed: {
       formatValue() {
-        return formatPercents(this.value);
+        return formatFloat(this.value);
       }
     },
     methods: {
       validate(value) {
-        return validateType('number', unFormatFloat(value));
-      },
-      convertValueToLocal (value) {
-        return value * 100;
-      },
-      convertValueToExternal (value) {
-        return value / 100;
+        return validateType(this.field.type, unFormatFloat(value));
       },
     }
   }

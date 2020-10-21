@@ -23,7 +23,6 @@
 </template>
 
 <script>
-import getCellComponent from "./t-value/getCellComponent";
 import tData from './t-data.vue'
 
 export default {
@@ -37,8 +36,8 @@ export default {
     editField: undefined,
     deleteMode: { type: Boolean, default: false }
   },
+  inject: ['getCellComponent'],
   methods: {
-    getCellComponent,
     onCellClick(fieldName) {
       this.$emit('click', { fieldName, rowName: this.value['name'] });
     },

@@ -12,7 +12,7 @@
     <b-row>
       <b-col>
         <div v-if="isLoading" class="text-center">
-          <b-spinner variant="primary" label="Text Centered"></b-spinner>
+          <b-spinner variant="primary" label="Text Centered" />
         </div>
 
         <editable-table
@@ -20,17 +20,18 @@
           :fields="tableFields"
           :rows="tableRows"
           :aggregated-data="tableAggregations"
+          :column-types="columnTypes"
           @change="onChangeValue"
           @change-aggregating="onChangeAggregating"
           @add-row="onAddRow"
           @del-row="onDelRow"
           @add-col="onAddCol"
           @del-col="onDelCol"
-        ></editable-table>
+        />
       </b-col>
     </b-row>
 
-    <promt-name v-model="newColumn.name" @change="onEnterColumnName"></promt-name>
+    <promt-name v-model="newColumn.name" @change="onEnterColumnName" />
   </b-container>
 </template>
 
@@ -39,9 +40,14 @@ import { mapActions, mapGetters } from 'vuex';
 
 import AppLogo from '~/components/app-logo.vue';
 import PromtName from '~/components/promt-name.vue';
-import EditableTable from '~/components/editable-table';
+import EditableTable from '../components/editable-table';
 
-import { isNumber, isString, isCorrectUrl } from '~/helpers';
+import DateColumnType from "../components/editable-table/column-types/DateColumnType";
+import JsonColumnType from "../components/editable-table/column-types/JsonColumnType";
+import ImageColumnType from "../components/editable-table/column-types/ImageColumnType";
+import NumberColumnType from "../components/editable-table/column-types/NumberColumnType";
+import PercentColumnType from "../components/editable-table/column-types/PercentColumnType";
+import TextColumnType from "../components/editable-table/column-types/TextColumnType";
 
 export default {
   components: {
@@ -51,6 +57,14 @@ export default {
   },
   data() {
     return {
+      columnTypes: [
+        TextColumnType,
+        ImageColumnType,
+        NumberColumnType,
+        DateColumnType,
+        PercentColumnType,
+        JsonColumnType,
+      ],
       newColumn: {
         name: '',
         type: ''
@@ -61,7 +75,7 @@ export default {
   async created() {
     try {
       const fieldResponse = await this.fieldRead();
-      const dataResponse = await this.dataRead()
+      const dataResponse = await this.dataRead();
 
       if (fieldResponse === 'Ok' && dataResponse === 'Ok') {
         this.isLoading = false;

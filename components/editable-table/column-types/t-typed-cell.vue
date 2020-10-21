@@ -14,7 +14,7 @@ import {
 } from '~/helpers';
 
 export default {
-  name: 't-value',
+  name: 't-typed-cell',
   props: ['value', 'field', 'edit'],
   components: {
     tData,

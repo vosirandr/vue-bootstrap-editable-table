@@ -25,13 +25,13 @@
   import {
     isUndefinedOrNullOrEmpty,
   } from '~/helpers';
-  import tValue from './t-value';
+  import tTypedCell from './t-typed-cell';
 
   const DEFAULT_IMAGE_SIZE = { width: 40, height: 40 };
 
   export default {
-    name: 't-image-value',
-    extends: tValue,
+    name: 't-image-cell',
+    extends: tTypedCell,
     components: {
       PromtUrl,
     },

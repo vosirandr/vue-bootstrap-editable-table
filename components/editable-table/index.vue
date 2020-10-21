@@ -40,6 +40,7 @@ import tAddRow from './t-add-row.vue'
 import tTotal from './t-total.vue'
 import tHead from './t-head.vue'
 import tRow from './t-row.vue'
+import ColumnType from "./column-types/ColumnType";
 
 export default {
   name: 'editable-table',
@@ -52,7 +53,8 @@ export default {
   props: {
     fields: { type: Array, required: true },
     rows: { type: Array, required: true },
-    aggregatedData: { type: Object, default: () => ({}) }
+    aggregatedData: { type: Object, default: () => ({}) },
+    columnTypes: { type: Array, default: () => [] },
   },
   data() {
     return {
@@ -100,8 +102,21 @@ export default {
 
       this.editableCell.field = undefined;
       this.editableCell.row = undefined;
+    },
+    getColumnType (type) {
+      return this.columnTypes.find(columnType => columnType.type === type);
+    },
+    getCellComponent(type) {
+      const columnType = this.getColumnType(type);
+      return (columnType || ColumnType).cell;
     }
-  }
+  },
+  provide: function() {
+    return {
+      columnTypes: this.columnTypes,
+      getCellComponent: this.getCellComponent,
+    };
+  },
 }
 </script>
 

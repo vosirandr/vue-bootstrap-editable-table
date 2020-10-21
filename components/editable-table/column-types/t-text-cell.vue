@@ -21,10 +21,10 @@
 </template>
 
 <script>
-  import tValue from './t-value';
+  import tTypedCell from './t-typed-cell';
 
   export default {
-    name: 't-text-value',
-    extends: tValue,
+    name: 't-text-cell',
+    extends: tTypedCell,
   }
 </script>

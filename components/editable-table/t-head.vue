@@ -48,11 +48,12 @@ export default {
     fields: { type: Array, required: true },
     deleteMode: { type: Boolean, default: false }
   },
-  data () {
-    return {
-      types: ['text', 'image', 'number', 'date', 'percent', 'json'],
+  computed: {
+    types () {
+      return this.columnTypes.map(({ type }) => type);
     }
   },
+  inject: ['columnTypes'],
   methods: {
     onClickDelete(fieldName) {
       this.$emit('del-col', fieldName);

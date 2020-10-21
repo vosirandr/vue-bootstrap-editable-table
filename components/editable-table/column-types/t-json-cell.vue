@@ -17,12 +17,12 @@
 </template>
 
 <script>
-  import tValue from './t-value';
+  import tTypedCell from './t-typed-cell';
   import jsonEditor from '../../json-editor';
 
   export default {
-    name: 't-json-value',
-    extends: tValue,
+    name: 't-json-cell',
+    extends: tTypedCell,
     components: {
       jsonEditor,
     },

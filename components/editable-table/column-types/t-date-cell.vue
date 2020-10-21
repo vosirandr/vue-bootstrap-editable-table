@@ -33,11 +33,11 @@
 
 <script>
   import moment from 'moment';
-  import tValue from './t-value';
+  import tTypedCell from './t-typed-cell';
 
   export default {
-    name: 't-date-value',
-    extends: tValue,
+    name: 't-date-cell',
+    extends: tTypedCell,
     computed: {
       formatValue() {
         if (!this.value) return '';
