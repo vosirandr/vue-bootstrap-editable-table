@@ -1,10 +1,10 @@
 <template>
   <div class="tr table-total">
-    <t-data v-for="field in fields" :key="field.name" :grow="field.grow">
-      <b v-if="field.name === 'name'">Total</b>
+    <t-data v-for="column in columns" :key="column.name" :grow="column.grow">
+      <b v-if="column.name === 'name'">Total</b>
 
-      <div v-else-if="hasAggregate(field)">
-        {{ field.aggregate && formatValue(value[field.name])}}
+      <div v-else-if="hasAggregate(column)">
+        {{ column.aggregate && formatValue(aggregate(column))}}
 
         <b-dropdown
           size="sm"
@@ -13,16 +13,16 @@
           no-caret
         >
           <template v-slot:button-content>
-            <i>{{'['+(field.aggregate || '-')+']'}}</i>
+            <i>{{'['+(column.aggregate || '+')+']'}}</i>
           </template>
 
-          <b-dropdown-item href="#" @click="onChange(null, field.name)">-</b-dropdown-item>
-          <b-dropdown-item href="#" @click="onChange('sum', field.name)">sum</b-dropdown-item>
-          <b-dropdown-item href="#" @click="onChange('mean', field.name)">mean</b-dropdown-item>
-          <b-dropdown-item href="#" @click="onChange('median', field.name)">median</b-dropdown-item>
-          <b-dropdown-item href="#" @click="onChange('min', field.name)">min</b-dropdown-item>
-          <b-dropdown-item href="#" @click="onChange('max', field.name)">max</b-dropdown-item>
-          <b-dropdown-item href="#" @click="onChange('count', field.name)">count</b-dropdown-item>
+          <b-dropdown-item href="#" @click="onChange(null, column.name)">-</b-dropdown-item>
+          <b-dropdown-item href="#" @click="onChange('sum', column.name)">sum</b-dropdown-item>
+          <b-dropdown-item href="#" @click="onChange('mean', column.name)">mean</b-dropdown-item>
+          <b-dropdown-item href="#" @click="onChange('median', column.name)">median</b-dropdown-item>
+          <b-dropdown-item href="#" @click="onChange('min', column.name)">min</b-dropdown-item>
+          <b-dropdown-item href="#" @click="onChange('max', column.name)">max</b-dropdown-item>
+          <b-dropdown-item href="#" @click="onChange('count', column.name)">count</b-dropdown-item>
         </b-dropdown>
       </div>
     </t-data>
@@ -41,14 +41,19 @@ export default {
     tData
   },
   props: {
-    fields: { type: Array, required: true },
-    value: { type: Object, required: true }
+    columns: Array,
   },
   inject: ['getColumnType'],
   methods: {
-    hasAggregate(field) {
-      const columnType = this.getColumnType(field.type);
-      return columnType.useAggregation;
+    hasAggregate (column) {
+      const columnType = this.getColumnType(column.type);
+      return columnType.aggregations.length;
+    },
+    aggregate (column) {
+      const aggregationName = column.aggregate;
+      const aggregationMethod = column.columnType.getAggregationMethod(aggregationName);
+      if (!aggregationMethod) return null;
+      return aggregationMethod(column.values);
     },
     formatValue(value) {
       return formatFloat(value);

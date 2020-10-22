@@ -23,8 +23,7 @@
     </div>
 
     <t-total
-      :fields="fields"
-      :value="aggregatedData"
+      :columns="columns"
       @change-aggregating="$emit('change-aggregating', $event)"
     />
 
@@ -53,7 +52,6 @@ export default {
   props: {
     fields: { type: Array, required: true },
     rows: { type: Array, required: true },
-    aggregatedData: { type: Object, default: () => ({}) },
     columnTypes: { type: Array, default: () => [] },
   },
   data() {
@@ -64,6 +62,15 @@ export default {
         isValid: true
       },
       deleteMode: false
+    }
+  },
+  computed: {
+    columns () {
+      return this.fields.map((field) => ({
+        ...field,
+        columnType: this.getColumnType(field.type),
+        values: this.rows.map(row => row[field.name]),
+      }));
     }
   },
   methods: {

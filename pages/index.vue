@@ -19,7 +19,6 @@
           v-else
           :fields="tableFields"
           :rows="tableRows"
-          :aggregated-data="tableAggregations"
           :column-types="columnTypes"
           @change="onChangeValue"
           @change-aggregating="onChangeAggregating"
@@ -81,7 +80,6 @@ export default {
     ...mapGetters({
       tableFields: 'fieldTable/items',
       tableRows: 'dataTable/items',
-      tableAggregations: 'dataTable/aggregations'
     }),
   },
   methods: {

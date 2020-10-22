@@ -93,13 +93,6 @@ export const actions = {
 
     if (response.status === 'Ok') {
       commit('update', payload);
-
-      const aggregationFields = getters.aggregationFields;
-      const aggregationField = aggregationFields.find(el => el.field === payload.rowName);
-
-      if (aggregationField) {
-        commit('dataTable/calculate', [aggregationField], { root: true });
-      }
     }
 
     return response.status;

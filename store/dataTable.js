@@ -1,10 +1,8 @@
 import { db } from '~/db';
 import { getValueToType } from '~/helpers';
-import aggregateFunctions from '../helpers/aggregations';
 
 export const state = () => ({
   items: [],
-  aggregations: {}
 });
 
 export const mutations = {
@@ -28,15 +26,6 @@ export const mutations = {
 
     for (let i = 0; i < data.length; i++) {
       state.items.push(data[i]);
-    }
-  },
-  calculate(state, aggregationFields) {
-    for (let i = 0; i < aggregationFields.length; i++) {
-      const field = aggregationFields[i].field;
-      const aggregate = aggregationFields[i].aggregate;
-
-      const values = state.items.map(item => item[field]);
-      this._vm.$set(state.aggregations, field, aggregateFunctions[aggregate](values));
     }
   },
   updateField(state, payload) {
@@ -65,20 +54,12 @@ export const mutations = {
       delete item[payload];
     });
   },
-  deleteAggregation(state, payload) {
-    if (Object.prototype.hasOwnProperty.call(state.aggregations, payload)) {
-      delete state.aggregations[payload];
-    }
-  }
 };
 
 export const getters = {
   items(state) {
     return state.items;
   },
-  aggregations(state) {
-    return state.aggregations;
-  }
 };
 
 export const actions = {
@@ -100,9 +81,6 @@ export const actions = {
 
     if (response.status === 'Ok') {
       commit('add', payload);
-
-      const aggregationFields = rootGetters['fieldTable/aggregationFields'];
-      commit('calculate', aggregationFields);
     }
 
     return response.status;
@@ -112,7 +90,6 @@ export const actions = {
     const aggregationFields = rootGetters['fieldTable/aggregationFields'];
 
     commit('load', response.data);
-    commit('calculate', aggregationFields);
 
     return response.status;
   },
@@ -127,14 +104,7 @@ export const actions = {
     });
 
     if (response.status === 'Ok') {
-      const aggregationFields = rootGetters['fieldTable/aggregationFields'];
-      // for aggregation, stay a changed column
-      const aggregationField = aggregationFields.find(el => el.field === payload.fieldName);
-
       commit('update', payload);
-      if (aggregationField) {
-        commit('calculate', [aggregationField]);
-      }
     }
 
     return response.status;
@@ -143,10 +113,7 @@ export const actions = {
     const response = await db.delete({ table: 'datas-table', query: payload });
 
     if (response.status === 'Ok') {
-      const aggregationFields = rootGetters['fieldTable/aggregationFields'];
-
       commit('delete', payload);
-      commit('calculate', aggregationFields);
     }
 
     return response.status;
@@ -160,10 +127,6 @@ export const actions = {
 
     if (response.status === 'Ok') {
       commit('updateField', payload);
-
-      if (payload.aggregation) {
-        commit('calculate', [payload.aggregation]);
-      }
     }
 
     return response.status;
@@ -176,7 +139,6 @@ export const actions = {
 
     if (response.status === 'Ok') {
       commit('deleteField', payload.query.name);
-      commit('deleteAggregation', payload.query.name);
     }
   }
 };
