@@ -1,33 +1,6 @@
 import { db } from '~/db';
 import { getValueToType } from '~/helpers';
-
-const aggregateFunctions = {
-  sum: (values, field) => values.reduce((acc, val) => acc + Number(val[field]), 0),
-  min: (values, field) => Math.min(...values.map(el => Number(el[field]))),
-  max: (values, field) => Math.max(...values.map(el => Number(el[field]))),
-  mean: (values, field) => {
-    const length = values.length;
-    if (length === 0) return 0;
-
-    return values.reduce((acc, val) => acc + Number(val[field]), 0) / length;
-  },
-  median: (values, field) => {
-    let median = 0;
-    const numsLen = values.length;
-    const calcValues = values.map(el => Number(el[field])).sort();
-
-    if (numsLen % 2 === 0) { // is even
-      // average of two middle numbers
-      median = (calcValues[numsLen / 2 - 1] + calcValues[numsLen / 2]) / 2;
-    } else { // is odd
-      // middle number only
-      median = calcValues[(numsLen - 1) / 2];
-    }
-
-    return median;
-  },
-  count: (values, field) => values.length
-};
+import aggregateFunctions from '../helpers/aggregations';
 
 export const state = () => ({
   items: [],
@@ -62,7 +35,8 @@ export const mutations = {
       const field = aggregationFields[i].field;
       const aggregate = aggregationFields[i].aggregate;
 
-      this._vm.$set(state.aggregations, field, aggregateFunctions[aggregate](state.items, field));
+      const values = state.items.map(item => item[field]);
+      this._vm.$set(state.aggregations, field, aggregateFunctions[aggregate](values));
     }
   },
   updateField(state, payload) {
