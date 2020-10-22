@@ -51,9 +51,7 @@ export default {
     },
     aggregate (column) {
       const aggregationName = column.aggregate;
-      const aggregationMethod = column.columnType.getAggregationMethod(aggregationName);
-      if (!aggregationMethod) return null;
-      return aggregationMethod(column.values);
+      return column.columnType.aggregate(aggregationName, column.values);
     },
     formatValue(value) {
       return formatFloat(value);

@@ -8,4 +8,9 @@ export default class ColumnType {
   static getAggregationMethod(name) {
     return this.aggregations.find(method => method.name === name);
   }
+  static aggregate(name, values) {
+    const method = this.getAggregationMethod(name);
+    if (!method) return null;
+    return method(values);
+  }
 }
