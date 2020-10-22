@@ -118,7 +118,7 @@ export default {
         caption: name,
         type,
         order,
-        aggregate: (type === 'number') ? 'sum' : null
+        aggregate: null
       });
     },
     async onDelCol(colName) {

@@ -4,7 +4,7 @@
       <b v-if="field.name === 'name'">Total</b>
 
       <div v-else-if="hasAggregate(field)">
-        {{formatValue(value[field.name])}}
+        {{ field.aggregate && formatValue(value[field.name])}}
 
         <b-dropdown
           size="sm"
@@ -13,9 +13,10 @@
           no-caret
         >
           <template v-slot:button-content>
-            <i>{{'['+field.aggregate+']'}}</i>
+            <i>{{'['+(field.aggregate || '-')+']'}}</i>
           </template>
 
+          <b-dropdown-item href="#" @click="onChange(null, field.name)">-</b-dropdown-item>
           <b-dropdown-item href="#" @click="onChange('sum', field.name)">sum</b-dropdown-item>
           <b-dropdown-item href="#" @click="onChange('mean', field.name)">mean</b-dropdown-item>
           <b-dropdown-item href="#" @click="onChange('median', field.name)">median</b-dropdown-item>
@@ -32,7 +33,7 @@
 
 <script>
 import tData from './t-data.vue'
-import { isUndefinedOrNullOrEmpty, isObject, formatFloat } from '~/helpers'
+import { formatFloat } from '~/helpers'
 
 export default {
   name: 't-total',
@@ -43,14 +44,11 @@ export default {
     fields: { type: Array, required: true },
     value: { type: Object, required: true }
   },
+  inject: ['getColumnType'],
   methods: {
     hasAggregate(field) {
-      return (
-        !isUndefinedOrNullOrEmpty(field.aggregate) &&
-        !isUndefinedOrNullOrEmpty(this.value) &&
-        isObject(this.value) &&
-        !isUndefinedOrNullOrEmpty(this.value[field.name])
-      );
+      const columnType = this.getColumnType(field.type);
+      return columnType.useAggregation;
     },
     formatValue(value) {
       return formatFloat(value);

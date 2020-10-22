@@ -114,6 +114,7 @@ export default {
   provide: function() {
     return {
       columnTypes: this.columnTypes,
+      getColumnType: this.getColumnType,
       getCellComponent: this.getCellComponent,
     };
   },
