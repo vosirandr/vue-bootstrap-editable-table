@@ -48,7 +48,7 @@ export default {
   methods: {
     hasAggregate (column) {
       const columnType = this.getColumnType(column.type);
-      return columnType.aggregations.length;
+      return columnType.hasAggregations();
     },
     aggregate (column) {
       const aggregationName = column.aggregate;

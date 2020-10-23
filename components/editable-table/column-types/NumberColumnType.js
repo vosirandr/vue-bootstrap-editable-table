@@ -5,5 +5,5 @@ import { count, max, mean, median, min, sum } from "../../../helpers/aggregation
 export default class NumberColumnType extends ColumnType {
   static type = 'number';
   static cell = tNumberCell;
-  static aggregations = [sum, min, max, mean, median, count];
+  static aggregations = { sum, min, max, mean, median, count };
 }

@@ -5,5 +5,5 @@ import { count, max, mean, median, min, sum } from "../../../helpers/aggregation
 export default class PercentColumnType extends ColumnType {
   static type = 'percent';
   static cell = tPercentCell;
-  static aggregations = [sum, min, max, mean, median, count];
+  static aggregations = { sum, min, max, mean, median, count };
 }
