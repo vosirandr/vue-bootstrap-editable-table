@@ -15,4 +15,7 @@ export default class PercentColumnType extends ColumnType {
   static formatAggregatedValue(name, value) {
     return name === 'count' ? value : formatPercents(value);
   }
+  static isAggregatedValueValid(name, value) {
+    return !(name === 'sum' && value > 1);
+  }
 }

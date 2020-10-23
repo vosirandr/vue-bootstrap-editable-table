@@ -22,4 +22,7 @@ export default class ColumnType {
   static formatAggregatedValue(name, value) {
     return value;
   }
+  static isAggregatedValueValid(name, value) {
+    return true;
+  }
 }

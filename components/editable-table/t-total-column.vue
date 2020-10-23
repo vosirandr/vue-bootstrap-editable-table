@@ -6,7 +6,9 @@
     <b v-if="column.name === 'name'">Total</b>
 
     <div v-else-if="hasAggregations">
-      {{ formattedAggregationValue}}
+      <span :class="!isAggregationValueValid && 'text-danger'">
+        {{ formattedAggregationValue}}
+      </span>
 
       <b-dropdown
         size="sm"
@@ -58,6 +60,9 @@
       },
       formattedAggregationValue () {
         return this.columnType.formatAggregatedValue(this.aggregationName, this.aggregationValue);
+      },
+      isAggregationValueValid () {
+        return this.columnType.isAggregatedValueValid(this.aggregationName, this.aggregationValue);
       },
       dropdownList () {
         return [null, ...this.columnType.getAggregationNames()];
