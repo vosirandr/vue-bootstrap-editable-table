@@ -49,7 +49,7 @@ export const formatFloat = value => {
 
 export const formatPercents = value => isUndefinedOrNullOrEmpty(value)
   ? ''
-  : `${(value * 100).toFixed(2)}%`;
+  : `${Math.round(value * 100)}%`;
 
 export const unFormatFloat = value => {
   return Number(String(value).replace(/[\ ,%]/g, ''));
