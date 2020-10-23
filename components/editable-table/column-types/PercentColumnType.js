@@ -10,7 +10,7 @@ export default class PercentColumnType extends ColumnType {
     .reduce((agg, method) => ({
       ...agg,
       [method.name]: (values) => method(convertToNumberArray(values)),
-    }));
+    }), {});
 
   static formatAggregatedValue(name, value) {
     return name === 'count' ? value : formatPercents(value);

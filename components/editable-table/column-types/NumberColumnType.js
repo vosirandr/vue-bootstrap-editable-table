@@ -10,7 +10,7 @@ export default class NumberColumnType extends ColumnType {
     .reduce((agg, method) => ({
       ...agg,
       [method.name]: (values) => method(convertToNumberArray(values)),
-    }));
+    }), {});
 
   static formatAggregatedValue(name, value) {
     return name === 'count' ? value : formatFloat(value);
