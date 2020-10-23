@@ -1,3 +1,5 @@
+import { sort } from './index';
+
 export const sum = values => values.reduce((sum, value) => sum + value, 0);
 
 export const min = values => Math.min(...values);
@@ -11,7 +13,7 @@ export const mean = values => {
 
 export const median = values => {
   const numsLen = values.length;
-  const sortedValues = values.sort();
+  const sortedValues = values.sort(sort);
 
   if (numsLen % 2 === 0) {
     return mean(sortedValues[numsLen / 2 - 1], sortedValues[numsLen / 2]);

@@ -75,3 +75,8 @@ export const getValueToType = (type) => {
     default: return '';
   }
 };
+
+export const sort = (a, b) => {
+  if (a === b) return 0;
+  return a > b ? 1 : -1;
+};
