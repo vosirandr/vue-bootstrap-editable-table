@@ -1,6 +1,6 @@
 <template>
   <t-data
-    :grow="field.grow"
+    :width="field.width"
     @click="$emit('click')"
   >
     <div>{{formatValue}}</div>

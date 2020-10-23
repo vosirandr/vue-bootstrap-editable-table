@@ -1,7 +1,7 @@
 <template>
   <t-data
     class="table-total-column"
-    :grow="column.grow"
+    :width="column.width"
   >
     <b v-if="column.name === 'name'">Total</b>
 

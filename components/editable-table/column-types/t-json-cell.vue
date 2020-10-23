@@ -1,7 +1,7 @@
 <template>
   <t-data
     class="t-json-value"
-    :grow="field.grow"
+    :width="field.width"
     @click="modalShown = true"
   >
     <span class="t-json-value__format">{{formatValue}}</span>

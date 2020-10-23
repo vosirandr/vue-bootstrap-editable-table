@@ -13,12 +13,14 @@
 export default {
   name: 't-data',
   props: {
-    grow: { type: Number, default: undefined },
     empty: { type: Boolean, default: false },
+    width: { type: Number, default: 100 },
   },
   computed: {
     tdStyle() {
-      return (this.grow === undefined) ? '' : `flex-grow: ${this.grow};`;
+      return {
+        width: `${this.width}px`,
+      };
     },
   }
 }
@@ -32,7 +34,6 @@ export default {
     justify-content: center;
     /* overflow: auto; */
     text-overflow: ellipsis;
-    width: 150px;
     min-width: 0px;
     min-height: 38px;
     /* white-space: nowrap; */

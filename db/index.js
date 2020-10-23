@@ -8,7 +8,6 @@ const testFields = [{
   caption: 'Text',
   type: 'text',
   order: 1,
-  grow: 2
 }, {
   name: 'image',
   caption: 'Image',

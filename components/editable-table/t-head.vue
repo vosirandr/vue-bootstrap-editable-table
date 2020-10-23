@@ -3,7 +3,7 @@
     <t-data
       v-for="field in fields"
       :key="field.name"
-      :grow="field.grow"
+      :width="field.width"
     >
       <button
         v-if="field.name !== 'name' && deleteMode"
