@@ -16,13 +16,14 @@
             <i>{{'['+(column.aggregate || '+')+']'}}</i>
           </template>
 
-          <b-dropdown-item href="#" @click="onChange(null, column.name)">-</b-dropdown-item>
-          <b-dropdown-item href="#" @click="onChange('sum', column.name)">sum</b-dropdown-item>
-          <b-dropdown-item href="#" @click="onChange('mean', column.name)">mean</b-dropdown-item>
-          <b-dropdown-item href="#" @click="onChange('median', column.name)">median</b-dropdown-item>
-          <b-dropdown-item href="#" @click="onChange('min', column.name)">min</b-dropdown-item>
-          <b-dropdown-item href="#" @click="onChange('max', column.name)">max</b-dropdown-item>
-          <b-dropdown-item href="#" @click="onChange('count', column.name)">count</b-dropdown-item>
+          <b-dropdown-item
+            v-for="aggregation in getDropdownList(column)"
+            :key="aggregation"
+            href="#"
+            @click="onChange(aggregation, column.name)"
+          >
+            {{ aggregation || '-' }}
+          </b-dropdown-item>
         </b-dropdown>
       </div>
     </t-data>
@@ -56,12 +57,15 @@ export default {
     formatValue(value) {
       return formatFloat(value);
     },
+    getDropdownList (column) {
+      return [null, ...column.columnType.getAggregationNames()];
+    },
     onChange(func, fieldName) {
       this.$emit('change-aggregating', {
         aggregation: func,
         fieldName
       });
-    }
+    },
   }
 }
 </script>
