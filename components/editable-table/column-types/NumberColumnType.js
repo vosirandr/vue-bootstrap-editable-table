@@ -1,6 +1,6 @@
 import ColumnType from "./ColumnType";
 import tNumberCell from './t-number-cell';
-import { convertToNumberArray } from "../../../helpers";
+import { formatFloat, convertToNumberArray } from "../../../helpers";
 import { count, max, mean, median, min, sum } from "../../../helpers/aggregations";
 
 export default class NumberColumnType extends ColumnType {
@@ -11,4 +11,8 @@ export default class NumberColumnType extends ColumnType {
       ...agg,
       [method.name]: (values) => method(convertToNumberArray(values)),
     }));
+
+  static formatAggregatedValue(name, value) {
+    return name === 'count' ? value : formatFloat(value);
+  }
 }

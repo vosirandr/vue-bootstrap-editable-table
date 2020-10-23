@@ -19,4 +19,7 @@ export default class ColumnType {
     if (!method) return null;
     return method(values);
   }
+  static formatAggregatedValue(name, value) {
+    return value;
+  }
 }

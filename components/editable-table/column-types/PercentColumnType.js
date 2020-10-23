@@ -1,6 +1,6 @@
 import ColumnType from "./ColumnType";
 import tPercentCell from './t-percent-cell';
-import { convertToNumberArray } from "../../../helpers";
+import { formatPercents, convertToNumberArray } from "../../../helpers";
 import { count, max, mean, median, min, sum } from "../../../helpers/aggregations";
 
 export default class PercentColumnType extends ColumnType {
@@ -11,4 +11,8 @@ export default class PercentColumnType extends ColumnType {
       ...agg,
       [method.name]: (values) => method(convertToNumberArray(values)),
     }));
+
+  static formatAggregatedValue(name, value) {
+    return name === 'count' ? value : formatPercents(value);
+  }
 }

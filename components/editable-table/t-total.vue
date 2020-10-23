@@ -4,7 +4,7 @@
       <b v-if="column.name === 'name'">Total</b>
 
       <div v-else-if="hasAggregate(column)">
-        {{ column.aggregate && formatValue(aggregate(column))}}
+        {{ column.aggregate && aggregate(column)}}
 
         <b-dropdown
           size="sm"
@@ -51,11 +51,9 @@ export default {
       return columnType.hasAggregations();
     },
     aggregate (column) {
-      const aggregationName = column.aggregate;
-      return column.columnType.aggregate(aggregationName, column.values);
-    },
-    formatValue(value) {
-      return formatFloat(value);
+      const { columnType, aggregate: aggregationName } = column;
+      const value = columnType.aggregate(aggregationName, column.values);
+      return columnType.formatAggregatedValue(aggregationName, value);
     },
     getDropdownList (column) {
       return [null, ...column.columnType.getAggregationNames()];
