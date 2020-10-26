@@ -6,6 +6,7 @@
       @add-col="$emit('add-col', $event)"
       @del-col="$emit('del-col', $event)"
       @delete-mode="deleteMode = $event"
+      @resize-col="$emit('resize-col', $event)"
     />
 
     <div class="table-body" v-click-outside="onClickOutside">

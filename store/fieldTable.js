@@ -27,6 +27,11 @@ export const mutations = {
     if (itemIndex > -1) {
       state.items.splice(itemIndex, 1);
     }
+  },
+  resize(state, { name, width }) {
+    const field = state.items.find(el => el.name === name);
+    if (!field) return;
+    field.width = width;
   }
 };
 
@@ -38,7 +43,7 @@ export const getters = {
     return state.items
       .filter(el => !isUndefinedOrNullOrEmpty(el.aggregate))
       .map(el => ({ field: el.name, aggregate: el.aggregate }));
-  }
+  },
 };
 
 export const actions = {
@@ -110,5 +115,8 @@ export const actions = {
     }
 
     return response.status;
+  },
+  async resize({ dispatch, commit }, payload) {
+    commit('resize', payload);
   }
 };

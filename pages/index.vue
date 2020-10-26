@@ -26,6 +26,7 @@
           @del-row="onDelRow"
           @add-col="onAddCol"
           @del-col="onDelCol"
+          @resize-col="onResizeCol"
         />
       </b-col>
     </b-row>
@@ -88,6 +89,7 @@ export default {
       fieldRead: 'fieldTable/read',
       fieldUpdate: 'fieldTable/update',
       fieldDelete: 'fieldTable/delete',
+      fieldResize: 'fieldTable/resize',
       dataCreate: 'dataTable/create',
       dataRead: 'dataTable/read',
       dataUpdate: 'dataTable/update',
@@ -122,6 +124,9 @@ export default {
     async onDelCol(colName) {
       await this.fieldDelete({ name: colName });
     },
+    async onResizeCol({ name, width }) {
+      await this.fieldResize({ name, width });
+    }
   }
 }
 </script>

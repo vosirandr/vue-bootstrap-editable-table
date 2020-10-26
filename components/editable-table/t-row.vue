@@ -18,7 +18,7 @@
       />
     </component>
 
-    <t-data empty/>
+    <t-data :width="150" empty/>
   </div>
 </template>
 

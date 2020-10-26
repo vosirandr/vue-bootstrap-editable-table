@@ -1,20 +1,15 @@
 <template>
   <div class="tr th">
-    <t-data
+    <t-head-cell
       v-for="field in fields"
       :key="field.name"
-      :width="field.width"
-    >
-      <button
-        v-if="field.name !== 'name' && deleteMode"
-        class="clear-btn-style del-btn top-position"
-        @click="onClickDelete(field.name)"
-      />
+      :field="field"
+      :delete-mode="deleteMode"
+      @delete="onClickDelete"
+      @resize="$emit('resize-col', { name: field.name, width: $event })"
+    />
 
-      {{field.caption}}
-    </t-data>
-
-    <t-data>
+    <t-data :width="150">
       <b-dropdown size="sm" variant="link" toggle-class="text-decoration-none" no-caret>
         <template v-slot:button-content>
           Add column
@@ -44,10 +39,12 @@
 import tData from './t-data.vue';
 import IconButton from '~/components/icon-button.vue';
 import PromtName from '../promt-name';
+import THeadCell from "./t-head-cell";
 
 export default {
   name: 't-head',
   components: {
+    THeadCell,
     tData,
     IconButton,
     PromtName,
@@ -73,7 +70,7 @@ export default {
     },
     addColumn (name) {
       this.$emit('add-col', { type: this.columnType, name });
-    }
+    },
   }
 }
 </script>
