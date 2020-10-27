@@ -116,7 +116,15 @@ export const actions = {
 
     return response.status;
   },
-  async resize({ dispatch, commit }, payload) {
-    commit('resize', payload);
+  async resize({ dispatch, commit }, { name, width }) {
+    const response = await db.put({
+      table: 'fields-table',
+      query: { name },
+      payload: { width },
+    });
+
+    if (response.status === 'Ok') {
+      commit('resize', { name, width });
+    }
   }
 };
