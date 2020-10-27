@@ -47,8 +47,10 @@
           this.calcReadyToResize(e);
         }
       },
-      onMouseUp (e) {
+      onMouseUp () {
+        if (!this.resizingPosition) return;
         this.resizingPosition = null;
+        this.$emit('resize-stop');
       },
       calcReadyToResize (e) {
         const bounds = e.target.getBoundingClientRect();

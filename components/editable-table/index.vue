@@ -1,18 +1,19 @@
 <template>
   <div class="table">
     <t-head
-      :fields="fields"
+      :fields="tempFields"
       :delete-mode="deleteMode"
       @add-col="$emit('add-col', $event)"
       @del-col="$emit('del-col', $event)"
       @delete-mode="deleteMode = $event"
-      @resize-col="$emit('resize-col', $event)"
+      @resize-col="resizeColumn"
+      @resize-col-stop="submitColumnResizing"
     />
 
     <div class="table-body" v-click-outside="onClickOutside">
       <t-row
         v-for="row in rows" :key="String(row.name).replace(/ /g, '_')"
-        :fields="fields"
+        :fields="tempFields"
         :value="row"
         :editField="(row.name === editableCell.row) ? editableCell.field : undefined"
         :delete-mode="deleteMode"
@@ -36,6 +37,7 @@
 </template>
 
 <script>
+import deepCopy from 'deepcopy';
 import tAddRow from './t-add-row.vue'
 import tTotal from './t-total.vue'
 import tHead from './t-head.vue'
@@ -57,17 +59,19 @@ export default {
   },
   data() {
     return {
+      tempFields: deepCopy(this.fields),
       editableCell: {
         field: undefined,
         row: undefined,
         isValid: true
       },
-      deleteMode: false
+      deleteMode: false,
+      resizingProps: null,
     }
   },
   computed: {
     columns () {
-      return this.fields.map((field) => ({
+      return this.tempFields.map((field) => ({
         ...field,
         columnType: this.getColumnType(field.type),
         values: this.rows.map(row => row[field.name]),
@@ -111,6 +115,18 @@ export default {
       this.editableCell.field = undefined;
       this.editableCell.row = undefined;
     },
+    getField (fields, name) {
+      return fields.find(field => field.name === name);
+    },
+    resizeColumn ({ name, width }) {
+      this.resizingProps = { name, width };
+      const tempField = this.getField(this.tempFields, name);
+      tempField.width = width;
+    },
+    submitColumnResizing () {
+      if (!this.resizingProps) return;
+      this.$emit('resize-col', this.resizingProps);
+    },
     getColumnType (type) {
       return this.columnTypes.find(columnType => columnType.type === type);
     },
@@ -119,13 +135,18 @@ export default {
       return (columnType || ColumnType).cell;
     }
   },
-  provide: function() {
+  provide() {
     return {
       columnTypes: this.columnTypes,
       getColumnType: this.getColumnType,
       getCellComponent: this.getCellComponent,
     };
   },
+  watch: {
+    fields () {
+      this.tempFields = deepCopy(this.fields);
+    }
+  }
 }
 </script>
 

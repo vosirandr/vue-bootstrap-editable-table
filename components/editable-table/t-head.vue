@@ -7,6 +7,7 @@
       :delete-mode="deleteMode"
       @delete="onClickDelete"
       @resize="$emit('resize-col', { name: field.name, width: $event })"
+      @resize-stop="$emit('resize-col-stop')"
     />
 
     <t-data :width="150">
