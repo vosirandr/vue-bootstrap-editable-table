@@ -57,13 +57,13 @@
     },
     mounted () {
       this.$el.addEventListener('mousedown', this.onMouseDown);
-      this.$el.addEventListener('mousemove', this.onMouseMove);
-      this.$el.addEventListener('mouseup', this.onMouseUp);
+      window.addEventListener('mousemove', this.onMouseMove);
+      window.addEventListener('mouseup', this.onMouseUp);
     },
     beforeDestroy() {
       this.$el.removeEventListener('mousedown', this.onMouseDown);
-      this.$el.removeEventListener('mousemove', this.onMouseMove);
-      this.$el.removeEventListener('mouseup', this.onMouseUp);
+      window.removeEventListener('mousemove', this.onMouseMove);
+      window.removeEventListener('mouseup', this.onMouseUp);
     },
   }
 </script>
