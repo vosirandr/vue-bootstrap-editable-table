@@ -118,7 +118,8 @@ export default {
         caption: name,
         type,
         order,
-        aggregate: null
+        aggregate: null,
+        width: 100,
       });
     },
     async onDelCol(colName) {
