@@ -3,25 +3,21 @@ const testFields = [{
   caption: 'Name',
   type: 'text',
   width: 120,
-  order: 0,
 }, {
   name: 'text',
   caption: 'Text',
   type: 'text',
   width: 200,
-  order: 1,
 }, {
   name: 'image',
   caption: 'Image',
   type: 'image',
   width: 80,
-  order: 2,
 }, {
   name: 'number',
   caption: 'Number',
   type: 'number',
   width: 80,
-  order: 3,
   aggregate: 'sum',
 }];
 

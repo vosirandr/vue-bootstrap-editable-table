@@ -112,12 +112,9 @@ export default {
       });
     },
     async onAddCol({ type, name }) {
-      const order = this.tableFields.length;
-
       await this.fieldCreate({
         caption: name,
         type,
-        order,
         aggregate: null,
         width: 100,
       });
