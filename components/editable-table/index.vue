@@ -143,9 +143,12 @@ export default {
     };
   },
   watch: {
-    fields () {
-      this.tempFields = deepCopy(this.fields);
-    }
+    fields: {
+      handler () {
+        this.tempFields = deepCopy(this.fields);
+      },
+      deep: true,
+    },
   }
 }
 </script>
