@@ -5,7 +5,7 @@
        readyToResize && 't-head-cell--resizing'
     ]"
     :width="field.width"
-    :draggable="!readyToResize"
+    :draggable="!readyToResize && field.name !== 'name'"
     @dragstart="$emit('drag', field.name)"
     @dragover.prevent
     @drop="$emit('drop', field.name)"
