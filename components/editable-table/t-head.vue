@@ -12,7 +12,11 @@
       @drop="moveColumn($event)"
     />
 
-    <t-data :width="150">
+    <t-data
+      :width="150"
+      @dragover.prevent
+      @drop="moveLastColumn"
+    >
       <b-dropdown size="sm" variant="link" toggle-class="text-decoration-none" no-caret>
         <template v-slot:button-content>
           Add column
@@ -90,6 +94,17 @@ export default {
       this.$emit('move-col', {
         name: this.draggingColumn,
         index: nextIndex,
+      });
+    },
+    moveLastColumn () {
+      if (!this.draggingColumn) return;
+
+      const currentIndex = getFieldIndex(this.fields, this.draggingColumn);
+      if (currentIndex === -1) return;
+
+      this.$emit('move-col', {
+        name: this.draggingColumn,
+        index: this.fields.length,
       });
     }
   }
