@@ -27,6 +27,7 @@
           @add-col="onAddCol"
           @del-col="onDelCol"
           @resize-col="onResizeCol"
+          @move-col="onMoveCol"
         />
       </b-col>
     </b-row>
@@ -90,6 +91,7 @@ export default {
       fieldUpdate: 'fieldTable/update',
       fieldDelete: 'fieldTable/delete',
       fieldResize: 'fieldTable/resize',
+      fieldMove: 'fieldTable/move',
       dataCreate: 'dataTable/create',
       dataRead: 'dataTable/read',
       dataUpdate: 'dataTable/update',
@@ -124,6 +126,9 @@ export default {
     },
     async onResizeCol({ name, width }) {
       await this.fieldResize({ name, width });
+    },
+    async onMoveCol({ name, index }) {
+      await this.fieldMove({ name, index });
     }
   }
 }

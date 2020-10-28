@@ -3,7 +3,7 @@
     class="td"
     :class="{ 'td-design': !empty, 'empty-td-design': empty }"
     :style="tdStyle"
-    @click="$emit('click')"
+    v-on="$listeners"
   >
     <slot/>
   </div>
@@ -22,7 +22,7 @@ export default {
         width: `${this.width}px`,
       };
     },
-  }
+  },
 }
 </script>
 

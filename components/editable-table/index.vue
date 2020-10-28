@@ -8,6 +8,7 @@
       @delete-mode="deleteMode = $event"
       @resize-col="resizeColumn"
       @resize-col-stop="submitColumnResizing"
+      @move-col="$emit('move-col', $event)"
     />
 
     <div class="table-body" v-click-outside="onClickOutside">
@@ -38,6 +39,7 @@
 
 <script>
 import deepCopy from 'deepcopy';
+import { getField } from "../../helpers/fields";
 import tAddRow from './t-add-row.vue'
 import tTotal from './t-total.vue'
 import tHead from './t-head.vue'
@@ -115,12 +117,9 @@ export default {
       this.editableCell.field = undefined;
       this.editableCell.row = undefined;
     },
-    getField (fields, name) {
-      return fields.find(field => field.name === name);
-    },
     resizeColumn ({ name, width }) {
       this.resizingProps = { name, width };
-      const tempField = this.getField(this.tempFields, name);
+      const tempField = getField(this.tempFields, name);
       tempField.width = width;
     },
     submitColumnResizing () {

@@ -8,6 +8,8 @@
       @delete="onClickDelete"
       @resize="$emit('resize-col', { name: field.name, width: $event })"
       @resize-stop="$emit('resize-col-stop')"
+      @drag="draggingColumn = $event"
+      @drop="moveColumn($event)"
     />
 
     <t-data :width="150">
@@ -37,6 +39,7 @@
 </template>
 
 <script>
+import { getFieldIndex } from "../../helpers/fields";
 import tData from './t-data.vue';
 import IconButton from '~/components/icon-button.vue';
 import PromtName from '../promt-name';
@@ -57,6 +60,7 @@ export default {
   data () {
     return {
       columnType: null,
+      draggingColumn: null,
     }
   },
   computed: {
@@ -72,6 +76,22 @@ export default {
     addColumn (name) {
       this.$emit('add-col', { type: this.columnType, name });
     },
+    moveColumn (target) {
+      if (!this.draggingColumn) return;
+
+      const index = getFieldIndex(this.fields, target);
+      const currentIndex = getFieldIndex(this.fields, this.draggingColumn);
+      if (index === -1 || currentIndex === -1) return;
+      if (index === 0 || currentIndex === 0) return;// not allowed for first column
+
+      const nextIndex = index - (currentIndex < index ? 1 : 0);
+      if (nextIndex === currentIndex) return;
+
+      this.$emit('move-col', {
+        name: this.draggingColumn,
+        index: nextIndex,
+      });
+    }
   }
 }
 </script>

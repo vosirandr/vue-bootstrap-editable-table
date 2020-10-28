@@ -1,5 +1,6 @@
 import { db } from '~/db';
 import { isUndefinedOrNullOrEmpty, generateId, getValueToType } from '~/helpers';
+import { getField, getFieldIndex } from "../helpers/fields";
 
 export const state = () => ({
   items: [],
@@ -32,6 +33,14 @@ export const mutations = {
     const field = state.items.find(el => el.name === name);
     if (!field) return;
     field.width = width;
+  },
+  move(state, { name, index }) {
+    const field = getField(state.items, name);
+    const oldIndex = getFieldIndex(state.items, name);
+    if (oldIndex === -1) return;
+
+    state.items.splice(oldIndex, 1);
+    state.items.splice(index, 0, field);
   }
 };
 
@@ -125,6 +134,17 @@ export const actions = {
 
     if (response.status === 'Ok') {
       commit('resize', { name, width });
+    }
+  },
+  async move({ dispatch, commit }, { name, index }) {
+    const response = await db.put({
+      table: 'fields-table',
+      query: { name },
+      payload: { index },
+    });
+
+    if (response.status === 'Ok') {
+      commit('move', {name, index});
     }
   }
 };

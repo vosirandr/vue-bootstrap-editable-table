@@ -5,6 +5,10 @@
        readyToResize && 't-head-cell--resizing'
     ]"
     :width="field.width"
+    :draggable="!readyToResize"
+    @dragstart="$emit('drag', field.name)"
+    @dragover.prevent
+    @drop="$emit('drop', field.name)"
   >
     <button
       v-if="field.name !== 'name' && deleteMode"
