@@ -1,5 +1,6 @@
 <template>
   <t-data
+    class="t-text-cell"
     :width="field.width"
     @click="$emit('click')"
   >
@@ -7,8 +8,6 @@
       v-if="edit"
       v-model="localValue"
       size="sm"
-      rows="2"
-      max-rows="3"
       :state="isValidValue"
       @change="setValue"
       @input="checkValid"
@@ -28,3 +27,10 @@
     extends: tTypedCell,
   }
 </script>
+
+<style>
+  .t-text-cell textarea {
+    height: 100%;
+    min-height: 30px;
+  }
+</style>
