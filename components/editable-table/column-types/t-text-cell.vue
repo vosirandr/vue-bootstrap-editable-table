@@ -8,7 +8,6 @@
       v-if="edit"
       v-model="localValue"
       size="sm"
-      :state="isValidValue"
       @change="setValue"
       @input="checkValid"
     />
