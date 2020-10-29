@@ -168,7 +168,7 @@ export default {
     width: fit-content;
     /* design */
     font-size: 1rem;
-    margin: 0.5rem;
+    margin: 0;
     line-height: 1.5;
     justify-content: center;
     text-align: center;
