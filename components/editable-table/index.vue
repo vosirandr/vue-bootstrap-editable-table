@@ -1,39 +1,41 @@
 <template>
-  <div class="table">
-    <t-head
-      :fields="tempFields"
-      :delete-mode="deleteMode"
-      @add-col="$emit('add-col', $event)"
-      @del-col="$emit('del-col', $event)"
-      @delete-mode="deleteMode = $event"
-      @resize-col="resizeColumn"
-      @resize-col-stop="submitColumnResizing"
-      @move-col="$emit('move-col', $event)"
-    />
-
-    <div class="table-body" v-click-outside="onClickOutside">
-      <t-row
-        v-for="row in rows" :key="String(row.name).replace(/ /g, '_')"
+  <div class="table-wrapper">
+    <div class="table">
+      <t-head
         :fields="tempFields"
-        :value="row"
-        :editField="(row.name === editableCell.row) ? editableCell.field : undefined"
         :delete-mode="deleteMode"
-        @click="onClickCell"
-        @del-row="onDeleteRow(row.name)"
-        @change="onChangeValueInCell"
-        @change-valid="onChangeValidInCell"
+        @add-col="$emit('add-col', $event)"
+        @del-col="$emit('del-col', $event)"
+        @delete-mode="deleteMode = $event"
+        @resize-col="resizeColumn"
+        @resize-col-stop="submitColumnResizing"
+        @move-col="$emit('move-col', $event)"
+      />
+
+      <div class="table-body" v-click-outside="onClickOutside">
+        <t-row
+          v-for="row in rows" :key="String(row.name).replace(/ /g, '_')"
+          :fields="tempFields"
+          :value="row"
+          :editField="(row.name === editableCell.row) ? editableCell.field : undefined"
+          :delete-mode="deleteMode"
+          @click="onClickCell"
+          @del-row="onDeleteRow(row.name)"
+          @change="onChangeValueInCell"
+          @change-valid="onChangeValidInCell"
+        />
+      </div>
+
+      <t-total
+        :columns="columns"
+        @change-aggregating="$emit('change-aggregating', $event)"
+      />
+
+      <t-add-row
+        :fields="fields"
+        @add-row="$emit('add-row')"
       />
     </div>
-
-    <t-total
-      :columns="columns"
-      @change-aggregating="$emit('change-aggregating', $event)"
-    />
-
-    <t-add-row
-      :fields="fields"
-      @add-row="$emit('add-row')"
-    />
   </div>
 </template>
 
@@ -153,6 +155,11 @@ export default {
 </script>
 
 <style>
+  .table-wrapper {
+    overflow-x: auto;
+    margin-bottom: 2rem;
+  }
+
   .table {
     /* structure */
     display: flex;
@@ -163,7 +170,6 @@ export default {
     font-size: 1rem;
     margin: 0.5rem;
     line-height: 1.5;
-    padding-bottom: 2rem;
     justify-content: center;
     text-align: center;
   }
