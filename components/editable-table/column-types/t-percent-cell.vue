@@ -24,7 +24,7 @@
   import tTypedCell from './t-typed-cell';
 
   export default {
-    name: 't-number-cell',
+    name: 't-percent-cell',
     extends: tTypedCell,
     computed: {
       formatValue() {
