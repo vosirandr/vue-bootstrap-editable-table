@@ -1,27 +1,28 @@
 <template>
   <t-data
     :width="field.width"
-    @click="modalShown = true"
+    @click="$emit('click')"
   >
+    <b-form-input
+      v-if="edit"
+      v-model="localValue"
+      :state="isNullIfValid"
+      @change="setValue"
+      @input="checkValid"
+    />
+
     <b-img
-      v-if="hasImageUrl"
+      v-else-if="hasImageUrl"
       :src="value"
       :height="imageSize.height"
       :width="imageSize.width"
-    />
-
-    <promt-url
-      v-if="modalShown"
-      :url="value"
-      @submit="setValue"
-      @close="modalShown = false"
     />
   </t-data>
 </template>
 
 <script>
-  import PromtUrl from '~/components/promt-url.vue';
   import {
+    validateType,
     isUndefinedOrNullOrEmpty,
   } from '~/helpers';
   import tTypedCell from './t-typed-cell';
@@ -31,14 +32,6 @@
   export default {
     name: 't-image-cell',
     extends: tTypedCell,
-    components: {
-      PromtUrl,
-    },
-    data () {
-      return {
-        modalShown: false,
-      }
-    },
     computed: {
       imageSize() {
         return (isUndefinedOrNullOrEmpty(this.field.imageSize)
@@ -53,5 +46,10 @@
         );
       },
     },
+    methods: {
+      validate(value) {
+        return validateType('url', value);
+      },
+    }
   }
 </script>
