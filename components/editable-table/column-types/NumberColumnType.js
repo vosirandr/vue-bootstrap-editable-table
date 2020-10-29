@@ -9,7 +9,10 @@ export default class NumberColumnType extends ColumnType {
   static aggregations = [ sum, min, max, mean, median, count ]
     .reduce((agg, method) => ({
       ...agg,
-      [method.name]: (values) => method(convertToNumberArray(values)),
+      [method.name]: (values) => {
+        const validData = method.name === 'count' ? values : convertToNumberArray(values)
+        return method(validData);
+      },
     }), {});
 
   static formatAggregatedValue(name, value) {
