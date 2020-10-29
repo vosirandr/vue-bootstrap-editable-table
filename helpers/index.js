@@ -84,3 +84,8 @@ export const sort = (a, b) => {
 };
 
 export const convertToNumberArray = array => array.map(value => +value || 0);
+
+export const sliceWithEllipsis = (string, length) =>
+  string.length <= length
+    ? string
+    : string.slice(0, length) + '…';

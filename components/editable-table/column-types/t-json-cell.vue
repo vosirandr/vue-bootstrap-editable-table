@@ -17,6 +17,7 @@
 </template>
 
 <script>
+  import { sliceWithEllipsis } from "../../../helpers";
   import tTypedCell from './t-typed-cell';
   import jsonEditor from '../../json-editor';
 
@@ -33,7 +34,9 @@
     },
     computed: {
       formatValue () {
-        return this.value && JSON.stringify(this.value, null,  2);
+        if (!this.value) return '';
+        const jsonString = JSON.stringify(this.value, null,  2);
+        return sliceWithEllipsis(jsonString, 100);
       }
     },
   }
