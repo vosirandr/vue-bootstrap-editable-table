@@ -29,6 +29,9 @@ export default {
     formatValue() {
       if (this.value === undefined) return '';
       return this.value;
+    },
+    isNullIfValid () {
+      return this.isValidValue ? null : false;
     }
   },
   methods: {

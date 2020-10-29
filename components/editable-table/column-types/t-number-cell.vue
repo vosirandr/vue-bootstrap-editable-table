@@ -6,7 +6,7 @@
     <b-form-input
       v-if="edit"
       v-model="localValue"
-      :state="isValidValue"
+      :state="isNullIfValid"
       @change="setValue"
       @input="checkValid"
     />
