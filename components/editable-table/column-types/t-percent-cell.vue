@@ -39,7 +39,7 @@
         return value * 100;
       },
       convertValueToExternal (value) {
-        return value / 100;
+        return unFormatFloat(value) / 100;
       },
     }
   }
