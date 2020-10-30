@@ -16,7 +16,7 @@ export const median = numbers => {
   const sortedNumbers = numbers.sort(sort);
 
   if (numsLen % 2 === 0) {
-    return mean(sortedNumbers[numsLen / 2 - 1], sortedNumbers[numsLen / 2]);
+    return mean([sortedNumbers[numsLen / 2 - 1], sortedNumbers[numsLen / 2]]);
   } else {
     return sortedNumbers[(numsLen - 1) / 2];
   }
