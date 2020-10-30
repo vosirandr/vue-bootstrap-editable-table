@@ -99,6 +99,10 @@ function database(tableName) {
 
   function find(query, findIndex) {
     if (Object.keys(query).length) {
+      if (query.hasOwnProperty('index')) {
+        return findIndex ? query.index : datas[query.index];
+      }
+
       if (findIndex) {
         return datas.findIndex(comparator);
       } else {
@@ -136,7 +140,7 @@ function database(tableName) {
           }
         }
 
-        if (payload.index) {
+        if (payload.hasOwnProperty('index')) {
           const recordIndex = find(query, true);
           datas.splice(recordIndex, 1);
           datas.splice(payload.index, 0, record);

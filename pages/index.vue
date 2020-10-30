@@ -28,6 +28,7 @@
           @del-col="onDelCol"
           @resize-col="onResizeCol"
           @move-col="onMoveCol"
+          @move-row="onMoveRow"
         />
       </b-col>
     </b-row>
@@ -95,7 +96,8 @@ export default {
       dataCreate: 'dataTable/create',
       dataRead: 'dataTable/read',
       dataUpdate: 'dataTable/update',
-      dataDelete: 'dataTable/delete'
+      dataDelete: 'dataTable/delete',
+      dataMove: 'dataTable/move',
     }),
     async onAddRow() {
       await this.dataCreate();
@@ -129,7 +131,10 @@ export default {
     },
     async onMoveCol({ name, index }) {
       await this.fieldMove({ name, index });
-    }
+    },
+    async onMoveRow({ from, to }) {
+      await this.dataMove({ from, to });
+    },
   }
 }
 </script>

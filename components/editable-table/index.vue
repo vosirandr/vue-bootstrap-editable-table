@@ -14,7 +14,7 @@
 
       <div class="table-body" v-click-outside="onClickOutside">
         <t-row
-          v-for="row in rows" :key="String(row.name).replace(/ /g, '_')"
+          v-for="(row, i) in rows" :key="String(row.name).replace(/ /g, '_')"
           :fields="tempFields"
           :value="row"
           :editField="(row.name === editableCell.row) ? editableCell.field : undefined"
@@ -23,6 +23,8 @@
           @del-row="onDeleteRow(row.name)"
           @change="onChangeValueInCell"
           @change-valid="onChangeValidInCell"
+          @dragstart="draggingRow = i"
+          @drop="moveRow(i)"
         />
       </div>
 
@@ -71,6 +73,7 @@ export default {
       },
       deleteMode: false,
       resizingProps: null,
+      draggingRow: null,
     }
   },
   computed: {
@@ -83,6 +86,10 @@ export default {
     }
   },
   methods: {
+    moveRow(rowIndex) {
+      if (this.draggingRow === rowIndex) return;
+      this.$emit('move-row', { from: this.draggingRow, to: rowIndex });
+    },
     onClickCell({ fieldName, rowName }) {
       // console.log(`Cell clicked fieldName:${fieldName}, rowName:${rowName}`);
       if (!this.editableCell.isValid) return;
@@ -94,11 +101,7 @@ export default {
         this.editableCell.row = rowName;
       }
 
-      if (fieldName === 'name') {
-        this.editableCell.field = undefined;
-      } else {
-        this.editableCell.field = fieldName;
-      }
+      this.editableCell.field = fieldName;
     },
     onDeleteRow(rowName) {
       this.$emit('del-row', rowName);

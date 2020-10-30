@@ -1,6 +1,12 @@
 <template>
   <div class="tr striped">
-    <t-data :width="firstField.width">
+    <t-data
+      :width="firstField.width"
+      draggable
+      @dragstart="$emit('dragstart')"
+      @dragover.prevent
+      @drop="$emit('drop')"
+    >
       {{ value[firstField.name] }}
 
       <button

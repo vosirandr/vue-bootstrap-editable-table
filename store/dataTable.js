@@ -54,6 +54,11 @@ export const mutations = {
       delete item[payload];
     });
   },
+  move(state, { from, to }) {
+    const field = state.items[from];
+    state.items.splice(from, 1);
+    state.items.splice(to, 0, field);
+  }
 };
 
 export const getters = {
@@ -139,6 +144,17 @@ export const actions = {
 
     if (response.status === 'Ok') {
       commit('deleteField', payload.query.name);
+    }
+  },
+  async move({ dispatch, commit }, { from, to }) {
+    const response = await db.put({
+      table: 'datas-table',
+      query: { index: from },
+      payload: { index: to },
+    });
+
+    if (response.status === 'Ok') {
+      commit('move', { from, to });
     }
   }
 };

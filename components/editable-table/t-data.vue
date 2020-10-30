@@ -3,6 +3,7 @@
     class="td"
     :class="{ 'td-design': !empty, 'empty-td-design': empty }"
     :style="tdStyle"
+    v-bind="$attrs"
     v-on="$listeners"
   >
     <slot/>
