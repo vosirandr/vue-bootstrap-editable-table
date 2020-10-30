@@ -1,6 +1,5 @@
 <template>
-  <t-data
-    :width="field.width"
+  <t-cell-filler
     @click="$emit('click')"
   >
     <b-form-input
@@ -17,7 +16,7 @@
       :height="imageSize.height"
       :width="imageSize.width"
     />
-  </t-data>
+  </t-cell-filler>
 </template>
 
 <script>
@@ -34,16 +33,10 @@
     extends: tTypedCell,
     computed: {
       imageSize() {
-        return (isUndefinedOrNullOrEmpty(this.field.imageSize)
-          ? DEFAULT_IMAGE_SIZE
-          : this.field.imageSize
-        );
+        return DEFAULT_IMAGE_SIZE;
       },
       hasImageUrl() {
-        return (
-          this.field.type === 'image' &&
-          !isUndefinedOrNullOrEmpty(this.value)
-        );
+        return !isUndefinedOrNullOrEmpty(this.value);
       },
     },
     methods: {

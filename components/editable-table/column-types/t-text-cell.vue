@@ -1,7 +1,6 @@
 <template>
-  <t-data
+  <t-cell-filler
     class="t-text-cell"
-    :width="field.width"
     @click="$emit('click')"
   >
     <b-form-textarea
@@ -13,9 +12,7 @@
     />
 
     <span v-else>{{formatValue}}</span>
-
-    <slot />
-  </t-data>
+  </t-cell-filler>
 </template>
 
 <script>

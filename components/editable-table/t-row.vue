@@ -1,22 +1,30 @@
 <template>
   <div class="tr striped">
-    <component
-      v-for="field in fields"
-      :key="field.name"
-      :is="getCellComponent(field.type)"
-      v-model="value[field.name]"
-      :field="field"
-      :edit="editField === field.name"
-      @click="onCellClick(field.name)"
-      @change="onValueChange($event, field.name)"
-      @change-valid="onValidChange($event, field.name)"
-    >
+    <t-data :width="firstField.width">
+      {{ value[firstField.name] }}
+
       <button
-        v-if="field.name === 'name' && deleteMode"
+        v-if="deleteMode"
         class="clear-btn-style del-btn left-position"
-        @click="onClickDelete(field.name)"
+        @click="onClickDelete(firstField.name)"
       />
-    </component>
+    </t-data>
+
+    <t-data
+      v-for="field in otherFields"
+      :key="field.name"
+      :width="field.width"
+    >
+      <component
+        :is="getCellComponent(field.type)"
+        v-model="value[field.name]"
+        :field="field"
+        :edit="editField === field.name"
+        @click="onCellClick(field.name)"
+        @change="onValueChange($event, field.name)"
+        @change-valid="onValidChange($event, field.name)"
+      />
+    </t-data>
 
     <t-data :width="150" empty/>
   </div>
@@ -34,7 +42,15 @@ export default {
     fields: { type: Array, required: true },
     value: { type: Object, required: true },
     editField: undefined,
-    deleteMode: { type: Boolean, default: false }
+    deleteMode: { type: Boolean, default: false },
+  },
+  computed: {
+    firstField () {
+      return this.fields[0];
+    },
+    otherFields () {
+      return this.fields.slice(1);
+    }
   },
   inject: ['getCellComponent'],
   methods: {

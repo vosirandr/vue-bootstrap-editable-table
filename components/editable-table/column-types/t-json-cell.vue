@@ -1,7 +1,6 @@
 <template>
-  <t-data
+  <t-cell-filler
     class="t-json-value"
-    :width="field.width"
     @click="modalShown = true"
   >
     <span class="t-json-value__format">{{formatValue}}</span>
@@ -13,7 +12,7 @@
       @submit="setValue"
       @close="modalShown = false"
     />
-  </t-data>
+  </t-cell-filler>
 </template>
 
 <script>

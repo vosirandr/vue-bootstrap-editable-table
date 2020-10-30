@@ -1,14 +1,11 @@
 <template>
-  <t-data
-    :width="field.width"
-    @click="$emit('click')"
-  >
+  <t-cell-filler>
     <div>{{formatValue}}</div>
-  </t-data>
+  </t-cell-filler>
 </template>
 
 <script>
-import tData from '../t-data';
+import TCellFiller from "../t-cell-filler";
 import {
   validateType,
 } from '~/helpers';
@@ -17,7 +14,7 @@ export default {
   name: 't-typed-cell',
   props: ['value', 'field', 'edit'],
   components: {
-    tData,
+    TCellFiller,
   },
   data() {
     return {

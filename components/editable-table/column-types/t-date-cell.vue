@@ -1,6 +1,5 @@
 <template>
-  <t-data
-    :width="field.width"
+  <t-cell-filler
     @click="$emit('click')"
   >
     <b-input-group v-if="edit" >
@@ -28,7 +27,7 @@
     </b-input-group>
 
     <span v-else>{{formatValue}}</span>
-  </t-data>
+  </t-cell-filler>
 </template>
 
 <script>
