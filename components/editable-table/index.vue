@@ -181,6 +181,10 @@ export default {
     box-shadow: none;
   }
 
+  .td:last-child {
+    width: 100px
+  }
+
   .clear-btn-style {
     outline: none;
 

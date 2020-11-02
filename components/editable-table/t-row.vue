@@ -32,7 +32,7 @@
       />
     </t-data>
 
-    <t-data :width="150" empty/>
+    <t-data empty/>
   </div>
 </template>
 

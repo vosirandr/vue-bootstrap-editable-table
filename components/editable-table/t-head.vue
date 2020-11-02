@@ -13,7 +13,6 @@
     />
 
     <t-data
-      :width="150"
       @dragover.prevent
       @drop="moveLastColumn"
     >
@@ -31,7 +30,7 @@
         </b-dropdown-item>
       </b-dropdown>
 
-      <b-button class="p-0" variant="link" @click="$emit('delete-mode', !deleteMode)">
+      <b-button class="px-2 py-1" variant="link" @click="$emit('delete-mode', !deleteMode)">
         <b-icon icon="x" font-scale="2" />
       </b-button>
     </t-data>
