@@ -32,7 +32,7 @@
       />
     </t-data>
 
-    <t-data empty/>
+    <t-data empty @click="switchEditMode()"/>
   </div>
 </template>
 
