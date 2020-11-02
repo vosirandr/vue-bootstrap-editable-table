@@ -19,7 +19,7 @@
     >
       <b-dropdown size="sm" variant="link" toggle-class="text-decoration-none" no-caret>
         <template v-slot:button-content>
-          Add column
+          <b-icon icon="plus" font-scale="2" />
         </template>
 
         <b-dropdown-item
