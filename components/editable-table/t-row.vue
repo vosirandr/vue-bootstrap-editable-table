@@ -26,7 +26,7 @@
         v-model="value[field.name]"
         :field="field"
         :edit="editField === field.name"
-        @click="onCellClick(field.name)"
+        @switch-edit-mode="switchEditMode(field.name)"
         @change="onValueChange($event, field.name)"
         @change-valid="onValidChange($event, field.name)"
       />
@@ -60,8 +60,8 @@ export default {
   },
   inject: ['getCellComponent'],
   methods: {
-    onCellClick(fieldName) {
-      this.$emit('click', { fieldName, rowName: this.value['name'] });
+    switchEditMode(fieldName) {
+      this.$emit('switch-edit-mode', { fieldName, rowName: this.value['name'] });
     },
     onValueChange(value, fieldName) {
       this.$emit('change', { fieldName, rowName: this.value['name'], value });

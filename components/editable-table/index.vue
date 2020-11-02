@@ -19,7 +19,7 @@
           :value="row"
           :editField="(row.name === editableCell.row) ? editableCell.field : undefined"
           :delete-mode="deleteMode"
-          @click="onClickCell"
+          @switch-edit-mode="switchEditMode"
           @del-row="onDeleteRow(row.name)"
           @change="onChangeValueInCell"
           @change-valid="onChangeValidInCell"
@@ -90,7 +90,7 @@ export default {
       if (this.draggingRow === rowIndex) return;
       this.$emit('move-row', { from: this.draggingRow, to: rowIndex });
     },
-    onClickCell({ fieldName, rowName }) {
+    switchEditMode({ fieldName, rowName }) {
       // console.log(`Cell clicked fieldName:${fieldName}, rowName:${rowName}`);
       if (!this.editableCell.isValid) return;
 

@@ -1,6 +1,6 @@
 <template>
   <t-cell-filler
-    @click="$emit('click')"
+    @click="$emit('switch-edit-mode')"
   >
     <b-form-input
       v-if="edit"

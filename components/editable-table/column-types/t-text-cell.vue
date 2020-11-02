@@ -1,7 +1,7 @@
 <template>
   <t-cell-filler
     class="t-text-cell"
-    @click="$emit('click')"
+    @click="$emit('switch-edit-mode')"
   >
     <b-form-textarea
       v-if="edit"
