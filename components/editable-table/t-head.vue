@@ -31,7 +31,9 @@
         </b-dropdown-item>
       </b-dropdown>
 
-      <icon-button style="margin-left: 10px;" @click="$emit('delete-mode', !deleteMode)" />
+      <b-button class="p-0" variant="link" @click="$emit('delete-mode', !deleteMode)">
+        <b-icon icon="x" font-scale="2" />
+      </b-button>
     </t-data>
 
     <promt-name
@@ -45,7 +47,6 @@
 <script>
 import { getFieldIndex } from "../../helpers/fields";
 import tData from './t-data.vue';
-import IconButton from '~/components/icon-button.vue';
 import PromtName from '../promt-name';
 import THeadCell from "./t-head-cell";
 
@@ -54,7 +55,6 @@ export default {
   components: {
     THeadCell,
     tData,
-    IconButton,
     PromtName,
   },
   props: {
