@@ -12,7 +12,9 @@
         size="sm"
         variant="link"
         @click="$emit('add-row')"
-      >Add row</b-button>
+      >
+        <b-icon icon="plus" font-scale="2" />
+      </b-button>
     </t-data>
 
     <t-data empty>
