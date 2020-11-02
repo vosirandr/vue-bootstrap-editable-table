@@ -9,11 +9,14 @@
     >
       {{ value[firstField.name] }}
 
-      <button
+      <b-button
         v-if="deleteMode"
-        class="clear-btn-style del-btn left-position"
+        class="t-row__delete"
+        variant="link"
         @click="onClickDelete(firstField.name)"
-      />
+      >
+        <b-icon icon="x" />
+      </b-button>
     </t-data>
 
     <t-data
@@ -89,5 +92,12 @@ export default {
 
   .striped:nth-of-type(odd) {
     background-color: #f8f9fa;
+  }
+
+  .t-row__delete {
+    position: absolute;
+    right: 0;
+    top: 0;
+    padding: 0;
   }
 </style>

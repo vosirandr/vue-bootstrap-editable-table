@@ -30,6 +30,7 @@ export default {
 <style>
   .td {
     display: flex;
+    position: relative;
     word-break: break-word;
     align-items: center;
     justify-content: center;

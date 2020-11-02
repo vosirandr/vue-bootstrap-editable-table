@@ -10,11 +10,14 @@
     @dragover.prevent
     @drop="$emit('drop', field.name)"
   >
-    <button
+    <b-button
       v-if="field.name !== 'name' && deleteMode"
-      class="clear-btn-style del-btn top-position"
+      class="t-head-cell__delete"
+      variant="link"
       @click="$emit('delete', field.name)"
-    />
+    >
+      <b-icon icon="x" />
+    </b-button>
 
     {{field.caption}}
   </t-data>
@@ -77,5 +80,11 @@
 <style>
   .t-head-cell--resizing {
     cursor: col-resize;
+  }
+  .t-head-cell__delete {
+    position: absolute;
+    right: 0;
+    top: 0;
+    padding: 0;
   }
 </style>
