@@ -2,7 +2,7 @@
   <t-cell-filler
     @click="$emit('switch-edit-mode')"
   >
-    <b-input-group v-if="edit" >
+    <b-input-group v-if="edit" @click.stop>
       <b-form-input
         id="example-input"
         v-model="localValue"

@@ -96,12 +96,14 @@ export default {
 
       this.deleteMode = false;
 
-      if (rowName !== this.editableCell.row) {
-        this.editableCell.field = undefined;
+      if (this.editableCell.field === fieldName && this.editableCell.row === rowName) {
+        this.editableCell.field = null;
+        this.editableCell.row = null;
+      } else {
+        this.editableCell.field = fieldName;
         this.editableCell.row = rowName;
       }
 
-      this.editableCell.field = fieldName;
     },
     onDeleteRow(rowName) {
       this.$emit('del-row', rowName);

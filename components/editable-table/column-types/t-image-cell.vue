@@ -8,6 +8,7 @@
       :state="isNullIfValid"
       @change="setValue"
       @input="checkValid"
+      @click.stop
     />
 
     <b-img

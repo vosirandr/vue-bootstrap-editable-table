@@ -9,6 +9,7 @@
       size="sm"
       @change="setValue"
       @input="checkValid"
+      @click.stop
     />
 
     <span v-else>{{formatValue}}</span>
