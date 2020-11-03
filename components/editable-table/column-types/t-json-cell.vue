@@ -3,7 +3,7 @@
     class="t-json-value"
     @click="modalShown = true"
   >
-    <span class="t-json-value__format">{{formatValue}}</span>
+    <div class="t-json-value__format">{{formatValue}}</div>
 
     <json-editor
       ref="modal"
