@@ -13,10 +13,15 @@ module.exports = {
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
     ]
   },
+  plugins: [
+    //'~plugins/vue-plugins',
+    { src: '~/plugins/vue-plugins.js', mode: 'client' },
+    '~plugins/click-outside-directive',
+    '~plugins/filters'
+  ],
   /*
   ** Customize the progress bar color
   */
-  plugins: ['~plugins/click-outside-directive'],
   loading: { color: '#3B8070' },
   /*
   ** Build configuration

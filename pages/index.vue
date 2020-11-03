@@ -12,25 +12,26 @@
     <b-row>
       <b-col>
         <div v-if="isLoading" class="text-center">
-          <b-spinner variant="primary" label="Text Centered"></b-spinner>
+          <b-spinner variant="primary" label="Text Centered" />
         </div>
 
         <editable-table
           v-else
           :fields="tableFields"
           :rows="tableRows"
-          :aggregated-data="tableAggregations"
+          :column-types="columnTypes"
           @change="onChangeValue"
           @change-aggregating="onChangeAggregating"
           @add-row="onAddRow"
           @del-row="onDelRow"
           @add-col="onAddCol"
           @del-col="onDelCol"
-        ></editable-table>
+          @resize-col="onResizeCol"
+          @move-col="onMoveCol"
+        />
       </b-col>
     </b-row>
 
-    <promt-name v-model="newColumn.name" @change="onEnterColumnName"></promt-name>
   </b-container>
 </template>
 
@@ -38,30 +39,37 @@
 import { mapActions, mapGetters } from 'vuex';
 
 import AppLogo from '~/components/app-logo.vue';
-import PromtName from '~/components/promt-name.vue';
-import EditableTable from '~/components/editable-table';
+import EditableTable from '../components/editable-table';
 
-import { isNumber, isString, isCorrectUrl } from '~/helpers';
+import DateColumnType from "../components/editable-table/column-types/DateColumnType";
+import JsonColumnType from "../components/editable-table/column-types/JsonColumnType";
+import ImageColumnType from "../components/editable-table/column-types/ImageColumnType";
+import NumberColumnType from "../components/editable-table/column-types/NumberColumnType";
+import PercentColumnType from "../components/editable-table/column-types/PercentColumnType";
+import TextColumnType from "../components/editable-table/column-types/TextColumnType";
 
 export default {
   components: {
     AppLogo,
-    PromtName,
     EditableTable
   },
   data() {
     return {
-      newColumn: {
-        name: '',
-        type: ''
-      },
+      columnTypes: [
+        TextColumnType,
+        ImageColumnType,
+        NumberColumnType,
+        DateColumnType,
+        PercentColumnType,
+        JsonColumnType,
+      ],
       isLoading: true
     }
   },
   async created() {
     try {
       const fieldResponse = await this.fieldRead();
-      const dataResponse = await this.dataRead()
+      const dataResponse = await this.dataRead();
 
       if (fieldResponse === 'Ok' && dataResponse === 'Ok') {
         this.isLoading = false;
@@ -74,7 +82,6 @@ export default {
     ...mapGetters({
       tableFields: 'fieldTable/items',
       tableRows: 'dataTable/items',
-      tableAggregations: 'dataTable/aggregations'
     }),
   },
   methods: {
@@ -83,6 +90,8 @@ export default {
       fieldRead: 'fieldTable/read',
       fieldUpdate: 'fieldTable/update',
       fieldDelete: 'fieldTable/delete',
+      fieldResize: 'fieldTable/resize',
+      fieldMove: 'fieldTable/move',
       dataCreate: 'dataTable/create',
       dataRead: 'dataTable/read',
       dataUpdate: 'dataTable/update',
@@ -104,24 +113,22 @@ export default {
         value: aggregation
       });
     },
-    onAddCol(type) {
-      this.newColumn.name = '';
-      this.newColumn.type = type;
-      this.$bvModal.show('modal-promt-name');
+    async onAddCol({ type, name }) {
+      await this.fieldCreate({
+        caption: name,
+        type,
+        aggregate: null,
+        width: 100,
+      });
     },
     async onDelCol(colName) {
       await this.fieldDelete({ name: colName });
     },
-    async onEnterColumnName(caption) {
-      const type = this.newColumn.type;
-      const order = this.tableFields.length;
-
-      await this.fieldCreate({
-        caption,
-        type,
-        order,
-        aggregate: (type === 'number') ? 'sum' : null
-      });
+    async onResizeCol({ name, width }) {
+      await this.fieldResize({ name, width });
+    },
+    async onMoveCol({ name, index }) {
+      await this.fieldMove({ name, index });
     }
   }
 }

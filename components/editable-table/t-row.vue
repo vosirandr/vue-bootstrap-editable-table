@@ -1,35 +1,33 @@
 <template>
   <div class="tr striped">
-    <t-data v-for="field in fields" :key="field.name"
-      :grow="field.grow"
+    <component
+      v-for="field in fields"
+      :key="field.name"
+      :is="getCellComponent(field.type)"
+      v-model="value[field.name]"
+      :field="field"
+      :edit="editField === field.name"
       @click="onCellClick(field.name)"
+      @change="onValueChange($event, field.name)"
+      @change-valid="onValidChange($event, field.name)"
     >
-      <t-value
-        v-model="value[field.name]"
-        :field="field"
-        :edit="editField === field.name"
-        @change="onValueChange($event, field.name)"
-        @change-valid="onValidChange($event, field.name)"
-      ></t-value>
-
-      <button v-if="field.name === 'name' && deleteMode"
+      <button
+        v-if="field.name === 'name' && deleteMode"
         class="clear-btn-style del-btn left-position"
         @click="onClickDelete(field.name)"
-      ></button>
-    </t-data>
+      />
+    </component>
 
-    <t-data empty></t-data>
+    <t-data :width="150" empty/>
   </div>
 </template>
 
 <script>
-import tValue from './t-value.vue'
 import tData from './t-data.vue'
 
 export default {
   name: 't-row',
   components: {
-    tValue,
     tData
   },
   props: {
@@ -38,6 +36,7 @@ export default {
     editField: undefined,
     deleteMode: { type: Boolean, default: false }
   },
+  inject: ['getCellComponent'],
   methods: {
     onCellClick(fieldName) {
       this.$emit('click', { fieldName, rowName: this.value['name'] });
