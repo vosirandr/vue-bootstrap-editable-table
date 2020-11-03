@@ -2,7 +2,7 @@
   "name": "vue-table",
   "version": "1.0.0",
   "description": "Test task application",
-  "author": "Bruian <bruianio@gmail.com>",
+  "author": "Conjoint.ly <support@conjoint.ly>",
   "private": true,
   "scripts": {
     "dev": "nuxt",
