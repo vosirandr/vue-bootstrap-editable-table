@@ -1,5 +1,5 @@
 import { db } from '~/db';
-import { getValueToType } from '~/helpers';
+import { getValueToType, generateId } from "../helpers";
 
 export const state = () => ({
   items: [],
@@ -74,10 +74,9 @@ export const getters = {
 };
 
 export const actions = {
-  async create({ state, commit, rootGetters }) {
+  async create({ commit, rootGetters }) {
     const fields = rootGetters['fieldTable/items'];
-    const lastIndex = parseInt(state.items[state.items.length - 1].name.slice(4));
-    let payload = { name: `Name ${lastIndex + 1}` };
+    let payload = { name: generateId() };
 
     for (let i = 0; i < fields.length; i++) {
       if (fields[i].name === 'name') continue;
