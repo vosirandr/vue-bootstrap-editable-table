@@ -58,6 +58,12 @@ export const mutations = {
     const field = state.items[from];
     state.items.splice(from, 1);
     state.items.splice(to, 0, field);
+  },
+  bulkUpdate(state, records) {
+    records.forEach(record => {
+      const item = state.items.find(el => el.name === record.name);
+      Object.entries(record).forEach(([key, value]) => item[key] = value);
+    });
   }
 };
 
@@ -156,5 +162,9 @@ export const actions = {
     if (response.status === 'Ok') {
       commit('move', { from, to });
     }
-  }
+  },
+  async bulkUpdate({ dispatch, commit }, records) {
+    console.log('bulkUpdate', records);
+    commit('bulkUpdate', records);
+  },
 };

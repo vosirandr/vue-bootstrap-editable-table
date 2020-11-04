@@ -25,6 +25,7 @@
           @change-valid="onChangeValidInCell"
           @dragstart="draggingRow = i"
           @drop="moveRow(i)"
+          @paste-csv="pasteCSV"
         />
       </div>
 
@@ -43,7 +44,7 @@
 
 <script>
 import deepCopy from 'deepcopy';
-import { getField } from "../../helpers/fields";
+import { getField, getFieldIndex } from "../../helpers/fields";
 import tAddRow from './t-add-row.vue'
 import tTotal from './t-total.vue'
 import tHead from './t-head.vue'
@@ -128,6 +129,31 @@ export default {
       this.resizingProps = { name, width };
       const tempField = getField(this.tempFields, name);
       tempField.width = width;
+    },
+    pasteCSV ({ fieldName, rowName, data }) {
+      const iterate = (table, csv, name, callback) => {
+        const rowIndex = getFieldIndex(table, name);
+        for (let iCSV = 0; iCSV < csv.length; iCSV ++) {
+          const iTable = rowIndex + iCSV;
+          if (iTable >= table.length) break;
+
+          callback(iTable, iCSV)
+        }
+      };
+
+      const updatedRows = [];
+
+      iterate(this.rows, data, rowName, (iRows, yCSV) => {
+        const updatedRow = { name: this.rows[iRows].name };
+        updatedRows.push(updatedRow);
+        iterate(this.fields, data[yCSV], fieldName, (iFields, xCSV) => {
+          const fieldName = this.fields[iFields].name;
+          const value = data[yCSV][xCSV];
+          updatedRow[fieldName] = value;
+        });
+      });
+
+      this.$emit('update-cells', updatedRows);
     },
     submitColumnResizing () {
       if (!this.resizingProps) return;

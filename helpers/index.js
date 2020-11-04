@@ -89,3 +89,8 @@ export const sliceWithEllipsis = (string, length) =>
   string.length <= length
     ? string
     : string.slice(0, length) + '…';
+
+export const csvToArray = csv => (csv || '')
+  .split('\n')
+  .filter(row => row.length)
+  .map(row => row.split('\t'));

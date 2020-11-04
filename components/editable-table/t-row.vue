@@ -23,6 +23,7 @@
       v-for="field in otherFields"
       :key="field.name"
       :width="field.width"
+      @paste.stop="paste(field.name, $event)"
     >
       <component
         :is="getCellComponent(field.type)"
@@ -41,6 +42,7 @@
 
 <script>
 import tData from './t-data.vue'
+import {csvToArray} from "../../helpers";
 
 export default {
   name: 't-row',
@@ -54,6 +56,9 @@ export default {
     deleteMode: { type: Boolean, default: false },
   },
   computed: {
+    rowName () {
+      return this.value['name'];
+    },
     firstField () {
       return this.fields[0];
     },
@@ -64,17 +69,23 @@ export default {
   inject: ['getCellComponent'],
   methods: {
     switchEditMode(fieldName) {
-      this.$emit('switch-edit-mode', { fieldName, rowName: this.value['name'] });
+      this.$emit('switch-edit-mode', { fieldName, rowName: this.rowName });
     },
     onValueChange(value, fieldName) {
-      this.$emit('change', { fieldName, rowName: this.value['name'], value });
+      this.$emit('change', { fieldName, rowName: this.rowName, value });
     },
     onValidChange(value, fieldName) {
-      this.$emit('change-valid', { fieldName, rowName: this.value['name'], isValid: value });
+      this.$emit('change-valid', { fieldName, rowName: this.rowName, isValid: value });
     },
     onClickDelete(rowName) {
       this.$emit('del-row');
     },
+    paste (fieldName, e) {
+      const csv = e.clipboardData.getData('text');
+      const data = csvToArray(csv);
+      if (data.length === 0 || (data.length === 1 && data[0].length === 1)) return;
+      this.$emit('paste-csv', { fieldName, rowName: this.rowName, data });
+    }
   }
 }
 </script>

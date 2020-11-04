@@ -29,6 +29,7 @@
           @resize-col="onResizeCol"
           @move-col="onMoveCol"
           @move-row="onMoveRow"
+          @update-cells="onUpdateCells"
         />
       </b-col>
     </b-row>
@@ -98,6 +99,7 @@ export default {
       dataUpdate: 'dataTable/update',
       dataDelete: 'dataTable/delete',
       dataMove: 'dataTable/move',
+      dataBulkUpdate: 'dataTable/bulkUpdate',
     }),
     async onAddRow() {
       await this.dataCreate();
@@ -134,6 +136,9 @@ export default {
     },
     async onMoveRow({ from, to }) {
       await this.dataMove({ from, to });
+    },
+    async onUpdateCells(cells) {
+      await this.dataBulkUpdate(cells);
     },
   }
 }
