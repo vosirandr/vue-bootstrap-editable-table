@@ -27,7 +27,7 @@
     >
       <component
         :is="getCellComponent(field.type)"
-        v-model="value[field.name]"
+        :value="value[field.name]"
         :field="field"
         :edit="editField === field.name"
         @switch-edit-mode="switchEditMode(field.name)"

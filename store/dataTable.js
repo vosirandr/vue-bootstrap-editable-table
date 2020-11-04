@@ -16,10 +16,10 @@ export const mutations = {
     }
   },
   update(state, payload) {
-    const item = state.items.find(el => el.name === payload.rowName);
-    if (item) {
-      item[payload.fieldName] = payload.value;
-    }
+    state.items = state.items.map(item => {
+      if (item.name !== payload.rowName) return {...item};
+      return {...item, [payload.fieldName]: payload.value};
+    });
   },
   load(state, data) {
     state.items = [];

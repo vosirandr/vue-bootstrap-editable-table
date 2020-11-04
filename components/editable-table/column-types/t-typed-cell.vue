@@ -33,6 +33,7 @@ export default {
   },
   methods: {
     setValue(value) {
+      this.localValue = value;
       this.checkValid(value);
       if (this.isValidValue) {
         const externalValue = this.convertValueToExternal(value);
