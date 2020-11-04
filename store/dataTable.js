@@ -164,7 +164,13 @@ export const actions = {
     }
   },
   async bulkUpdate({ dispatch, commit }, records) {
-    console.log('bulkUpdate', records);
-    commit('bulkUpdate', records);
+    const response = await db.multiUpdate({
+      table: 'datas-table',
+      payload: { records },
+    });
+
+    if (response.status === 'Ok') {
+      commit('bulkUpdate', records);
+    }
   },
 };

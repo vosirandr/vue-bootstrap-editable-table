@@ -186,6 +186,16 @@ function database(tableName) {
 
       return datas;
     },
+    multiUpdate(query, { records }) {
+      read();
+
+      records.forEach(record => {
+        const item = datas.find(el => el.name === record.name);
+        Object.entries(record).forEach(([key, value]) => item[key] = value);
+      });
+
+      write();
+    },
     deleteColumn(query) {
       read();
 
@@ -226,6 +236,9 @@ export const db = {
   },
   bulkUpdate(request) {
     return responser('bulkUpdate', request);
+  },
+  multiUpdate(request) {
+    return responser('multiUpdate', request);
   },
   deleteColumn(request) {
     return responser('deleteColumn', request);
