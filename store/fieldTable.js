@@ -78,12 +78,6 @@ export const actions = {
         };
       }
 
-      await dispatch('dataTable/updateField', {
-        query: {},
-        data: dataUpdate,
-        aggregation
-      }, { root: true });
-
       commit('add', data);
     }
 

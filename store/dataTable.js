@@ -122,19 +122,6 @@ export const actions = {
 
     return response.status;
   },
-  async updateField({ commit }, payload) {
-    const response = await db.bulkUpdate({
-      table: 'datas-table',
-      query: payload.query,
-      payload: payload.data
-    });
-
-    if (response.status === 'Ok') {
-      commit('updateField', payload);
-    }
-
-    return response.status;
-  },
   async deleteField({ commit }, payload) {
     const response = await db.deleteColumn({
       table: 'datas-table',
