@@ -20,7 +20,8 @@
     formatPercents,
     validateType,
     unFormatFloat,
-  } from '~/helpers';
+    isUndefinedOrNullOrEmpty,
+  } from '../../../helpers';
   import tTypedCell from './t-typed-cell';
 
   export default {
@@ -36,6 +37,7 @@
         return validateType('number', unFormatFloat(value));
       },
       convertValueToLocal (value) {
+        if (isUndefinedOrNullOrEmpty(value)) return value;
         return value * 100;
       },
       convertValueToExternal (value) {
