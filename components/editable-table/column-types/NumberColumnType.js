@@ -18,4 +18,8 @@ export default class NumberColumnType extends ColumnType {
   static formatAggregatedValue(name, value) {
     return name === 'count' ? value : formatFloat(value);
   }
+  static convertStringToValue(str) {
+    const number = Number(str.replace(',', '.'));
+    return Number.isNaN(number) ? undefined : number;
+  }
 }

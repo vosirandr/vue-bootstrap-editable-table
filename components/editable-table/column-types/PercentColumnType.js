@@ -21,4 +21,8 @@ export default class PercentColumnType extends ColumnType {
   static isAggregatedValueValid(name, value) {
     return !(name === 'sum' && value > 1);
   }
+  static convertStringToValue(str) {
+    const number = Number(str.replace(',', '.'));
+    return Number.isNaN(number) ? undefined : number;
+  }
 }

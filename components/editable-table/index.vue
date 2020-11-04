@@ -146,10 +146,11 @@ export default {
       iterate(this.rows, data, rowName, (iRows, yCSV) => {
         const updatedRow = { name: this.rows[iRows].name };
         updatedRows.push(updatedRow);
-        iterate(this.fields, data[yCSV], fieldName, (iFields, xCSV) => {
-          const fieldName = this.fields[iFields].name;
-          const value = data[yCSV][xCSV];
-          updatedRow[fieldName] = value;
+        iterate(this.columns, data[yCSV], fieldName, (iFields, xCSV) => {
+          const column = this.columns[iFields];
+          const csvValue = data[yCSV][xCSV];
+          const value = column.columnType.convertStringToValue(csvValue);
+          updatedRow[column.name] = value;
         });
       });
 
