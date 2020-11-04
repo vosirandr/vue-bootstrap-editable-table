@@ -1,5 +1,5 @@
 import { db } from '~/db';
-import { getValueToType, generateId } from "../helpers";
+import { generateId } from "../helpers";
 
 export const state = () => ({
   items: [],
@@ -74,14 +74,8 @@ export const getters = {
 };
 
 export const actions = {
-  async create({ commit, rootGetters }) {
-    const fields = rootGetters['fieldTable/items'];
+  async create({ commit }) {
     let payload = { name: generateId() };
-
-    for (let i = 0; i < fields.length; i++) {
-      if (fields[i].name === 'name') continue;
-      payload[fields[i].name] = getValueToType(fields[i].type);
-    }
 
     const response = await db.post({
       table: 'datas-table',
