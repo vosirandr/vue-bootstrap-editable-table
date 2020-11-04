@@ -135,7 +135,7 @@ function database(tableName) {
       const record = find(query);
       if (record) {
         for (const key in payload) {
-          if (record.hasOwnProperty(key) && key !== 'index') {
+          if (key !== 'index') {
             record[key] = payload[key];
           }
         }
