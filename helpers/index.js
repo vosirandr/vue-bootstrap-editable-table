@@ -35,6 +35,7 @@ export const isCorrectUrl = val => {
 };
 
 export const formatFloat = value => {
+  if (isUndefinedOrNullOrEmpty(value)) return '';
   let formatValue = new Intl.NumberFormat('en-EN').format(value, {
     useGrouping: true,
     minimumFractionDigits: 2,
