@@ -2,7 +2,7 @@
   "name": "vue-table",
   "version": "1.0.0",
   "description": "Test task application",
-  "author": "Bruian <bruianio@gmail.com>",
+  "author": "Conjoint.ly <support@conjoint.ly>",
   "private": true,
   "scripts": {
     "dev": "nuxt",
@@ -14,7 +14,10 @@
   },
   "dependencies": {
     "bootstrap-vue": "^2.15.0",
-    "nuxt": "^2.0.0"
+    "deepcopy": "^2.1.0",
+    "moment": "^2.29.1",
+    "nuxt": "^2.0.0",
+    "vue-json-editor": "^1.4.2"
   },
   "devDependencies": {
     "babel-eslint": "^10.1.0",

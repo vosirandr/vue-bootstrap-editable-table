@@ -1,16 +1,20 @@
 <template>
   <div class="table">
     <t-head
-      :fields="fields"
+      :fields="tempFields"
       :delete-mode="deleteMode"
       @add-col="$emit('add-col', $event)"
       @del-col="$emit('del-col', $event)"
       @delete-mode="deleteMode = $event"
-    ></t-head>
+      @resize-col="resizeColumn"
+      @resize-col-stop="submitColumnResizing"
+      @move-col="$emit('move-col', $event)"
+    />
 
     <div class="table-body" v-click-outside="onClickOutside">
-      <t-row v-for="row in rows" :key="String(row.name).replace(/ /g, '_')"
-        :fields="fields"
+      <t-row
+        v-for="row in rows" :key="String(row.name).replace(/ /g, '_')"
+        :fields="tempFields"
         :value="row"
         :editField="(row.name === editableCell.row) ? editableCell.field : undefined"
         :delete-mode="deleteMode"
@@ -18,39 +22,33 @@
         @del-row="onDeleteRow(row.name)"
         @change="onChangeValueInCell"
         @change-valid="onChangeValidInCell"
-      ></t-row>
+      />
     </div>
 
     <t-total
-      :fields="fields"
-      :value="aggregatedData"
+      :columns="columns"
       @change-aggregating="$emit('change-aggregating', $event)"
-    ></t-total>
+    />
 
     <t-add-row
       :fields="fields"
       @add-row="$emit('add-row')"
-    ></t-add-row>
-
-    <promt-url
-      v-model="url"
-      @change="onChangeValueInCell"
-      @change-valid="onChangeValidInCell"
-    ></promt-url>
+    />
   </div>
 </template>
 
 <script>
-import PromtUrl from '~/components/promt-url.vue';
+import deepCopy from 'deepcopy';
+import { getField } from "../../helpers/fields";
 import tAddRow from './t-add-row.vue'
 import tTotal from './t-total.vue'
 import tHead from './t-head.vue'
 import tRow from './t-row.vue'
+import ColumnType from "./column-types/ColumnType";
 
 export default {
   name: 'editable-table',
   components: {
-    PromtUrl,
     tAddRow,
     tTotal,
     tHead,
@@ -59,21 +57,27 @@ export default {
   props: {
     fields: { type: Array, required: true },
     rows: { type: Array, required: true },
-    aggregatedData: { type: Object, default: () => ({}) }
+    columnTypes: { type: Array, default: () => [] },
   },
   data() {
     return {
+      tempFields: deepCopy(this.fields),
       editableCell: {
         field: undefined,
         row: undefined,
         isValid: true
       },
-      url: {
-        value: '',
-        field: null,
-        rowName: null
-      },
-      deleteMode: false
+      deleteMode: false,
+      resizingProps: null,
+    }
+  },
+  computed: {
+    columns () {
+      return this.tempFields.map((field) => ({
+        ...field,
+        columnType: this.getColumnType(field.type),
+        values: this.rows.map(row => row[field.name]),
+      }));
     }
   },
   methods: {
@@ -88,19 +92,7 @@ export default {
         this.editableCell.row = rowName;
       }
 
-      const field = this.fields.find(el => el.name === fieldName);
-
       if (fieldName === 'name') {
-        this.editableCell.field = undefined;
-      } else if (field.type === 'image') {
-        const row = this.rows.find(el => el.name === rowName);
-        if (!row) return;
-
-        this.url.value = row[fieldName];
-        this.url.field = field;
-        this.url.rowName = rowName;
-        this.$bvModal.show('modal-promt-url');
-      } else if (this.editableCell.field === fieldName) {
         this.editableCell.field = undefined;
       } else {
         this.editableCell.field = fieldName;
@@ -124,7 +116,38 @@ export default {
 
       this.editableCell.field = undefined;
       this.editableCell.row = undefined;
+    },
+    resizeColumn ({ name, width }) {
+      this.resizingProps = { name, width };
+      const tempField = getField(this.tempFields, name);
+      tempField.width = width;
+    },
+    submitColumnResizing () {
+      if (!this.resizingProps) return;
+      this.$emit('resize-col', this.resizingProps);
+    },
+    getColumnType (type) {
+      return this.columnTypes.find(columnType => columnType.type === type);
+    },
+    getCellComponent(type) {
+      const columnType = this.getColumnType(type);
+      return (columnType || ColumnType).cell;
     }
+  },
+  provide() {
+    return {
+      columnTypes: this.columnTypes,
+      getColumnType: this.getColumnType,
+      getCellComponent: this.getCellComponent,
+    };
+  },
+  watch: {
+    fields: {
+      handler () {
+        this.tempFields = deepCopy(this.fields);
+      },
+      deep: true,
+    },
   }
 }
 </script>
@@ -135,7 +158,7 @@ export default {
     display: flex;
     flex-flow: column nowrap;
     flex: 1 1 auto;
-    /* min-width: 1024px; */
+    width: fit-content;
     /* design */
     font-size: 1rem;
     margin: 0.5rem;

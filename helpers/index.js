@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 export const isNull = val => val === null;
 
 export const isUndefined = val => val === undefined;
@@ -45,6 +47,10 @@ export const formatFloat = value => {
   return formatValue;
 };
 
+export const formatPercents = value => isUndefinedOrNullOrEmpty(value)
+  ? ''
+  : `${Math.round(value * 100)}%`;
+
 export const unFormatFloat = value => {
   return Number(String(value).replace(/[\ ,%]/g, ''));
 };
@@ -55,7 +61,8 @@ export const validateType = (type, value) => {
   switch(type) {
     case 'text': return isString(value);
     case 'number': return isNumber(value);
-    case 'image': return isCorrectUrl(value);
+    case 'url': return isCorrectUrl(value);
+    case 'date': return moment(value).isValid()
     default: return true;
   }
 };
@@ -70,3 +77,10 @@ export const getValueToType = (type) => {
     default: return '';
   }
 };
+
+export const sort = (a, b) => {
+  if (a === b) return 0;
+  return a > b ? 1 : -1;
+};
+
+export const convertToNumberArray = array => array.map(value => +value || 0);

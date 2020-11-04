@@ -1,8 +1,11 @@
 <template>
   <div>
-    <b-img src="/logo.png" fluid alt="conjoint.ly" height="200" width="200"></b-img>
+    <b-img
+      src="/logo.png"
+      fluid
+      alt="conjoint.ly"
+      height="200"
+      width="200"
+    />
   </div>
 </template>
-
-<style>
-</style>

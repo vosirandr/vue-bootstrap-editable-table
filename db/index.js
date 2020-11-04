@@ -2,23 +2,22 @@ const testFields = [{
   name: 'name',
   caption: 'Name',
   type: 'text',
-  order: 0,
+  width: 120,
 }, {
   name: 'text',
   caption: 'Text',
   type: 'text',
-  order: 1,
-  grow: 2
+  width: 200,
 }, {
   name: 'image',
   caption: 'Image',
   type: 'image',
-  order: 2,
+  width: 80,
 }, {
   name: 'number',
   caption: 'Number',
   type: 'number',
-  order: 3,
+  width: 80,
   aggregate: 'sum',
 }];
 
@@ -132,9 +131,15 @@ function database(tableName) {
       const record = find(query);
       if (record) {
         for (const key in payload) {
-          if (record.hasOwnProperty(key)) {
+          if (record.hasOwnProperty(key) && key !== 'index') {
             record[key] = payload[key];
           }
+        }
+
+        if (payload.index) {
+          const recordIndex = find(query, true);
+          datas.splice(recordIndex, 1);
+          datas.splice(payload.index, 0, record);
         }
 
         write();
@@ -187,7 +192,7 @@ function database(tableName) {
       write();
 
       return [];
-    }
+    },
   }
 };
 

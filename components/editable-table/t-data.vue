@@ -1,10 +1,11 @@
 <template>
-  <div class="td"
+  <div
+    class="td"
     :class="{ 'td-design': !empty, 'empty-td-design': empty }"
     :style="tdStyle"
-    @click="$emit('click')"
+    v-on="$listeners"
   >
-    <slot></slot>
+    <slot/>
   </div>
 </template>
 
@@ -12,23 +13,22 @@
 export default {
   name: 't-data',
   props: {
-    grow: { type: Number, default: undefined },
     empty: { type: Boolean, default: false },
+    width: Number,
   },
   computed: {
     tdStyle() {
-      return (this.grow === undefined) ? '' : `flex-grow: ${this.grow};`;
+      return {
+        width: `${this.width}px`,
+      };
     },
-  }
+  },
 }
 </script>
 
 <style>
   .td {
     display: flex;
-    flex-flow: row nowrap;
-    flex-grow: 1;
-    flex-basis: 0;
     word-break: break-word;
     align-items: center;
     justify-content: center;
