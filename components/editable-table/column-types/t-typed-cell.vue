@@ -18,7 +18,7 @@ export default {
   },
   data() {
     return {
-      localValue: this.convertValueToLocal(this.value),
+      localValue: null,
       isValidValue: true
     }
   },
@@ -53,7 +53,18 @@ export default {
     },
     convertValueToExternal (value) {
       return value;
+    },
+    updateLocalValue () {
+      this.localValue = this.convertValueToLocal(this.value);
     }
+  },
+  watch: {
+    value () {
+      this.updateLocalValue();
+    },
+  },
+  created () {
+    this.updateLocalValue();
   }
 }
 </script>
