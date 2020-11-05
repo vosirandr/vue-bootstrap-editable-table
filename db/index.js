@@ -1,3 +1,5 @@
+import { generateId } from "../helpers";
+
 const testFields = [{
   name: 'name',
   caption: 'Name',
@@ -190,8 +192,12 @@ function database(tableName) {
       read();
 
       records.forEach(record => {
-        const item = datas.find(el => el.name === record.name);
-        Object.entries(record).forEach(([key, value]) => item[key] = value);
+        if (record.name) {
+          const item = datas.find(el => el.name === record.name);
+          Object.entries(record).forEach(([key, value]) => item[key] = value);
+        } else {
+          datas.push({ ...record, name: generateId() })
+        }
       });
 
       write();

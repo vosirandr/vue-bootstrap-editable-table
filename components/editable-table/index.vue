@@ -135,8 +135,6 @@ export default {
         const rowIndex = getFieldIndex(table, name);
         for (let iCSV = 0; iCSV < csv.length; iCSV ++) {
           const iTable = rowIndex + iCSV;
-          if (iTable >= table.length) break;
-
           callback(iTable, iCSV)
         }
       };
@@ -144,15 +142,18 @@ export default {
       const updatedRows = [];
 
       iterate(this.rows, data, rowName, (iRows, yCSV) => {
-        const updatedRow = { name: this.rows[iRows].name };
+        const updatedRow = { name: this.rows[iRows] && this.rows[iRows].name };
         updatedRows.push(updatedRow);
         iterate(this.columns, data[yCSV], fieldName, (iFields, xCSV) => {
+          if (iFields >= this.columns.length) return;
+
           const column = this.columns[iFields];
           const csvValue = data[yCSV][xCSV];
           const value = column.columnType.convertStringToValue(csvValue);
           updatedRow[column.name] = value;
         });
       });
+      console.log({ updatedRows })
 
       this.$emit('update-cells', updatedRows);
     },

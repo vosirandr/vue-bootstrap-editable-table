@@ -61,8 +61,12 @@ export const mutations = {
   },
   bulkUpdate(state, records) {
     records.forEach(record => {
-      const item = state.items.find(el => el.name === record.name);
-      Object.entries(record).forEach(([key, value]) => item[key] = value);
+      if (record.name) {
+        const item = state.items.find(el => el.name === record.name);
+        Object.entries(record).forEach(([key, value]) => item[key] = value);
+      } else {
+        state.items.push({ ...record, name: generateId() });
+      }
     });
   }
 };
