@@ -2,17 +2,18 @@ import { sort, isUndefinedOrNullOrEmpty } from './index';
 
 export const sum = numbers => numbers.reduce((sum, value) => sum + value, 0);
 
-export const min = numbers => Math.min(...numbers);
+export const min = numbers => numbers.length ? Math.min(...numbers) : undefined;
 
-export const max = numbers => Math.max(...numbers);
+export const max = numbers => numbers.length ? Math.max(...numbers) : undefined;
 
 export const mean = numbers => {
-  if (numbers.length === 0) return 0;
+  if (numbers.length === 0) return undefined;
   return sum(numbers) / numbers.length;
 };
 
 export const median = numbers => {
   const numsLen = numbers.length;
+  if (numsLen === 0) return undefined;
   const sortedNumbers = numbers.sort(sort);
 
   if (numsLen % 2 === 0) {
