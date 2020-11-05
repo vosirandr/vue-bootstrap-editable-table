@@ -4,6 +4,7 @@
   >
     <b-form-input
       v-if="edit"
+      ref="input"
       v-model="localValue"
       :state="isNullIfValid"
       @change="setValue"

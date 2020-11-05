@@ -5,6 +5,7 @@
   >
     <b-input-group v-if="edit" @click.stop>
       <b-form-input
+        ref="input"
         id="example-input"
         v-model="localValue"
         type="text"

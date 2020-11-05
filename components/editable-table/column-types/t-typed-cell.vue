@@ -63,6 +63,13 @@ export default {
     value () {
       this.updateLocalValue();
     },
+    edit () {
+      this.$nextTick(() => {
+        const { input } = this.$refs;
+        if (!input) return;
+        input.focus();
+      })
+    }
   },
   created () {
     this.updateLocalValue();

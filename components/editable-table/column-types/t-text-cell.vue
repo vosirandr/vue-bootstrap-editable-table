@@ -5,6 +5,7 @@
   >
     <b-form-textarea
       v-if="edit"
+      ref="input"
       v-model="localValue"
       size="sm"
       @change="setValue"
