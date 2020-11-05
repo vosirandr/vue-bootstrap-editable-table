@@ -1,6 +1,4 @@
 import Vue from 'vue';
+import { capitalize } from "../helpers";
 
-Vue.filter('capitalize', (value) => {
-  if (!value) return '';
-  return value.charAt(0).toUpperCase() + value.slice(1);
-});
+Vue.filter('capitalize', capitalize);

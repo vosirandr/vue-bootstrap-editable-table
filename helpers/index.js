@@ -95,3 +95,8 @@ export const csvToArray = csv => (csv || '')
   .split('\n')
   .filter(row => row.length)
   .map(row => row.split('\t'));
+
+export const capitalize = str => {
+  if (!str) return '';
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
