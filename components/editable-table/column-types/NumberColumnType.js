@@ -1,6 +1,6 @@
 import ColumnType from "./ColumnType";
 import tNumberCell from './t-number-cell';
-import { formatFloat, convertToNumberArray } from "../../../helpers";
+import { formatFloat, isUndefinedOrNullOrEmpty } from "../../../helpers";
 import { count, max, mean, median, min, sum } from "../../../helpers/aggregations";
 
 export default class NumberColumnType extends ColumnType {
@@ -10,7 +10,7 @@ export default class NumberColumnType extends ColumnType {
     .reduce((agg, method) => ({
       ...agg,
       [method.name]: (values) => {
-        const validData = method.name === 'count' ? values : convertToNumberArray(values)
+        const validData = values.filter(value => !isUndefinedOrNullOrEmpty(value));
         return method(validData);
       },
     }), {});

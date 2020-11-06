@@ -23,6 +23,6 @@ export const median = numbers => {
   }
 };
 
-export const count = values => values.filter(value => !isUndefinedOrNullOrEmpty(value)).length;
+export const count = values => values.length;
 
 export default { sum, min, max, mean, median, count };
