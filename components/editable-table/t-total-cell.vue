@@ -1,6 +1,6 @@
 <template>
   <t-data
-    class="table-total-column"
+    class="table-total-cell"
     :width="column.width"
   >
     <b v-if="column.name === 'name'">Total</b>
@@ -37,7 +37,7 @@
   import tData from './t-data';
 
   export default {
-    name: "t-total-column",
+    name: "t-total-cell",
     components: {
       tData
     },
@@ -80,11 +80,11 @@
 </script>
 
 <style>
-  .table-total-column .dropdown {
+  .table-total-cell .dropdown {
     vertical-align: baseline;
   }
 
-  .table-total-column .dropdown>button {
+  .table-total-cell .dropdown>button {
     padding: 1px;
   }
 </style>
