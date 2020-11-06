@@ -16,7 +16,7 @@
 </template>
 
 <script>
-  import { sliceWithEllipsis } from "../../../helpers";
+  import { sliceWithEllipsis, isObject } from "../../../helpers";
   import tTypedCell from './t-typed-cell';
   import jsonEditor from '../../json-editor';
 
@@ -38,6 +38,11 @@
         return sliceWithEllipsis(jsonString, 100);
       }
     },
+    methods: {
+      validate(value) {
+        return isObject(value);
+      },
+    }
   }
 </script>
 
