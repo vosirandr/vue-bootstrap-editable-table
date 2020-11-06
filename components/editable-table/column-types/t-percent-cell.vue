@@ -42,6 +42,7 @@
         return value * 100;
       },
       convertValueToExternal (value) {
+        if (value.trim() === '') return undefined;
         return unFormatFloat(value) / 100;
       },
     }

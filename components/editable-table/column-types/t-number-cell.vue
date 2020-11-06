@@ -37,6 +37,7 @@
         return validateType(this.field.type, unFormatFloat(value));
       },
       convertValueToExternal (value) {
+        if (value.trim() === '') return undefined;
         return Number(unFormatFloat(value));
       },
     }
