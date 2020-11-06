@@ -15,6 +15,7 @@
         variant="link"
         toggle-class="text-decoration-none"
         no-caret
+        boundary="window"
       >
         <template v-slot:button-content>
           <i>{{'['+(aggregationName || '+')+']'}}</i>
@@ -69,12 +70,20 @@
       },
     },
     methods: {
+      extractDropdownMenu () {
+        const dropdownMenu = this.$el.getElementsByClassName('dropdown-menu')[0];
+        if (!dropdownMenu) return;
+        document.body.append(dropdownMenu);
+      },
       onChange(aggregation, fieldName) {
         this.$emit('change-aggregating', {
           aggregation,
           fieldName
         });
       },
+    },
+    mounted () {
+      this.extractDropdownMenu();
     }
   }
 </script>
@@ -86,5 +95,10 @@
 
   .table-total-cell .dropdown>button {
     padding: 1px;
+  }
+
+  .table-total-cell .dropdown-menu {
+    max-height: 100px;
+    overflow-y: auto;
   }
 </style>
