@@ -38,6 +38,8 @@ export default {
       if (this.isValidValue) {
         const externalValue = this.convertValueToExternal(value);
         this.$emit('change', externalValue);
+      } else {
+        this.$emit('change', undefined);
       }
     },
     checkValid(value) {
