@@ -13,31 +13,23 @@
     />
 
     <t-data
-      :width="150"
       @dragover.prevent
       @drop="moveLastColumn"
     >
-      <b-dropdown size="sm" variant="link" toggle-class="text-decoration-none" no-caret>
-        <template v-slot:button-content>
-          Add column
-        </template>
+      <b-button class="px-2 py-1" variant="link" @click="showModal = true">
+        <b-icon icon="plus" font-scale="2" />
+      </b-button>
 
-        <b-dropdown-item
-          v-for="type in types"
-          :key="type"
-          @click="columnType = type"
-        >
-          {{ type | capitalize }}
-        </b-dropdown-item>
-      </b-dropdown>
-
-      <icon-button style="margin-left: 10px;" @click="$emit('delete-mode', !deleteMode)" />
+      <b-button class="px-2 py-1" variant="link" @click="$emit('delete-mode', !deleteMode)">
+        <b-icon icon="x" font-scale="2" />
+      </b-button>
     </t-data>
 
-    <promt-name
-      v-if="columnType"
+    <add-column-modal
+      v-if="showModal"
+      :column-types="columnTypes"
       @submit="addColumn"
-      @close="columnType = null"
+      @close="showModal = false"
     />
   </div>
 </template>
@@ -45,8 +37,7 @@
 <script>
 import { getFieldIndex } from "../../helpers/fields";
 import tData from './t-data.vue';
-import IconButton from '~/components/icon-button.vue';
-import PromtName from '../promt-name';
+import AddColumnModal from '../add-column-modal';
 import THeadCell from "./t-head-cell";
 
 export default {
@@ -54,8 +45,7 @@ export default {
   components: {
     THeadCell,
     tData,
-    IconButton,
-    PromtName,
+    AddColumnModal,
   },
   props: {
     fields: { type: Array, required: true },
@@ -63,13 +53,8 @@ export default {
   },
   data () {
     return {
-      columnType: null,
+      showModal: false,
       draggingColumn: null,
-    }
-  },
-  computed: {
-    types () {
-      return this.columnTypes.map(({ type }) => type);
     }
   },
   inject: ['columnTypes'],
@@ -77,8 +62,8 @@ export default {
     onClickDelete(fieldName) {
       this.$emit('del-col', fieldName);
     },
-    addColumn (name) {
-      this.$emit('add-col', { type: this.columnType, name });
+    addColumn (column) {
+      this.$emit('add-col', column);
     },
     moveColumn (target) {
       if (!this.draggingColumn) return;

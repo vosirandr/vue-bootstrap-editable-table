@@ -1,18 +1,19 @@
 <template>
-  <t-data
-    :width="field.width"
-    @click="$emit('click')"
+  <t-cell-filler
+    @click="$emit('switch-edit-mode')"
   >
     <b-form-input
       v-if="edit"
+      ref="input"
       v-model="localValue"
-      :state="isValidValue"
+      :state="isNullIfValid"
       @change="setValue"
       @input="checkValid"
+      @click.stop
     />
 
     <span v-else>{{formatValue}}</span>
-  </t-data>
+  </t-cell-filler>
 </template>
 
 <script>
@@ -36,7 +37,8 @@
         return validateType(this.field.type, unFormatFloat(value));
       },
       convertValueToExternal (value) {
-        return Number(value);
+        if (value.trim() === '') return undefined;
+        return Number(unFormatFloat(value));
       },
     }
   }

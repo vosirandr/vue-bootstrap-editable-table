@@ -1,23 +1,20 @@
 <template>
-  <t-data
-    :width="field.width"
-    @click="$emit('click')"
+  <t-cell-filler
+    class="t-text-cell"
+    @click="$emit('switch-edit-mode')"
   >
     <b-form-textarea
       v-if="edit"
+      ref="input"
       v-model="localValue"
       size="sm"
-      rows="2"
-      max-rows="3"
-      :state="isValidValue"
       @change="setValue"
       @input="checkValid"
+      @click.stop
     />
 
     <span v-else>{{formatValue}}</span>
-
-    <slot />
-  </t-data>
+  </t-cell-filler>
 </template>
 
 <script>
@@ -28,3 +25,10 @@
     extends: tTypedCell,
   }
 </script>
+
+<style>
+  .t-text-cell textarea {
+    height: 100%;
+    min-height: 30px;
+  }
+</style>

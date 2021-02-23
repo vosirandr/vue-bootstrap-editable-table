@@ -1,10 +1,9 @@
 <template>
-  <t-data
+  <t-cell-filler
     class="t-json-value"
-    :width="field.width"
     @click="modalShown = true"
   >
-    <span class="t-json-value__format">{{formatValue}}</span>
+    <div class="t-json-value__format">{{formatValue}}</div>
 
     <json-editor
       ref="modal"
@@ -13,10 +12,11 @@
       @submit="setValue"
       @close="modalShown = false"
     />
-  </t-data>
+  </t-cell-filler>
 </template>
 
 <script>
+  import { sliceWithEllipsis, isObject } from "../../../helpers";
   import tTypedCell from './t-typed-cell';
   import jsonEditor from '../../json-editor';
 
@@ -33,9 +33,16 @@
     },
     computed: {
       formatValue () {
-        return this.value && JSON.stringify(this.value, null,  2);
+        if (!this.value) return '';
+        const jsonString = JSON.stringify(this.value, null,  2);
+        return sliceWithEllipsis(jsonString, 100);
       }
     },
+    methods: {
+      validate(value) {
+        return isObject(value);
+      },
+    }
   }
 </script>
 

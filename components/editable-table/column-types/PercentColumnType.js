@@ -1,6 +1,6 @@
 import ColumnType from "./ColumnType";
 import tPercentCell from './t-percent-cell';
-import { formatPercents, convertToNumberArray } from "../../../helpers";
+import { formatPercents, isUndefinedOrNullOrEmpty } from "../../../helpers";
 import { count, max, mean, median, min, sum } from "../../../helpers/aggregations";
 
 export default class PercentColumnType extends ColumnType {
@@ -9,7 +9,10 @@ export default class PercentColumnType extends ColumnType {
   static aggregations = [ sum, min, max, mean, median, count ]
     .reduce((agg, method) => ({
       ...agg,
-      [method.name]: (values) => method(convertToNumberArray(values)),
+      [method.name]: (values) => {
+        const validData = values.filter(value => !isUndefinedOrNullOrEmpty(value));
+        return method(validData);
+      },
     }), {});
 
   static formatAggregatedValue(name, value) {
@@ -17,5 +20,9 @@ export default class PercentColumnType extends ColumnType {
   }
   static isAggregatedValueValid(name, value) {
     return !(name === 'sum' && value > 1);
+  }
+  static convertStringToValue(str) {
+    const number = Number(str.replace(',', '.'));
+    return Number.isNaN(number) ? undefined : number;
   }
 }

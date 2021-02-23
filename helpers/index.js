@@ -35,6 +35,7 @@ export const isCorrectUrl = val => {
 };
 
 export const formatFloat = value => {
+  if (isUndefinedOrNullOrEmpty(value)) return '';
   let formatValue = new Intl.NumberFormat('en-EN').format(value, {
     useGrouping: true,
     minimumFractionDigits: 2,
@@ -83,4 +84,17 @@ export const sort = (a, b) => {
   return a > b ? 1 : -1;
 };
 
-export const convertToNumberArray = array => array.map(value => +value || 0);
+export const sliceWithEllipsis = (string, length) =>
+  string.length <= length
+    ? string
+    : string.slice(0, length) + '…';
+
+export const csvToArray = csv => (csv || '')
+  .split('\n')
+  .filter(row => row.length)
+  .map(row => row.split('\t'));
+
+export const capitalize = str => {
+  if (!str) return '';
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}

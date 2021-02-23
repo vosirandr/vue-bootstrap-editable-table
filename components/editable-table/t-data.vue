@@ -3,6 +3,7 @@
     class="td"
     :class="{ 'td-design': !empty, 'empty-td-design': empty }"
     :style="tdStyle"
+    v-bind="$attrs"
     v-on="$listeners"
   >
     <slot/>
@@ -29,6 +30,7 @@ export default {
 <style>
   .td {
     display: flex;
+    position: relative;
     word-break: break-word;
     align-items: center;
     justify-content: center;

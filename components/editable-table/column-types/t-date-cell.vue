@@ -1,10 +1,11 @@
 <template>
-  <t-data
-    :width="field.width"
-    @click="$emit('click')"
+  <t-cell-filler
+    class="t-date-cell"
+    @click="$emit('switch-edit-mode')"
   >
-    <b-input-group v-if="edit" >
+    <b-input-group v-if="edit" @click.stop>
       <b-form-input
+        ref="input"
         id="example-input"
         v-model="localValue"
         type="text"
@@ -14,21 +15,20 @@
         @change="setValue"
         @input="checkValid"
       />
-      <b-input-group-append @click.stop="() => {}">
+      <b-input-group-append @click.stop>
         <b-form-datepicker
           v-model="localValue"
           button-only
           right
           size="sm"
           locale="en-US"
-          aria-controls="example-input"
           @input="setValue"
         />
       </b-input-group-append>
     </b-input-group>
 
     <span v-else>{{formatValue}}</span>
-  </t-data>
+  </t-cell-filler>
 </template>
 
 <script>
@@ -46,3 +46,9 @@
     },
   }
 </script>
+
+<style>
+  .t-date-cell label.form-control {
+    display: none;
+  }
+</style>

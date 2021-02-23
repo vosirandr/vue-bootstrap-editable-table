@@ -1,6 +1,6 @@
 <template>
   <t-data
-    class="table-total-column"
+    class="table-total-cell"
     :width="column.width"
   >
     <b v-if="column.name === 'name'">Total</b>
@@ -15,6 +15,7 @@
         variant="link"
         toggle-class="text-decoration-none"
         no-caret
+        boundary="window"
       >
         <template v-slot:button-content>
           <i>{{'['+(aggregationName || '+')+']'}}</i>
@@ -37,7 +38,7 @@
   import tData from './t-data';
 
   export default {
-    name: "t-total-column",
+    name: "t-total-cell",
     components: {
       tData
     },
@@ -69,22 +70,35 @@
       },
     },
     methods: {
+      extractDropdownMenu () {
+        const dropdownMenu = this.$el.getElementsByClassName('dropdown-menu')[0];
+        if (!dropdownMenu) return;
+        document.body.append(dropdownMenu);
+      },
       onChange(aggregation, fieldName) {
         this.$emit('change-aggregating', {
           aggregation,
           fieldName
         });
       },
+    },
+    mounted () {
+      this.extractDropdownMenu();
     }
   }
 </script>
 
 <style>
-  .table-total-column .dropdown {
+  .table-total-cell .dropdown {
     vertical-align: baseline;
   }
 
-  .table-total-column .dropdown>button {
+  .table-total-cell .dropdown>button {
     padding: 1px;
+  }
+
+  .table-total-cell .dropdown-menu {
+    max-height: 100px;
+    overflow-y: auto;
   }
 </style>

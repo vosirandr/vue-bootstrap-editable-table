@@ -1,45 +1,50 @@
 <template>
-  <div class="table">
-    <t-head
-      :fields="tempFields"
-      :delete-mode="deleteMode"
-      @add-col="$emit('add-col', $event)"
-      @del-col="$emit('del-col', $event)"
-      @delete-mode="deleteMode = $event"
-      @resize-col="resizeColumn"
-      @resize-col-stop="submitColumnResizing"
-      @move-col="$emit('move-col', $event)"
-    />
-
-    <div class="table-body" v-click-outside="onClickOutside">
-      <t-row
-        v-for="row in rows" :key="String(row.name).replace(/ /g, '_')"
+  <div class="table-wrapper">
+    <div class="table">
+      <t-head
         :fields="tempFields"
-        :value="row"
-        :editField="(row.name === editableCell.row) ? editableCell.field : undefined"
         :delete-mode="deleteMode"
-        @click="onClickCell"
-        @del-row="onDeleteRow(row.name)"
-        @change="onChangeValueInCell"
-        @change-valid="onChangeValidInCell"
+        @add-col="$emit('add-col', $event)"
+        @del-col="$emit('del-col', $event)"
+        @delete-mode="deleteMode = $event"
+        @resize-col="resizeColumn"
+        @resize-col-stop="submitColumnResizing"
+        @move-col="$emit('move-col', $event)"
+      />
+
+      <div class="table-body" v-click-outside="onClickOutside">
+        <t-row
+          v-for="(row, i) in rows" :key="String(row.name).replace(/ /g, '_')"
+          :fields="tempFields"
+          :value="row"
+          :editField="(row.name === editableCell.row) ? editableCell.field : undefined"
+          :delete-mode="deleteMode"
+          @switch-edit-mode="switchEditMode"
+          @del-row="onDeleteRow(row.name)"
+          @change="onChangeValueInCell"
+          @change-valid="onChangeValidInCell"
+          @dragstart="draggingRow = i"
+          @drop="moveRow(i)"
+          @paste-csv="pasteCSV"
+        />
+      </div>
+
+      <t-total
+        :columns="columns"
+        @change-aggregating="$emit('change-aggregating', $event)"
+      />
+
+      <t-add-row
+        :fields="fields"
+        @add-row="$emit('add-row')"
       />
     </div>
-
-    <t-total
-      :columns="columns"
-      @change-aggregating="$emit('change-aggregating', $event)"
-    />
-
-    <t-add-row
-      :fields="fields"
-      @add-row="$emit('add-row')"
-    />
   </div>
 </template>
 
 <script>
 import deepCopy from 'deepcopy';
-import { getField } from "../../helpers/fields";
+import { getField, getFieldIndex } from "../../helpers/fields";
 import tAddRow from './t-add-row.vue'
 import tTotal from './t-total.vue'
 import tHead from './t-head.vue'
@@ -69,6 +74,7 @@ export default {
       },
       deleteMode: false,
       resizingProps: null,
+      draggingRow: null,
     }
   },
   computed: {
@@ -81,22 +87,24 @@ export default {
     }
   },
   methods: {
-    onClickCell({ fieldName, rowName }) {
+    moveRow(rowIndex) {
+      if (this.draggingRow === rowIndex) return;
+      this.$emit('move-row', { from: this.draggingRow, to: rowIndex });
+    },
+    switchEditMode({ fieldName, rowName }) {
       // console.log(`Cell clicked fieldName:${fieldName}, rowName:${rowName}`);
       if (!this.editableCell.isValid) return;
 
       this.deleteMode = false;
 
-      if (rowName !== this.editableCell.row) {
-        this.editableCell.field = undefined;
+      if (this.editableCell.field === fieldName && this.editableCell.row === rowName) {
+        this.editableCell.field = null;
+        this.editableCell.row = null;
+      } else {
+        this.editableCell.field = fieldName;
         this.editableCell.row = rowName;
       }
 
-      if (fieldName === 'name') {
-        this.editableCell.field = undefined;
-      } else {
-        this.editableCell.field = fieldName;
-      }
     },
     onDeleteRow(rowName) {
       this.$emit('del-row', rowName);
@@ -121,6 +129,33 @@ export default {
       this.resizingProps = { name, width };
       const tempField = getField(this.tempFields, name);
       tempField.width = width;
+    },
+    pasteCSV ({ fieldName, rowName, data }) {
+      const iterate = (table, csv, name, callback) => {
+        const rowIndex = getFieldIndex(table, name);
+        for (let iCSV = 0; iCSV < csv.length; iCSV ++) {
+          const iTable = rowIndex + iCSV;
+          callback(iTable, iCSV)
+        }
+      };
+
+      const updatedRows = [];
+
+      iterate(this.rows, data, rowName, (iRows, yCSV) => {
+        const updatedRow = { name: this.rows[iRows] && this.rows[iRows].name };
+        updatedRows.push(updatedRow);
+        iterate(this.columns, data[yCSV], fieldName, (iFields, xCSV) => {
+          if (iFields >= this.columns.length) return;
+
+          const column = this.columns[iFields];
+          const csvValue = data[yCSV][xCSV];
+          const value = column.columnType.convertStringToValue(csvValue);
+          updatedRow[column.name] = value;
+        });
+      });
+      console.log({ updatedRows })
+
+      this.$emit('update-cells', updatedRows);
     },
     submitColumnResizing () {
       if (!this.resizingProps) return;
@@ -153,6 +188,11 @@ export default {
 </script>
 
 <style>
+  .table-wrapper {
+    overflow-x: auto;
+    margin-bottom: 2rem;
+  }
+
   .table {
     /* structure */
     display: flex;
@@ -161,9 +201,8 @@ export default {
     width: fit-content;
     /* design */
     font-size: 1rem;
-    margin: 0.5rem;
+    margin: 0;
     line-height: 1.5;
-    padding-bottom: 2rem;
     justify-content: center;
     text-align: center;
   }
@@ -172,86 +211,8 @@ export default {
     box-shadow: none;
   }
 
-  .clear-btn-style {
-    outline: none;
-
-    border: none;
-    margin: 0;
-    padding: 0;
-    width: auto;
-    overflow: visible;
-
-    background: transparent;
-
-    /* inherit font & color from ancestor */
-    color: inherit;
-    font: inherit;
-
-    /* Normalize `line-height`. Cannot be changed from `normal` in Firefox 4+. */
-    line-height: normal;
-
-    /* Corrects font smoothing for webkit */
-    -webkit-font-smoothing: inherit;
-    -moz-osx-font-smoothing: inherit;
-
-    /* Corrects inability to style clickable `input` types in iOS */
-    -webkit-appearance: none;
+  .td:last-child {
+    width: 100px
   }
 
-  .del-btn {
-    width: 21px;
-    height: 21px;
-    border-radius: 21px;
-    position: absolute;
-    z-index: 1;
-    cursor: pointer;
-  }
-
-  .top-position {
-    top: -20px;
-  }
-
-  .left-position {
-    left: 0px;
-  }
-
-  .del-btn:focus {
-    outline: none;
-  }
-
-  .del-btn:before {
-    content: '+';
-    color: #007bff;
-    position: absolute;
-    z-index: 2;
-    transform: rotate(45deg);
-    font-size: 30px;
-    line-height: 1;
-    top: -6px;
-    left: 2px;
-    transition: all 0.3s cubic-bezier(0.77, 0, 0.2, 0.85);
-  }
-
-  .del-btn:after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    border-radius: 100%;
-    background: #007bff;
-    z-index: 1;
-    transition: all 0.3s cubic-bezier(0.77, 0, 0.2, 0.85);
-    transform: scale(0.01);
-  }
-
-  .del-btn:hover:after {
-    transform: scale(1);
-  }
-
-  .del-btn:hover:before {
-    transform: scale(0.8) rotate(45deg);
-    color: #fff;
-  }
 </style>

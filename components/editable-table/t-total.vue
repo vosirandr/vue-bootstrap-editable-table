@@ -1,6 +1,6 @@
 <template>
   <div class="tr table-total">
-    <t-total-column
+    <t-total-cell
       v-for="column in columns"
       :key="column.name"
       :column="column"
@@ -13,12 +13,12 @@
 
 <script>
 import tData from './t-data.vue'
-import TTotalColumn from "./t-total-column";
+import TTotalCell from "./t-total-cell";
 
 export default {
   name: 't-total',
   components: {
-    TTotalColumn,
+    TTotalCell,
     tData
   },
   props: {

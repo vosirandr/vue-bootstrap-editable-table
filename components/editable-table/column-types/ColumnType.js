@@ -25,4 +25,7 @@ export default class ColumnType {
   static isAggregatedValueValid(name, value) {
     return true;
   }
+  static convertStringToValue(str) {
+    return str
+  }
 }

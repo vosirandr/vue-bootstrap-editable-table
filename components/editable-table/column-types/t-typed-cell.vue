@@ -1,14 +1,11 @@
 <template>
-  <t-data
-    :width="field.width"
-    @click="$emit('click')"
-  >
+  <t-cell-filler>
     <div>{{formatValue}}</div>
-  </t-data>
+  </t-cell-filler>
 </template>
 
 <script>
-import tData from '../t-data';
+import TCellFiller from "../t-cell-filler";
 import {
   validateType,
 } from '~/helpers';
@@ -17,11 +14,11 @@ export default {
   name: 't-typed-cell',
   props: ['value', 'field', 'edit'],
   components: {
-    tData,
+    TCellFiller,
   },
   data() {
     return {
-      localValue: this.convertValueToLocal(this.value),
+      localValue: null,
       isValidValue: true
     }
   },
@@ -29,14 +26,20 @@ export default {
     formatValue() {
       if (this.value === undefined) return '';
       return this.value;
+    },
+    isNullIfValid () {
+      return this.isValidValue ? null : false;
     }
   },
   methods: {
     setValue(value) {
+      this.localValue = value;
       this.checkValid(value);
       if (this.isValidValue) {
         const externalValue = this.convertValueToExternal(value);
         this.$emit('change', externalValue);
+      } else {
+        this.$emit('change', undefined);
       }
     },
     checkValid(value) {
@@ -53,7 +56,25 @@ export default {
     },
     convertValueToExternal (value) {
       return value;
+    },
+    updateLocalValue () {
+      this.localValue = this.convertValueToLocal(this.value);
     }
+  },
+  watch: {
+    value () {
+      this.updateLocalValue();
+    },
+    edit () {
+      this.$nextTick(() => {
+        const { input } = this.$refs;
+        if (!input) return;
+        input.focus();
+      })
+    }
+  },
+  created () {
+    this.updateLocalValue();
   }
 }
 </script>

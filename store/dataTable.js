@@ -1,5 +1,5 @@
 import { db } from '~/db';
-import { getValueToType } from '~/helpers';
+import { generateId } from "../helpers";
 
 export const state = () => ({
   items: [],
@@ -16,10 +16,10 @@ export const mutations = {
     }
   },
   update(state, payload) {
-    const item = state.items.find(el => el.name === payload.rowName);
-    if (item) {
-      item[payload.fieldName] = payload.value;
-    }
+    state.items = state.items.map(item => {
+      if (item.name !== payload.rowName) return {...item};
+      return {...item, [payload.fieldName]: payload.value};
+    });
   },
   load(state, data) {
     state.items = [];
@@ -54,6 +54,21 @@ export const mutations = {
       delete item[payload];
     });
   },
+  move(state, { from, to }) {
+    const field = state.items[from];
+    state.items.splice(from, 1);
+    state.items.splice(to, 0, field);
+  },
+  bulkUpdate(state, records) {
+    records.forEach(record => {
+      if (record.name) {
+        const item = state.items.find(el => el.name === record.name);
+        Object.entries(record).forEach(([key, value]) => item[key] = value);
+      } else {
+        state.items.push({ ...record, name: generateId() });
+      }
+    });
+  }
 };
 
 export const getters = {
@@ -63,15 +78,8 @@ export const getters = {
 };
 
 export const actions = {
-  async create({ state, commit, rootGetters }) {
-    const fields = rootGetters['fieldTable/items'];
-    const lastIndex = parseInt(state.items[state.items.length - 1].name.slice(4));
-    let payload = { name: `Name ${lastIndex + 1}` };
-
-    for (let i = 0; i < fields.length; i++) {
-      if (fields[i].name === 'name') continue;
-      payload[fields[i].name] = getValueToType(fields[i].type);
-    }
+  async create({ commit }) {
+    let payload = { name: generateId() };
 
     const response = await db.post({
       table: 'datas-table',
@@ -118,19 +126,6 @@ export const actions = {
 
     return response.status;
   },
-  async updateField({ commit }, payload) {
-    const response = await db.bulkUpdate({
-      table: 'datas-table',
-      query: payload.query,
-      payload: payload.data
-    });
-
-    if (response.status === 'Ok') {
-      commit('updateField', payload);
-    }
-
-    return response.status;
-  },
   async deleteField({ commit }, payload) {
     const response = await db.deleteColumn({
       table: 'datas-table',
@@ -140,5 +135,26 @@ export const actions = {
     if (response.status === 'Ok') {
       commit('deleteField', payload.query.name);
     }
-  }
+  },
+  async move({ dispatch, commit }, { from, to }) {
+    const response = await db.put({
+      table: 'datas-table',
+      query: { index: from },
+      payload: { index: to },
+    });
+
+    if (response.status === 'Ok') {
+      commit('move', { from, to });
+    }
+  },
+  async bulkUpdate({ dispatch, commit }, records) {
+    const response = await db.multiUpdate({
+      table: 'datas-table',
+      payload: { records },
+    });
+
+    if (response.status === 'Ok') {
+      commit('bulkUpdate', records);
+    }
+  },
 };

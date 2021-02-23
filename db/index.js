@@ -1,3 +1,5 @@
+import { generateId } from "../helpers";
+
 const testFields = [{
   name: 'name',
   caption: 'Name',
@@ -99,6 +101,10 @@ function database(tableName) {
 
   function find(query, findIndex) {
     if (Object.keys(query).length) {
+      if (query.hasOwnProperty('index')) {
+        return findIndex ? query.index : datas[query.index];
+      }
+
       if (findIndex) {
         return datas.findIndex(comparator);
       } else {
@@ -131,12 +137,12 @@ function database(tableName) {
       const record = find(query);
       if (record) {
         for (const key in payload) {
-          if (record.hasOwnProperty(key) && key !== 'index') {
+          if (key !== 'index') {
             record[key] = payload[key];
           }
         }
 
-        if (payload.index) {
+        if (payload.hasOwnProperty('index')) {
           const recordIndex = find(query, true);
           datas.splice(recordIndex, 1);
           datas.splice(payload.index, 0, record);
@@ -182,6 +188,20 @@ function database(tableName) {
 
       return datas;
     },
+    multiUpdate(query, { records }) {
+      read();
+
+      records.forEach(record => {
+        if (record.name) {
+          const item = datas.find(el => el.name === record.name);
+          Object.entries(record).forEach(([key, value]) => item[key] = value);
+        } else {
+          datas.push({ ...record, name: generateId() })
+        }
+      });
+
+      write();
+    },
     deleteColumn(query) {
       read();
 
@@ -222,6 +242,9 @@ export const db = {
   },
   bulkUpdate(request) {
     return responser('bulkUpdate', request);
+  },
+  multiUpdate(request) {
+    return responser('multiUpdate', request);
   },
   deleteColumn(request) {
     return responser('deleteColumn', request);
