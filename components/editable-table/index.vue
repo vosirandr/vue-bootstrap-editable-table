@@ -1,7 +1,13 @@
 <template>
-  <div class="table-wrapper">
+  <div
+    class="table-wrapper"
+    ref="tableWrapper"
+    @scroll="setTableHeaderPosition()"
+  >
     <div class="table">
       <t-head
+        class="table-header"
+        :style="{ top: `${tableHeaderTopPosition}px` }"
         :fields="tempFields"
         @add-col="$emit('add-col', $event)"
         @del-col="$emit('del-col', $event)"
@@ -71,6 +77,7 @@ export default {
       },
       resizingProps: null,
       draggingRow: null,
+      tableHeaderTopPosition: 0,
     }
   },
   computed: {
@@ -83,6 +90,9 @@ export default {
     }
   },
   methods: {
+    setTableHeaderPosition() {
+      this.tableHeaderTopPosition = this.$refs.tableWrapper.scrollTop;
+    },
     moveRow(rowIndex) {
       if (this.draggingRow === rowIndex) return;
       this.$emit('move-row', { from: this.draggingRow, to: rowIndex });
@@ -185,6 +195,18 @@ export default {
   .table-wrapper {
     overflow-x: auto;
     margin-bottom: 2rem;
+    margin-top: 3rem;
+    position: relative;
+    padding-top: 50px;
+    max-height: calc(100vh - 5rem);
+  }
+
+  .table-header {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: auto;
+    z-index: 10;
   }
 
   .table {
