@@ -4,7 +4,6 @@
       v-for="field in fields"
       :key="field.name"
       :field="field"
-      :delete-mode="deleteMode"
       @delete="onClickDelete"
       @resize="$emit('resize-col', { name: field.name, width: $event })"
       @resize-stop="$emit('resize-col-stop')"
@@ -18,10 +17,6 @@
     >
       <b-button class="px-2 py-1" variant="link" @click="showModal = true">
         <b-icon icon="plus" font-scale="2" />
-      </b-button>
-
-      <b-button class="px-2 py-1" variant="link" @click="$emit('delete-mode', !deleteMode)">
-        <b-icon icon="x" font-scale="2" />
       </b-button>
     </t-data>
 
@@ -50,7 +45,6 @@ export default {
   },
   props: {
     fields: { type: Array, required: true },
-    deleteMode: { type: Boolean, default: false }
   },
   data () {
     return {

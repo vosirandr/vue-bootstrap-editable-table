@@ -3,10 +3,8 @@
     <div class="table">
       <t-head
         :fields="tempFields"
-        :delete-mode="deleteMode"
         @add-col="$emit('add-col', $event)"
         @del-col="$emit('del-col', $event)"
-        @delete-mode="deleteMode = $event"
         @resize-col="resizeColumn"
         @resize-col-stop="submitColumnResizing"
         @move-col="$emit('move-col', $event)"
@@ -18,7 +16,6 @@
           :fields="tempFields"
           :value="row"
           :editField="(row.name === editableCell.row) ? editableCell.field : undefined"
-          :delete-mode="deleteMode"
           @switch-edit-mode="switchEditMode"
           @del-row="onDeleteRow(row.name)"
           @change="onChangeValueInCell"
@@ -72,7 +69,6 @@ export default {
         row: undefined,
         isValid: true
       },
-      deleteMode: false,
       resizingProps: null,
       draggingRow: null,
     }
@@ -94,8 +90,6 @@ export default {
     switchEditMode({ fieldName, rowName }) {
       // console.log(`Cell clicked fieldName:${fieldName}, rowName:${rowName}`);
       if (!this.editableCell.isValid) return;
-
-      this.deleteMode = false;
 
       if (this.editableCell.field === fieldName && this.editableCell.row === rowName) {
         this.editableCell.field = null;

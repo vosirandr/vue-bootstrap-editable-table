@@ -9,9 +9,9 @@
     @dragstart="$emit('drag', field.name)"
     @dragover.prevent
     @drop="$emit('drop', field.name)"
-  >
+    >
     <b-button
-      v-if="field.name !== 'name' && deleteMode"
+      v-if="field.name !== 'name'"
       class="t-head-cell__delete"
       variant="link"
       @click="$emit('delete', field.name)"
@@ -33,7 +33,6 @@
     },
     props: {
       field: Object,
-      deleteMode: Boolean,
     },
     data () {
       return {
@@ -86,5 +85,9 @@
     right: 0;
     top: 0;
     padding: 0;
+    display: none;
+  }
+  .t-head-cell:hover .t-head-cell__delete {
+    display: block;
   }
 </style>

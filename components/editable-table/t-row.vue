@@ -1,6 +1,7 @@
 <template>
   <div class="tr striped">
     <t-data
+      class="t-row-cell"
       :width="firstField.width"
       draggable
       @dragstart="$emit('dragstart')"
@@ -10,7 +11,6 @@
       {{ value[firstField.name] }}
 
       <b-button
-        v-if="deleteMode"
         class="t-row__delete"
         variant="link"
         @click="onClickDelete(firstField.name)"
@@ -53,7 +53,6 @@ export default {
     fields: { type: Array, required: true },
     value: { type: Object, required: true },
     editField: undefined,
-    deleteMode: { type: Boolean, default: false },
   },
   computed: {
     rowName () {
@@ -110,5 +109,10 @@ export default {
     right: 0;
     top: 0;
     padding: 0;
+    display: none;
+  }
+
+  .t-row-cell:hover .t-row__delete {
+    display: block;
   }
 </style>
