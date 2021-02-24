@@ -4,20 +4,37 @@
       't-head-cell',
        readyToResize && 't-head-cell--resizing'
     ]"
+    :title="capitalize(field.type)"
     :width="field.width"
     :draggable="!readyToResize && field.name !== 'name'"
     @dragstart="$emit('drag', field.name)"
     @dragover.prevent
     @drop="$emit('drop', field.name)"
-  >
-    <b-button
-      v-if="field.name !== 'name' && deleteMode"
-      class="t-head-cell__delete"
-      variant="link"
-      @click="$emit('delete', field.name)"
     >
-      <b-icon icon="x" />
-    </b-button>
+
+    <div
+      v-if="field.name !== 'name'"
+      class="t-head-func-buttons-wrapper"
+    >
+      <b-button
+        class="t-head-cell__move"
+        variant="link"
+      >
+        <b-icon icon="arrows-move" />
+      </b-button>
+
+      <b-button
+        class="t-head-cell__delete"
+        variant="link"
+        @click="$emit('delete', field.name)"
+      >
+        <b-icon icon="x" />
+      </b-button>
+    </div>
+
+    <font-awesome-icon :icon="['fas', icons[field.type]]" />
+
+    &nbsp;
 
     {{field.caption}}
   </t-data>
@@ -25,6 +42,7 @@
 
 <script>
   import tData from './t-data.vue';
+  import { capitalize } from "../../helpers";
 
   export default {
     name: "t-head-cell",
@@ -33,15 +51,25 @@
     },
     props: {
       field: Object,
-      deleteMode: Boolean,
     },
     data () {
       return {
         readyToResize: false,
         resizingPosition: null,
+        icons: {
+          text: 'align-left',
+          image: 'image',
+          number: 'calculator',
+          date: 'calendar-day',
+          percent: 'percent',
+          json: 'code',
+        }
       }
     },
     methods: {
+      capitalize(text) {
+        return capitalize(text);
+      },
       onMouseDown (e) {
         if (this.readyToResize) {
           this.resizingPosition = e.clientX - this.field.width;
@@ -81,10 +109,42 @@
   .t-head-cell--resizing {
     cursor: col-resize;
   }
-  .t-head-cell__delete {
+
+  .t-head-cell {
+    background-color: #dee2e6;
+  }
+
+  .t-head-func-buttons-wrapper {
+    display: none;
     position: absolute;
+    top: -31px;
     right: 0;
-    top: 0;
+    width: 100%;
+    height: 30px;
+    background-color: #efefef;
+    justify-content: space-around;
+    align-items: center;
+  }
+
+  .t-head-cell__delete, .t-head-cell__move {
     padding: 0;
+    width: 20px;
+    height: 20px;
+    background-color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .t-head-cell__delete:hover, .t-head-cell__move:hover {
+    background-color: #bdbcbc;
+  }
+
+  .t-head-cell__move:active {
+    cursor: grab;
+  }
+
+  .t-head-cell:hover .t-head-func-buttons-wrapper {
+    display: flex;
   }
 </style>

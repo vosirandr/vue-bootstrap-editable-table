@@ -2,15 +2,6 @@
   <b-container>
     <b-row>
       <b-col>
-        <app-logo/>
-        <h1 class="title">
-          vue-table
-        </h1>
-      </b-col>
-    </b-row>
-
-    <b-row>
-      <b-col>
         <div v-if="isLoading" class="text-center">
           <b-spinner variant="primary" label="Text Centered" />
         </div>
