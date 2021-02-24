@@ -1,13 +1,8 @@
 <template>
-  <div
-    class="table-wrapper"
-    ref="tableWrapper"
-    @scroll="setTableHeaderPosition()"
-  >
+  <div class="table-wrapper">
     <div class="table">
       <t-head
         class="table-header"
-        :style="{ top: `${tableHeaderTopPosition}px` }"
         :fields="tempFields"
         @add-col="$emit('add-col', $event)"
         @del-col="$emit('del-col', $event)"
@@ -16,31 +11,33 @@
         @move-col="$emit('move-col', $event)"
       />
 
-      <div class="table-body" v-click-outside="onClickOutside">
-        <t-row
-          v-for="(row, i) in rows" :key="String(row.name).replace(/ /g, '_')"
-          :fields="tempFields"
-          :value="row"
-          :editField="(row.name === editableCell.row) ? editableCell.field : undefined"
-          @switch-edit-mode="switchEditMode"
-          @del-row="onDeleteRow(row.name)"
-          @change="onChangeValueInCell"
-          @change-valid="onChangeValidInCell"
-          @dragstart="draggingRow = i"
-          @drop="moveRow(i)"
-          @paste-csv="pasteCSV"
+      <div class="table-body-wrapper">
+        <div class="table-body" v-click-outside="onClickOutside">
+          <t-row
+            v-for="(row, i) in rows" :key="String(row.name).replace(/ /g, '_')"
+            :fields="tempFields"
+            :value="row"
+            :editField="(row.name === editableCell.row) ? editableCell.field : undefined"
+            @switch-edit-mode="switchEditMode"
+            @del-row="onDeleteRow(row.name)"
+            @change="onChangeValueInCell"
+            @change-valid="onChangeValidInCell"
+            @dragstart="draggingRow = i"
+            @drop="moveRow(i)"
+            @paste-csv="pasteCSV"
+          />
+        </div>
+
+        <t-total
+          :columns="columns"
+          @change-aggregating="$emit('change-aggregating', $event)"
+        />
+
+        <t-add-row
+          :fields="fields"
+          @add-row="$emit('add-row')"
         />
       </div>
-
-      <t-total
-        :columns="columns"
-        @change-aggregating="$emit('change-aggregating', $event)"
-      />
-
-      <t-add-row
-        :fields="fields"
-        @add-row="$emit('add-row')"
-      />
     </div>
   </div>
 </template>
@@ -77,7 +74,6 @@ export default {
       },
       resizingProps: null,
       draggingRow: null,
-      tableHeaderTopPosition: 0,
     }
   },
   computed: {
@@ -90,9 +86,6 @@ export default {
     }
   },
   methods: {
-    setTableHeaderPosition() {
-      this.tableHeaderTopPosition = this.$refs.tableWrapper.scrollTop;
-    },
     moveRow(rowIndex) {
       if (this.draggingRow === rowIndex) return;
       this.$emit('move-row', { from: this.draggingRow, to: rowIndex });
@@ -193,20 +186,15 @@ export default {
 
 <style>
   .table-wrapper {
-    overflow-x: auto;
-    margin-bottom: 2rem;
-    margin-top: 3rem;
+    margin: 2rem 0;
     position: relative;
-    padding-top: 50px;
-    max-height: calc(100vh - 5rem);
+    max-height: calc(100vh - 4rem);
+    overflow: hidden;
   }
 
-  .table-header {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: auto;
-    z-index: 10;
+  .table-body-wrapper {
+    height: calc(100vh - 50px - 4rem);
+    overflow: auto;
   }
 
   .table {
@@ -215,6 +203,7 @@ export default {
     flex-flow: column nowrap;
     flex: 1 1 auto;
     width: fit-content;
+    height: 100%;
     /* design */
     font-size: 1rem;
     margin: 0;
