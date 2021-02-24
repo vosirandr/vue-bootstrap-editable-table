@@ -4,6 +4,7 @@
       't-head-cell',
        readyToResize && 't-head-cell--resizing'
     ]"
+    :title="capitalize(field.type)"
     :width="field.width"
     :draggable="!readyToResize && field.name !== 'name'"
     @dragstart="$emit('drag', field.name)"
@@ -19,12 +20,17 @@
       <b-icon icon="x" />
     </b-button>
 
+    <font-awesome-icon :icon="['fas', icons[field.type]]" />
+
+    &nbsp;
+
     {{field.caption}}
   </t-data>
 </template>
 
 <script>
   import tData from './t-data.vue';
+  import { capitalize } from "../../helpers";
 
   export default {
     name: "t-head-cell",
@@ -38,9 +44,20 @@
       return {
         readyToResize: false,
         resizingPosition: null,
+        icons: {
+          text: 'align-left',
+          image: 'image',
+          number: 'calculator',
+          date: 'calendar-day',
+          percent: 'percent',
+          json: 'code',
+        }
       }
     },
     methods: {
+      capitalize(text) {
+        return capitalize(text);
+      },
       onMouseDown (e) {
         if (this.readyToResize) {
           this.resizingPosition = e.clientX - this.field.width;
