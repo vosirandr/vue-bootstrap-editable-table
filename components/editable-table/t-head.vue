@@ -28,6 +28,7 @@
     <add-column-modal
       v-if="showModal"
       :column-types="columnTypes"
+      :form="newColumnData"
       @submit="addColumn"
       @close="showModal = false"
     />
@@ -58,6 +59,14 @@ export default {
     }
   },
   inject: ['columnTypes'],
+  computed: {
+    newColumnData() {
+      return {
+        type: 'text',
+        name: `Column ${this.fields.length + 1}`
+      }
+    }
+  },
   methods: {
     onClickDelete(fieldName) {
       this.$emit('del-col', fieldName);

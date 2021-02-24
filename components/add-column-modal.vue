@@ -40,14 +40,10 @@
     mixins: [ validationMixin ],
     props: {
       columnTypes: Array,
+      form: Object
     },
     data() {
-      return {
-        form: {
-          type: '',
-          name: '',
-        },
-      }
+      return {}
     },
     validations: {
       form: {
