@@ -11,14 +11,17 @@
     @dragover.prevent
     @drop="$emit('drop', field.name)"
     >
-    <b-button
-      v-if="field.name !== 'name'"
-      class="t-head-cell__delete"
-      variant="link"
-      @click="$emit('delete', field.name)"
-    >
-      <b-icon icon="x" />
-    </b-button>
+
+    <div class="t-head-func-buttons-wrapper">
+      <b-button
+        v-if="field.name !== 'name'"
+        class="t-head-cell__delete"
+        variant="link"
+        @click="$emit('delete', field.name)"
+      >
+        <b-icon icon="x" />
+      </b-button>
+    </div>
 
     <font-awesome-icon :icon="['fas', icons[field.type]]" />
 
@@ -97,14 +100,38 @@
   .t-head-cell--resizing {
     cursor: col-resize;
   }
-  .t-head-cell__delete {
-    position: absolute;
-    right: 0;
-    top: 0;
-    padding: 0;
-    display: none;
+
+  .t-head-cell {
+    background-color: #dee2e6;
   }
-  .t-head-cell:hover .t-head-cell__delete {
-    display: block;
+
+  .t-head-func-buttons-wrapper {
+    display: none;
+    position: absolute;
+    top: -31px;
+    right: 0;
+    width: 100%;
+    height: 30px;
+    background-color: #efefef;
+    justify-content: space-around;
+    align-items: center;
+  }
+
+  .t-head-cell__delete {
+    padding: 0;
+    width: 20px;
+    height: 20px;
+    background-color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .t-head-cell__delete:hover {
+    background-color: #bdbcbc;
+  }
+
+  .t-head-cell:not(:first-child):hover .t-head-func-buttons-wrapper {
+    display: flex;
   }
 </style>

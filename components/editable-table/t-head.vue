@@ -12,6 +12,7 @@
     />
 
     <t-data
+      class="td__func-buttons-wrapper"
       @dragover.prevent
       @drop="moveLastColumn"
     >
@@ -103,12 +104,15 @@ export default {
   .th {
     display: none;
     font-weight: 700;
-    background-color: #dee2e6;
   }
 
   .th > .td {
     white-space: normal;
     justify-content: center;
     border-top: 1px solid #d0d0d0;
+  }
+
+  .td__func-buttons-wrapper {
+    background-color: #dee2e6;
   }
 </style>

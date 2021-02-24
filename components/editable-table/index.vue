@@ -189,12 +189,16 @@ export default {
     margin: 2rem 0;
     position: relative;
     max-height: calc(100vh - 4rem);
-    overflow: hidden;
   }
 
   .table-body-wrapper {
     height: calc(100vh - 50px - 4rem);
     overflow: auto;
+    padding-left: 30px;
+  }
+
+  .table-header {
+    padding-left: 30px;
   }
 
   .table {
