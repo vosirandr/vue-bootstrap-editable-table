@@ -4,7 +4,6 @@
       v-for="field in fields"
       :key="field.name"
       :field="field"
-      :delete-mode="deleteMode"
       @delete="onClickDelete"
       @resize="$emit('resize-col', { name: field.name, width: $event })"
       @resize-stop="$emit('resize-col-stop')"
@@ -13,21 +12,19 @@
     />
 
     <t-data
+      class="td__func-buttons-wrapper"
       @dragover.prevent
       @drop="moveLastColumn"
     >
       <b-button class="px-2 py-1" variant="link" @click="showModal = true">
         <b-icon icon="plus" font-scale="2" />
       </b-button>
-
-      <b-button class="px-2 py-1" variant="link" @click="$emit('delete-mode', !deleteMode)">
-        <b-icon icon="x" font-scale="2" />
-      </b-button>
     </t-data>
 
     <add-column-modal
       v-if="showModal"
       :column-types="columnTypes"
+      :form="newColumnData"
       @submit="addColumn"
       @close="showModal = false"
     />
@@ -49,7 +46,6 @@ export default {
   },
   props: {
     fields: { type: Array, required: true },
-    deleteMode: { type: Boolean, default: false }
   },
   data () {
     return {
@@ -58,6 +54,14 @@ export default {
     }
   },
   inject: ['columnTypes'],
+  computed: {
+    newColumnData() {
+      return {
+        type: 'text',
+        name: `Column ${this.fields.length + 1}`
+      }
+    }
+  },
   methods: {
     onClickDelete(fieldName) {
       this.$emit('del-col', fieldName);
@@ -100,12 +104,15 @@ export default {
   .th {
     display: none;
     font-weight: 700;
-    background-color: #dee2e6;
   }
 
   .th > .td {
     white-space: normal;
     justify-content: center;
     border-top: 1px solid #d0d0d0;
+  }
+
+  .td__func-buttons-wrapper {
+    background-color: #dee2e6;
   }
 </style>

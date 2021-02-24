@@ -2,42 +2,42 @@
   <div class="table-wrapper">
     <div class="table">
       <t-head
+        class="table-header"
         :fields="tempFields"
-        :delete-mode="deleteMode"
         @add-col="$emit('add-col', $event)"
         @del-col="$emit('del-col', $event)"
-        @delete-mode="deleteMode = $event"
         @resize-col="resizeColumn"
         @resize-col-stop="submitColumnResizing"
         @move-col="$emit('move-col', $event)"
       />
 
-      <div class="table-body" v-click-outside="onClickOutside">
-        <t-row
-          v-for="(row, i) in rows" :key="String(row.name).replace(/ /g, '_')"
-          :fields="tempFields"
-          :value="row"
-          :editField="(row.name === editableCell.row) ? editableCell.field : undefined"
-          :delete-mode="deleteMode"
-          @switch-edit-mode="switchEditMode"
-          @del-row="onDeleteRow(row.name)"
-          @change="onChangeValueInCell"
-          @change-valid="onChangeValidInCell"
-          @dragstart="draggingRow = i"
-          @drop="moveRow(i)"
-          @paste-csv="pasteCSV"
+      <div class="table-body-wrapper">
+        <div class="table-body" v-click-outside="onClickOutside">
+          <t-row
+            v-for="(row, i) in rows" :key="String(row.name).replace(/ /g, '_')"
+            :fields="tempFields"
+            :value="row"
+            :editField="(row.name === editableCell.row) ? editableCell.field : undefined"
+            @switch-edit-mode="switchEditMode"
+            @del-row="onDeleteRow(row.name)"
+            @change="onChangeValueInCell"
+            @change-valid="onChangeValidInCell"
+            @dragstart="draggingRow = i"
+            @drop="moveRow(i)"
+            @paste-csv="pasteCSV"
+          />
+        </div>
+
+        <t-total
+          :columns="columns"
+          @change-aggregating="$emit('change-aggregating', $event)"
+        />
+
+        <t-add-row
+          :fields="fields"
+          @add-row="$emit('add-row')"
         />
       </div>
-
-      <t-total
-        :columns="columns"
-        @change-aggregating="$emit('change-aggregating', $event)"
-      />
-
-      <t-add-row
-        :fields="fields"
-        @add-row="$emit('add-row')"
-      />
     </div>
   </div>
 </template>
@@ -72,7 +72,6 @@ export default {
         row: undefined,
         isValid: true
       },
-      deleteMode: false,
       resizingProps: null,
       draggingRow: null,
     }
@@ -94,8 +93,6 @@ export default {
     switchEditMode({ fieldName, rowName }) {
       // console.log(`Cell clicked fieldName:${fieldName}, rowName:${rowName}`);
       if (!this.editableCell.isValid) return;
-
-      this.deleteMode = false;
 
       if (this.editableCell.field === fieldName && this.editableCell.row === rowName) {
         this.editableCell.field = null;
@@ -189,8 +186,19 @@ export default {
 
 <style>
   .table-wrapper {
-    overflow-x: auto;
-    margin-bottom: 2rem;
+    margin: 2rem 0;
+    position: relative;
+    max-height: calc(100vh - 4rem);
+  }
+
+  .table-body-wrapper {
+    height: calc(100vh - 50px - 4rem);
+    overflow: auto;
+    padding-left: 30px;
+  }
+
+  .table-header {
+    padding-left: 30px;
   }
 
   .table {
@@ -199,6 +207,7 @@ export default {
     flex-flow: column nowrap;
     flex: 1 1 auto;
     width: fit-content;
+    height: 100%;
     /* design */
     font-size: 1rem;
     margin: 0;
