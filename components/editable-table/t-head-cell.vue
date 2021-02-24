@@ -12,9 +12,18 @@
     @drop="$emit('drop', field.name)"
     >
 
-    <div class="t-head-func-buttons-wrapper">
+    <div
+      v-if="field.name !== 'name'"
+      class="t-head-func-buttons-wrapper"
+    >
       <b-button
-        v-if="field.name !== 'name'"
+        class="t-head-cell__move"
+        variant="link"
+      >
+        <b-icon icon="arrows-move" />
+      </b-button>
+
+      <b-button
         class="t-head-cell__delete"
         variant="link"
         @click="$emit('delete', field.name)"
@@ -117,7 +126,7 @@
     align-items: center;
   }
 
-  .t-head-cell__delete {
+  .t-head-cell__delete, .t-head-cell__move {
     padding: 0;
     width: 20px;
     height: 20px;
@@ -127,11 +136,15 @@
     align-items: center;
   }
 
-  .t-head-cell__delete:hover {
+  .t-head-cell__delete:hover, .t-head-cell__move:hover {
     background-color: #bdbcbc;
   }
 
-  .t-head-cell:not(:first-child):hover .t-head-func-buttons-wrapper {
+  .t-head-cell__move:active {
+    cursor: grab;
+  }
+
+  .t-head-cell:hover .t-head-func-buttons-wrapper {
     display: flex;
   }
 </style>
