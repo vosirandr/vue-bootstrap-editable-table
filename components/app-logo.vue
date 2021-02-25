@@ -3,9 +3,9 @@
     <b-img
       src="/logo.png"
       fluid
-      alt="conjoint.ly"
-      height="200"
-      width="200"
+      alt="Сonjoint.ly"
+      height="100"
+      width="100"
     />
   </div>
 </template>

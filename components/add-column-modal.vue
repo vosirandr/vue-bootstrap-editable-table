@@ -1,7 +1,7 @@
 <template>
   <b-modal
     ref="modal"
-    title="Add new column"
+    title="Add a new column"
     visible
     @ok="handleOk"
     @hidden="$emit('close')"
