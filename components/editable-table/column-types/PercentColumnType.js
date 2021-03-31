@@ -6,6 +6,8 @@ import { count, max, mean, median, min, sum } from "~/helpers/aggregations";
 export default class PercentColumnType extends ColumnType {
   static type = 'percent';
   static cell = tPercentCell;
+  static icon = 'percent';
+
   static aggregations = [ sum, min, max, mean, median, count ]
     .reduce((agg, method) => ({
       ...agg,

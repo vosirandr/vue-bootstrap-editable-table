@@ -5,6 +5,7 @@ import tJsonCell from './t-json-cell';
 export default class JsonColumnType extends ColumnType {
   static type = 'JSON';
   static cell = tJsonCell;
+  static icon = 'code';
 
   static convertStringToValue(str) {
     try {

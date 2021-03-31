@@ -6,6 +6,8 @@ import { count, max, mean, median, min, sum } from "~/helpers/aggregations";
 export default class NumberColumnType extends ColumnType {
   static type = 'number';
   static cell = tNumberCell;
+  static icon = 'calculator';
+
   static aggregations = [ sum, min, max, mean, median, count ]
     .reduce((agg, method) => ({
       ...agg,

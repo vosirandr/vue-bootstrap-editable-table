@@ -32,7 +32,7 @@
       </b-button>
     </div>
 
-    <font-awesome-icon :icon="['fas', icons[field.type]]" />
+    <font-awesome-icon :icon="['fas', getColumnType(field.type).icon]" />
 
     &nbsp;
 
@@ -58,16 +58,9 @@
       return {
         readyToResize: false,
         resizingPosition: null,
-        icons: {
-          text: 'align-left',
-          image: 'image',
-          number: 'calculator',
-          date: 'calendar-day',
-          percent: 'percent',
-          json: 'code',
-        }
       }
     },
+    inject: ['getColumnType'],
     methods: {
       capitalize(text) {
         return capitalize(text);

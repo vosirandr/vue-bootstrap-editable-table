@@ -4,6 +4,7 @@ import tTypedCell from './t-text-cell';
 export default class ColumnType {
   static type = '';
   static cell = tTypedCell;
+  static icon = '';
   static aggregations = {};
 
   static hasAggregations () {
