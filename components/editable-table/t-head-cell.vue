@@ -6,12 +6,11 @@
     ]"
     :title="capitalize(field.type)"
     :width="field.width"
-    :draggable="!readyToResize && field.name !== 'name'"
+    :draggable="readyToDrag && !readyToResize && field.name !== 'name'"
     @dragstart="$emit('drag', field.name)"
     @dragover.prevent
     @drop="$emit('drop', field.name)"
-    >
-
+  >
     <div
       v-if="field.name !== 'name'"
       class="t-head-func-buttons-wrapper"
@@ -19,6 +18,8 @@
       <b-button
         class="t-head-cell__move"
         variant="link"
+        @mousedown="readyToDrag = true"
+        @mouseup="readyToDrag = false"
       >
         <b-icon icon="arrows-move" />
       </b-button>
@@ -57,6 +58,7 @@
     data () {
       return {
         readyToResize: false,
+        readyToDrag: false,
         resizingPosition: null,
       }
     },
@@ -110,7 +112,7 @@
   }
 
   .t-head-func-buttons-wrapper {
-    display: none;
+    display: flex;
     position: absolute;
     top: -31px;
     right: 0;
@@ -119,6 +121,7 @@
     background-color: #efefef;
     justify-content: space-around;
     align-items: center;
+    opacity: 0;
   }
 
   .t-head-cell__delete, .t-head-cell__move {
@@ -140,6 +143,6 @@
   }
 
   .t-head-cell:hover .t-head-func-buttons-wrapper {
-    display: flex;
+    opacity: 1;
   }
 </style>
