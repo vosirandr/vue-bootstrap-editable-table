@@ -1,6 +1,6 @@
 <template>
-  <div class="table-wrapper">
-    <div class="table" :style="{height}">
+  <div class="table-wrapper" :style="{height}">
+    <div class="table">
       <t-head
         class="table-header"
         :fields="tempFields"
@@ -199,9 +199,10 @@ export default {
 
 <style>
   .table-wrapper {
-    margin: 2rem 0;
+    padding: 2rem 0;
     position: relative;
     max-height: calc(100vh - 4rem);
+    overflow-y: auto;
   }
 
   .table-body-wrapper {
@@ -224,7 +225,6 @@ export default {
     line-height: 1.5;
     justify-content: center;
     text-align: center;
-    overflow-y: auto;
   }
 
   .td .btn:focus, .btn-focus {
