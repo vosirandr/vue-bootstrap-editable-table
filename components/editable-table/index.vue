@@ -220,6 +220,7 @@ export default {
     width: fit-content;
     height: 100%;
     /* design */
+    font-family: Arial;
     font-size: 1rem;
     margin: 0;
     line-height: 1.5;
