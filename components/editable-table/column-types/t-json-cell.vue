@@ -43,6 +43,8 @@
 
 <style>
   .t-json-value__format {
+    font-family: "Courier New";
+    font-size: 0.8rem;
     width: 100%;
     text-align: left;
     white-space: pre-wrap;
