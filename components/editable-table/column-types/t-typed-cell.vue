@@ -36,7 +36,7 @@ export default {
   methods: {
     setValue(value) {
       this.localValue = value;
-      if (this.cell.isValid) {
+      if (!this.cell || this.cell.isValid) {
         const externalValue = this.convertValueToExternal(value);
         this.$emit('change', externalValue);
       } else {
