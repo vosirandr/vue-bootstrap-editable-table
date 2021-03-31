@@ -9,7 +9,7 @@
       v-model="localValue"
       size="sm"
       @change="setValue"
-      @input="checkValid"
+      @input="$emit('validate', $event)"
       @click.stop
     />
 

@@ -1,7 +1,7 @@
 import ColumnType from "./ColumnType";
 import tNumberCell from './t-number-cell';
-import { formatFloat, isUndefinedOrNullOrEmpty } from "../../../helpers";
-import { count, max, mean, median, min, sum } from "../../../helpers/aggregations";
+import { formatFloat, isUndefinedOrNullOrEmpty, unFormatFloat, validateType } from "~/helpers";
+import { count, max, mean, median, min, sum } from "~/helpers/aggregations";
 
 export default class NumberColumnType extends ColumnType {
   static type = 'number';
@@ -21,5 +21,8 @@ export default class NumberColumnType extends ColumnType {
   static convertStringToValue(str) {
     const number = Number(str.replace(',', '.'));
     return Number.isNaN(number) ? undefined : number;
+  }
+  static validate(value) {
+    return validateType(this.type, unFormatFloat(value));
   }
 }

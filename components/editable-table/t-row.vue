@@ -31,10 +31,10 @@
         :is="getCellComponent(field.type)"
         :value="value[field.name]"
         :field="field"
-        :edit="editField === field.name"
+        :cell="getEditableCellData(field.name)"
         @switch-edit-mode="switchEditMode(field.name)"
         @change="onValueChange($event, field.name)"
-        @change-valid="onValidChange($event, field.name)"
+        @validate="onValidate(field.name, $event)"
       />
     </t-data>
 
@@ -44,7 +44,7 @@
 
 <script>
 import tData from './t-data.vue'
-import {csvToArray} from "../../helpers";
+import {csvToArray} from "~/helpers";
 
 export default {
   name: 't-row',
@@ -54,7 +54,7 @@ export default {
   props: {
     fields: { type: Array, required: true },
     value: { type: Object, required: true },
-    editField: undefined,
+    editableCell: {type: Object, default: null},
   },
   computed: {
     rowName () {
@@ -69,14 +69,19 @@ export default {
   },
   inject: ['getCellComponent'],
   methods: {
+    getEditableCellData(fieldName) {
+      if (!this.editableCell) return null;
+      if (this.editableCell.field !== fieldName) return null;
+      return this.editableCell;
+    },
     switchEditMode(fieldName) {
       this.$emit('switch-edit-mode', { fieldName, rowName: this.rowName });
     },
     onValueChange(value, fieldName) {
       this.$emit('change', { fieldName, rowName: this.rowName, value });
     },
-    onValidChange(value, fieldName) {
-      this.$emit('change-valid', { fieldName, rowName: this.rowName, isValid: value });
+    onValidate(fieldName, value) {
+      this.$emit('validate', {fieldName, value });
     },
     onClickDelete(rowName) {
       this.$emit('del-row');

@@ -8,7 +8,7 @@
       v-model="localValue"
       :state="isNullIfValid"
       @change="setValue"
-      @input="checkValid"
+      @input="$emit('validate', $event)"
       @click.stop
     />
 
@@ -22,10 +22,7 @@
 </template>
 
 <script>
-  import {
-    validateType,
-    isUndefinedOrNullOrEmpty,
-  } from '~/helpers';
+  import {isUndefinedOrNullOrEmpty} from '~/helpers';
   import tTypedCell from './t-typed-cell';
 
   const DEFAULT_IMAGE_SIZE = { width: 40, height: 40 };
@@ -41,10 +38,5 @@
         return !isUndefinedOrNullOrEmpty(this.value);
       },
     },
-    methods: {
-      validate(value) {
-        return validateType('url', value);
-      },
-    }
   }
 </script>

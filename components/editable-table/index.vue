@@ -17,11 +17,11 @@
             v-for="(row, i) in rows" :key="String(row.name).replace(/ /g, '_')"
             :fields="tempFields"
             :value="row"
-            :editField="(row.name === editableCell.row) ? editableCell.field : undefined"
+            :editable-cell="editableCell && row.name === editableCell.row ? editableCell : null"
             @switch-edit-mode="switchEditMode"
             @del-row="onDeleteRow(row.name)"
             @change="onChangeValueInCell"
-            @change-valid="onChangeValidInCell"
+            @validate="validateCell"
             @dragstart="draggingRow = i"
             @drop="moveRow(i)"
             @paste-csv="pasteCSV"
@@ -86,6 +86,12 @@ export default {
     }
   },
   methods: {
+    validateCell({ fieldName, value }) {
+      const field = this.getFieldByName(fieldName);
+      const column = this.getColumnType(field.type);
+
+      this.editableCell.isValid = column.validate(value);
+    },
     moveRow(rowIndex) {
       if (this.draggingRow === rowIndex) return;
       this.$emit('move-row', { from: this.draggingRow, to: rowIndex });
@@ -109,9 +115,6 @@ export default {
     onChangeValueInCell(payload) {
       this.$emit('change', payload);
       this.unEditable();
-    },
-    onChangeValidInCell({ fieldName, rowName, isValid }) {
-      this.isValid = isValid;
     },
     onClickOutside(event) {
       this.unEditable();
@@ -157,6 +160,9 @@ export default {
     submitColumnResizing () {
       if (!this.resizingProps) return;
       this.$emit('resize-col', this.resizingProps);
+    },
+    getFieldByName (fieldName) {
+      return this.fields.find(field => field.name === fieldName);
     },
     getColumnType (type) {
       return this.columnTypes.find(columnType => columnType.type === type);

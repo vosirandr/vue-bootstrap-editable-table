@@ -38,11 +38,6 @@
         return sliceWithEllipsis(jsonString, 100);
       }
     },
-    methods: {
-      validate(value) {
-        return isObject(value);
-      },
-    }
   }
 </script>
 

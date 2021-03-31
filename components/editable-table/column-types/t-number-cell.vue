@@ -8,7 +8,7 @@
       v-model="localValue"
       :state="isNullIfValid"
       @change="setValue"
-      @input="checkValid"
+      @input="$emit('validate', $event)"
       @click.stop
     />
 
@@ -33,9 +33,6 @@
       }
     },
     methods: {
-      validate(value) {
-        return validateType(this.field.type, unFormatFloat(value));
-      },
       convertValueToExternal (value) {
         if (value.trim() === '') return undefined;
         return Number(unFormatFloat(value));

@@ -1,7 +1,7 @@
 import ColumnType from "./ColumnType";
 import tPercentCell from './t-percent-cell';
-import { formatPercents, isUndefinedOrNullOrEmpty } from "../../../helpers";
-import { count, max, mean, median, min, sum } from "../../../helpers/aggregations";
+import { formatPercents, isUndefinedOrNullOrEmpty, unFormatFloat, validateType } from "~/helpers";
+import { count, max, mean, median, min, sum } from "~/helpers/aggregations";
 
 export default class PercentColumnType extends ColumnType {
   static type = 'percent';
@@ -24,5 +24,8 @@ export default class PercentColumnType extends ColumnType {
   static convertStringToValue(str) {
     const number = Number(str.replace(',', '.'));
     return Number.isNaN(number) ? undefined : number;
+  }
+  static validate(value) {
+    return validateType('number', unFormatFloat(value));
   }
 }

@@ -13,7 +13,7 @@
         placeholder="YYYY-MM-DD"
         autocomplete="off"
         @change="setValue"
-        @input="checkValid"
+        @input="$emit('validate', $event)"
       />
       <b-input-group-append @click.stop>
         <b-form-datepicker

@@ -8,7 +8,7 @@
       v-model="localValue"
       :state="isNullIfValid"
       @change="setValue"
-      @input="checkValid"
+      @input="$emit('validate', $event)"
       @click.stop
     />
 
@@ -19,10 +19,9 @@
 <script>
   import {
     formatPercents,
-    validateType,
     unFormatFloat,
     isUndefinedOrNullOrEmpty,
-  } from '../../../helpers';
+  } from '~/helpers';
   import tTypedCell from './t-typed-cell';
 
   export default {
@@ -34,9 +33,6 @@
       }
     },
     methods: {
-      validate(value) {
-        return validateType('number', unFormatFloat(value));
-      },
       convertValueToLocal (value) {
         if (isUndefinedOrNullOrEmpty(value)) return value;
         return value * 100;

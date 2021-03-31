@@ -1,3 +1,4 @@
+import {validateType} from '~/helpers';
 import tTypedCell from './t-text-cell';
 
 export default class ColumnType {
@@ -27,5 +28,8 @@ export default class ColumnType {
   }
   static convertStringToValue(str) {
     return str
+  }
+  static validate(value) {
+    return validateType(this.type || 'text', value);
   }
 }

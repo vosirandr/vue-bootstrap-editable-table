@@ -6,20 +6,16 @@
 
 <script>
 import TCellFiller from "../t-cell-filler";
-import {
-  validateType,
-} from '~/helpers';
 
 export default {
   name: 't-typed-cell',
-  props: ['value', 'field', 'edit'],
+  props: ['value', 'field', 'cell'],
   components: {
     TCellFiller,
   },
   data() {
     return {
       localValue: null,
-      isValidValue: true
     }
   },
   computed: {
@@ -28,28 +24,24 @@ export default {
       return this.value;
     },
     isNullIfValid () {
-      return this.isValidValue ? null : false;
+      return this.isValid ? null : false;
+    },
+    edit() {
+      return !!this.cell;
+    },
+    isValid() {
+      return this.cell ? this.cell.isValid : true;
     }
   },
   methods: {
     setValue(value) {
       this.localValue = value;
-      this.checkValid(value);
-      if (this.isValidValue) {
+      if (this.cell.isValid) {
         const externalValue = this.convertValueToExternal(value);
         this.$emit('change', externalValue);
       } else {
         this.$emit('change', undefined);
       }
-    },
-    checkValid(value) {
-      if (this.isValidValue !== this.validate(value)) {
-        this.isValidValue = !this.isValidValue;
-        this.$emit('change-valid', this.isValidValue);
-      }
-    },
-    validate(value) {
-      return validateType(this.field.type, value);
     },
     convertValueToLocal (value) {
       return value;
