@@ -6,7 +6,7 @@
           <b-spinner variant="primary" label="Text Centered" />
         </div>
 
-        <editable-table
+        <table-switcher
           v-else
           :fields="tableFields"
           :rows="tableRows"
@@ -34,7 +34,7 @@
 import { mapActions, mapGetters } from 'vuex';
 
 import AppLogo from '~/components/app-logo.vue';
-import EditableTable from '../components/editable-table';
+import TableSwitcher from '../components/table-switcher';
 
 import DateColumnType from "../components/editable-table/column-types/DateColumnType";
 import JsonColumnType from "../components/editable-table/column-types/JsonColumnType";
@@ -46,7 +46,7 @@ import TextColumnType from "../components/editable-table/column-types/TextColumn
 export default {
   components: {
     AppLogo,
-    EditableTable
+    TableSwitcher,
   },
   data() {
     return {
