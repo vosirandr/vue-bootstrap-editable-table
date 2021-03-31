@@ -86,9 +86,14 @@ export default {
     }
   },
   methods: {
-    validateCell({ fieldName, value }) {
+    validateCell({ fieldName, rowName, value }) {
       const field = this.getFieldByName(fieldName);
       const column = this.getColumnType(field.type);
+
+      if (field.unique && this.rows.some(row => row.name !== rowName && row[fieldName] === value)) {
+        this.editableCell.isValid = false;
+        return;
+      }
 
       this.editableCell.isValid = column.validate(value);
     },

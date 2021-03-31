@@ -8,7 +8,15 @@
       @dragover.prevent
       @drop="$emit('drop')"
     >
-      {{ value[firstField.name] }}
+      <component
+        :is="getCellComponent(firstField.type)"
+        :value="value[firstField.name]"
+        :field="firstField"
+        :cell="getEditableCellData(firstField.name)"
+        @switch-edit-mode="switchEditMode(firstField.name)"
+        @change="onValueChange($event, firstField.name)"
+        @validate="onValidate(firstField.name, $event)"
+      />
 
       <div class="t-row-func-buttons-wrapper">
         <b-button
@@ -58,7 +66,7 @@ export default {
   },
   computed: {
     rowName () {
-      return this.value['name'];
+      return this.value.name;
     },
     firstField () {
       return this.fields[0];
@@ -81,7 +89,7 @@ export default {
       this.$emit('change', { fieldName, rowName: this.rowName, value });
     },
     onValidate(fieldName, value) {
-      this.$emit('validate', {fieldName, value });
+      this.$emit('validate', {fieldName, rowName: this.rowName, value });
     },
     onClickDelete(rowName) {
       this.$emit('del-row');

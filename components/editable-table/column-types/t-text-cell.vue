@@ -7,6 +7,7 @@
       v-if="edit"
       ref="input"
       v-model="localValue"
+      :state="isNullIfValid"
       size="sm"
       @change="setValue"
       @input="$emit('validate', $event)"

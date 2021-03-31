@@ -5,6 +5,7 @@ const testFields = [{
   caption: 'Name',
   type: 'text',
   width: 120,
+  unique: true,
 }, {
   name: 'text',
   caption: 'Text',
