@@ -1,6 +1,6 @@
 <template>
   <div class="table-wrapper">
-    <div class="table">
+    <div class="table" :style="{height}">
       <t-head
         class="table-header"
         :fields="tempFields"
@@ -64,6 +64,7 @@ export default {
     fields: { type: Array, required: true },
     rows: { type: Array, required: true },
     columnTypes: { type: Array, default: () => [] },
+    height: { type: String, default: null },
   },
   data() {
     return {
@@ -204,7 +205,6 @@ export default {
   }
 
   .table-body-wrapper {
-    height: calc(100vh - 50px - 4rem);
     overflow: auto;
     padding-left: 30px;
   }
@@ -215,9 +215,6 @@ export default {
 
   .table {
     /* structure */
-    display: flex;
-    flex-flow: column nowrap;
-    flex: 1 1 auto;
     width: fit-content;
     height: 100%;
     /* design */
@@ -227,6 +224,7 @@ export default {
     line-height: 1.5;
     justify-content: center;
     text-align: center;
+    overflow-y: auto;
   }
 
   .td .btn:focus, .btn-focus {
