@@ -9,6 +9,7 @@
       @resize-stop="$emit('resize-col-stop')"
       @drag="draggingColumn = $event"
       @drop="moveColumn($event)"
+      @rename="$emit('rename-col', {name: field.name, caption: $event})"
     />
 
     <t-data

@@ -21,6 +21,7 @@
           @move-col="onMoveCol"
           @move-row="onMoveRow"
           @update-cells="onUpdateCells"
+          @rename-col="onRenameCol"
         />
       </b-col>
     </b-row>
@@ -85,6 +86,7 @@ export default {
       fieldDelete: 'fieldTable/delete',
       fieldResize: 'fieldTable/resize',
       fieldMove: 'fieldTable/move',
+      fieldRename: 'fieldTable/rename',
       dataCreate: 'dataTable/create',
       dataRead: 'dataTable/read',
       dataUpdate: 'dataTable/update',
@@ -130,6 +132,9 @@ export default {
     },
     async onUpdateCells(cells) {
       await this.dataBulkUpdate(cells);
+    },
+    async onRenameCol({ name, caption}) {
+      await this.fieldRename({ name, caption });
     },
   }
 }

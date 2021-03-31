@@ -6,6 +6,7 @@
         :fields="tempFields"
         @add-col="$emit('add-col', $event)"
         @del-col="$emit('del-col', $event)"
+        @rename-col="$emit('rename-col', $event)"
         @resize-col="resizeColumn"
         @resize-col-stop="submitColumnResizing"
         @move-col="$emit('move-col', $event)"

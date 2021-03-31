@@ -41,7 +41,12 @@ export const mutations = {
 
     state.items.splice(oldIndex, 1);
     state.items.splice(index, 0, field);
-  }
+  },
+  rename(state, { name, caption }) {
+    const field = getField(state.items, name);
+    if (!field) return;
+    field.caption = caption;
+  },
 };
 
 export const getters = {
@@ -140,5 +145,16 @@ export const actions = {
     if (response.status === 'Ok') {
       commit('move', {name, index});
     }
-  }
+  },
+  async rename({ dispatch, commit }, { name, caption }) {
+    const response = await db.put({
+      table: 'fields-table',
+      query: { name },
+      payload: { caption },
+    });
+
+    if (response.status === 'Ok') {
+      commit('rename', {name, caption});
+    }
+  },
 };

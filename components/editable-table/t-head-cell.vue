@@ -36,17 +36,19 @@
 
     &nbsp;
 
-    {{field.caption}}
+    <t-editable-label :value="field.caption" @input="$emit('rename', $event)" />
   </t-data>
 </template>
 
 <script>
   import tData from './t-data.vue';
   import { capitalize } from "../../helpers";
+  import tEditableLabel from "./t-editable-label";
 
   export default {
     name: "t-head-cell",
     components: {
+      tEditableLabel,
       tData,
     },
     props: {
