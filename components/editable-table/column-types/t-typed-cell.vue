@@ -1,5 +1,5 @@
 <template>
-  <t-cell-filler>
+  <t-cell-filler :title="title">
     <div>{{formatValue}}</div>
   </t-cell-filler>
 </template>
@@ -31,7 +31,10 @@ export default {
     },
     isValid() {
       return this.cell ? this.cell.isValid : true;
-    }
+    },
+    title() {
+      return this.isValid ? '' : `Expected data format: ${this.field.type}`;
+    },
   },
   methods: {
     setValue(value) {

@@ -1,6 +1,7 @@
 <template>
   <t-cell-filler
     class="t-date-cell"
+    :title="title"
     @click="$emit('switch-edit-mode')"
   >
     <b-input-group v-if="edit" @click.stop>

@@ -1,5 +1,6 @@
 <template>
   <t-cell-filler
+    :title="title"
     class="t-text-cell"
     @click="$emit('switch-edit-mode')"
   >

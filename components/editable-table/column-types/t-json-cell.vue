@@ -1,6 +1,7 @@
 <template>
   <t-cell-filler
     class="t-json-value"
+    :title="title"
     @click="modalShown = true"
   >
     <div class="t-json-value__format">{{formatValue}}</div>

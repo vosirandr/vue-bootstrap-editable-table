@@ -1,5 +1,6 @@
 <template>
   <t-cell-filler
+    :title="title"
     @click="$emit('switch-edit-mode')"
   >
     <b-form-input
