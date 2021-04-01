@@ -11,6 +11,6 @@ export default class ImageColumnType extends ColumnType {
     return isCorrectUrl(str) ? str : undefined;
   }
   static validate(value) {
-    return validateType('url', value);
+    return !value || validateType('url', value);
   }
 }
