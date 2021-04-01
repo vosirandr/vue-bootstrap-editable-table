@@ -9,6 +9,7 @@
         ref="input"
         id="example-input"
         v-model="localValue"
+        :state="isNullIfValid"
         type="text"
         size="sm"
         placeholder="YYYY-MM-DD"
