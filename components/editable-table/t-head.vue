@@ -102,11 +102,6 @@ export default {
 </script>
 
 <style>
-  .th {
-    display: none;
-    font-weight: 700;
-  }
-
   .th > .td {
     white-space: normal;
     justify-content: center;

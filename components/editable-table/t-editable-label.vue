@@ -40,10 +40,18 @@
 
 <style>
   .t-editable-label {
+    max-width: 100%;
     border-bottom: 1px dashed black;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  .t-editable-label:hover {
+    background: #ddd;
   }
   .t-editable-label input{
     width: 100%;
+    padding: 0;
     background: transparent;
     border: none;
   }

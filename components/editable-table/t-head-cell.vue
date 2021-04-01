@@ -108,7 +108,9 @@
   }
 
   .t-head-cell {
+    font-size: 14px;
     background-color: #dee2e6;
+    padding: 0 5px;
   }
 
   .t-head-func-buttons-wrapper {
