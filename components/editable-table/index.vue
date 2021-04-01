@@ -1,5 +1,5 @@
 <template>
-  <div class="table-wrapper" :style="{height}">
+  <div class="table-wrapper">
     <div class="table">
       <t-head
         class="table-header"
@@ -12,7 +12,7 @@
         @move-col="$emit('move-col', $event)"
       />
 
-      <div class="table-body-wrapper">
+      <div class="table-body-wrapper" :style="{height}">
         <div class="table-body" v-click-outside="onClickOutside">
           <t-row
             v-for="(row, i) in rows" :key="String(row.name).replace(/ /g, '_')"
