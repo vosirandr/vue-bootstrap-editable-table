@@ -19,13 +19,7 @@
       />
 
       <div class="t-row-func-buttons-wrapper">
-        <b-button
-          class="t-row__delete"
-          variant="link"
-          @click="onClickDelete(firstField.name)"
-        >
-          <b-icon icon="x" />
-        </b-button>
+        <delete-button @click="onClickDelete(firstField.name)" />
       </div>
     </t-data>
 
@@ -53,10 +47,12 @@
 <script>
 import tData from './t-data.vue'
 import {csvToArray} from "~/helpers";
+import DeleteButton from "~/components/delete-button";
 
 export default {
   name: 't-row',
   components: {
+    DeleteButton,
     tData
   },
   props: {
@@ -129,20 +125,6 @@ export default {
     background-color: #efefef;
     justify-content: space-around;
     align-items: center;
-  }
-
-  .t-row__delete {
-    padding: 0;
-    width: 20px;
-    height: 20px;
-    background-color: white;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-
-  .t-row__delete:hover {
-    background-color: #bdbcbc;
   }
 
   .t-row-cell {

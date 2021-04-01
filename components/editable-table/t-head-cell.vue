@@ -15,22 +15,9 @@
       v-if="field.name !== 'name'"
       class="t-head-func-buttons-wrapper"
     >
-      <b-button
-        class="t-head-cell__move"
-        variant="link"
-        @mousedown="readyToDrag = true"
-        @mouseup="readyToDrag = false"
-      >
-        <b-icon icon="arrows-move" />
-      </b-button>
+      <move-button @mousedown="readyToDrag = true" @mouseup="readyToDrag = false" />
 
-      <b-button
-        class="t-head-cell__delete"
-        variant="link"
-        @click="$emit('delete', field.name)"
-      >
-        <b-icon icon="x" />
-      </b-button>
+      <delete-button @click="$emit('delete', field.name)" />
     </div>
 
     <font-awesome-icon :icon="['fas', getColumnType(field.type).icon]" />
@@ -45,10 +32,14 @@
   import tData from './t-data.vue';
   import { capitalize } from "../../helpers";
   import tEditableLabel from "./t-editable-label";
+  import MoveButton from "~/components/move-button";
+  import DeleteButton from "~/components/delete-button";
 
   export default {
     name: "t-head-cell",
     components: {
+      DeleteButton,
+      MoveButton,
       tEditableLabel,
       tData,
     },
@@ -124,24 +115,6 @@
     justify-content: space-around;
     align-items: center;
     opacity: 0;
-  }
-
-  .t-head-cell__delete, .t-head-cell__move {
-    padding: 0;
-    width: 20px;
-    height: 20px;
-    background-color: white;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-
-  .t-head-cell__delete:hover, .t-head-cell__move:hover {
-    background-color: #bdbcbc;
-  }
-
-  .t-head-cell__move:active {
-    cursor: grab;
   }
 
   .t-head-cell:hover .t-head-func-buttons-wrapper {
