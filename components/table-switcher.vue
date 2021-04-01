@@ -1,6 +1,8 @@
 <template>
   <div>
-    <button @click="switchMode">Switch JSON mode</button>
+    <b-button @click="switchMode" size="sm" class="mb-3">
+      {{jsonMode ? 'Return to table view' : 'Switch JSON mode'}}
+    </b-button>
     <editable-table v-if="!jsonMode" :fields="fields" :rows="rows" v-bind="$attrs" v-on="$listeners" />
     <vue-json-editor v-else :value="json" />
   </div>
