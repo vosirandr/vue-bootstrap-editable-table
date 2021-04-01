@@ -207,11 +207,11 @@ export default {
 
   .table-body-wrapper {
     overflow: auto;
-    padding-left: 30px;
   }
 
+  .table-body-wrapper,
   .table-header {
-    padding-left: 30px;
+    padding-left: 50px;
   }
 
   .table {

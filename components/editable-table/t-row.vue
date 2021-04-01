@@ -3,7 +3,7 @@
     <t-data
       class="t-row-cell"
       :width="firstField.width"
-      draggable
+      :draggable="readyToDrag"
       @dragstart="$emit('dragstart')"
       @dragover.prevent
       @drop="$emit('drop')"
@@ -19,6 +19,8 @@
       />
 
       <div class="t-row-func-buttons-wrapper">
+        <move-button @mousedown="readyToDrag = true" @mouseup="readyToDrag = false" />
+
         <delete-button @click="onClickDelete(firstField.name)" />
       </div>
     </t-data>
@@ -48,17 +50,24 @@
 import tData from './t-data.vue'
 import {csvToArray} from "~/helpers";
 import DeleteButton from "~/components/delete-button";
+import MoveButton from "~/components/move-button";
 
 export default {
   name: 't-row',
   components: {
     DeleteButton,
+    MoveButton,
     tData
   },
   props: {
     fields: { type: Array, required: true },
     value: { type: Object, required: true },
     editableCell: {type: Object, default: null},
+  },
+  data () {
+    return {
+      readyToDrag: false,
+    }
   },
   computed: {
     rowName () {
@@ -116,15 +125,17 @@ export default {
   }
 
   .t-row-func-buttons-wrapper {
-    display: none;
+    display: flex;
     position: absolute;
     top: 0;
-    left: -31px;
-    width: 30px;
+    right: 100%;
+    width: 50px;
     height: 100%;
+    margin-right: 1px;
     background-color: #efefef;
     justify-content: space-around;
     align-items: center;
+    opacity: 0;
   }
 
   .t-row-cell {
@@ -132,6 +143,6 @@ export default {
   }
 
   .t-row-cell:hover .t-row-func-buttons-wrapper {
-    display: flex;
+    opacity: 1;
   }
 </style>
