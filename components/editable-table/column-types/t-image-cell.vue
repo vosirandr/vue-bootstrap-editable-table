@@ -25,7 +25,7 @@
   import {
     validateType,
     isUndefinedOrNullOrEmpty,
-  } from '~/helpers';
+  } from '../../../helpers';
   import tTypedCell from './t-typed-cell';
 
   const DEFAULT_IMAGE_SIZE = { width: 40, height: 40 };

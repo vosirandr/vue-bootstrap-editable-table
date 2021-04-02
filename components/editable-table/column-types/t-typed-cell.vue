@@ -8,7 +8,7 @@
 import TCellFiller from "../t-cell-filler";
 import {
   validateType,
-} from '~/helpers';
+} from '../../../helpers';
 
 export default {
   name: 't-typed-cell',
