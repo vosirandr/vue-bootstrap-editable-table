@@ -21,7 +21,7 @@
     formatFloat,
     validateType,
     unFormatFloat,
-  } from '~/helpers';
+  } from '../../../helpers';
   import tTypedCell from './t-typed-cell';
 
   export default {
