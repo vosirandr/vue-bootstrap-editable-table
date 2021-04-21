@@ -1,21 +1,51 @@
 module.exports = {
   root: true,
+  extends: [ 'plugin:vue/recommended' ],
+  parserOptions: {
+    parser: "babel-eslint",
+    sourceType: "module",
+    ecmaVersion: 2017
+  },
+  globals: {
+    PKG_VERSION: true,
+  },
   env: {
     browser: true,
-    node: true
+    node: true,
+    es6: true
   },
-  parserOptions: {
-    parser: 'babel-eslint'
+  settings: {
+    'import/resolver': {
+      node: null,
+      webpack: {
+        config: 'build/webpack-configs/base.js',
+      },
+    },
   },
-  extends: [
-    // https://github.com/vuejs/eslint-plugin-vue#priority-a-essential-error-prevention
-    // consider switching to `plugin:vue/strongly-recommended` or `plugin:vue/recommended` for stricter rules.
-    'plugin:vue/essential'
-  ],
-  // required to lint *.vue files
-  plugins: [
-    'vue'
-  ],
-  // add your custom rules here
-  rules: {}
+  rules: {
+    'semi': 'error',
+    'import/no-named-as-default': 0,
+    'unicorn/consistent-function-scoping': 0,
+    'vue/attributes-order': 0,
+    'vue/name-property-casing': 0,
+    'vue/no-v-html': 0,
+    'no-undefined': 0,
+    'no-confusing-arrow': 1,
+    'no-console': 1,
+    'no-warning-comments': 1,
+    'prefer-destructuring': 0,
+    'vue/max-attributes-per-line': 0,
+    'vue/html-closing-bracket-spacing': 0,
+    "vue/no-parsing-error": ["error", {
+      "x-invalid-namespace": false
+    }],
+  },
+  overrides: [ {
+    files: [ 'src/**', 'dev/**' ],
+    rules: {
+      'unicorn/no-for-loop': 0,
+      'unicorn/prefer-includes': 0,
+      'unicorn/prefer-node-append': 0,
+    },
+  } ],
 }
