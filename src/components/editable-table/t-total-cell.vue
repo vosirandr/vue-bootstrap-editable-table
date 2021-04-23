@@ -3,7 +3,7 @@
     class="table-total-cell"
     :width="column.width"
   >
-    <b v-if="column.name === 'name'">Total</b>
+    <b v-if="column.name === generalField">Total</b>
 
     <div v-else-if="hasAggregations">
       <span :class="!isAggregationValueValid && 'text-danger'">
@@ -45,6 +45,7 @@ export default {
   props: {
     column: Object,
   },
+  inject: ['generalField'],
   computed: {
     aggregationName() {
       return this.column.aggregate;

@@ -12,6 +12,7 @@
           :rows="tableRows"
           :column-types="columnTypes"
           height="500px"
+          general-field="name"
           @change="onChangeValue"
           @change-aggregating="onChangeAggregating"
           @add-row="onAddRow"

@@ -62,6 +62,7 @@ export default {
   },
   props: {
     fields: {type: Array, required: true},
+    generalField: {type: String, required: true},
     rows: {type: Array, required: true},
     columnTypes: {type: Array, default: () => []},
     height: {type: String, default: null},
@@ -86,6 +87,14 @@ export default {
         values: this.rows.map(row => row[field.name]),
       }));
     }
+  },
+  watch: {
+    fields: {
+      handler() {
+        this.tempFields = deepCopy(this.fields);
+      },
+      deep: true,
+    },
   },
   methods: {
     validateCell({fieldName, rowName, value}) {
@@ -160,7 +169,6 @@ export default {
           updatedRow[column.name] = value;
         });
       });
-      console.log({updatedRows});
 
       this.$emit('update-cells', updatedRows);
     },
@@ -184,16 +192,9 @@ export default {
       columnTypes: this.columnTypes,
       getColumnType: this.getColumnType,
       getCellComponent: this.getCellComponent,
+      generalField: this.generalField
     };
   },
-  watch: {
-    fields: {
-      handler() {
-        this.tempFields = deepCopy(this.fields);
-      },
-      deep: true,
-    },
-  }
 };
 </script>
 

@@ -22,7 +22,10 @@ export default {
     tData
   },
   props: {
-    columns: Array,
+    columns: {
+      type: Array,
+      required: true
+    },
   },
 };
 </script>

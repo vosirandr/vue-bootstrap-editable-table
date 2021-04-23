@@ -4,10 +4,10 @@
       v-for="field in fields"
       :key="field.name"
       :width="field.width"
-      :empty="field.name !== 'name'"
+      :empty="field.name !== generalField"
     >
       <b-button
-        v-if="field.name === 'name'"
+        v-if="field.name === generalField"
         class="text-decoration-none"
         size="sm"
         variant="link"
@@ -32,6 +32,7 @@ export default {
   },
   props: {
     fields: {type: Array, required: true}
-  }
+  },
+  inject: ['generalField']
 };
 </script>

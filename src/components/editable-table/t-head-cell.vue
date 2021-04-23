@@ -6,7 +6,7 @@
     ]"
     :title="capitalize(field.type)"
     :width="field.width"
-    :draggable="readyToDrag && !readyToResize && field.name !== 'name'"
+    :draggable="readyToDrag && !readyToResize && field.name !== generalField"
     @dragstart="$emit('drag', field.name)"
     @dragover.prevent
     @drop="$emit('drop', field.name)"
@@ -46,7 +46,10 @@ export default {
     FontAwesomeIcon,
   },
   props: {
-    field: Object,
+    field: {
+      type: Object,
+      required: true
+    },
   },
   data() {
     return {
@@ -55,7 +58,7 @@ export default {
       resizingPosition: null,
     };
   },
-  inject: ['getColumnType'],
+  inject: ['getColumnType', 'generalField'],
   mounted() {
     this.$el.addEventListener('mousedown', this.onMouseDown);
     window.addEventListener('mousemove', this.onMouseMove);
