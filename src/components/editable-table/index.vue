@@ -51,6 +51,7 @@ import tTotal from './t-total.vue';
 import tHead from './t-head.vue';
 import tRow from './t-row.vue';
 import ColumnType from './column-types/ColumnType';
+import clickOutsideDirective from '../../directives/click-outside';
 
 export default {
   name: 'editable-table',
@@ -59,6 +60,9 @@ export default {
     tTotal,
     tHead,
     tRow
+  },
+  directives: {
+    'click-outside': clickOutsideDirective
   },
   props: {
     fields: {type: Array, required: true},

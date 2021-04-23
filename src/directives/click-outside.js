@@ -76,14 +76,11 @@ const directive = {
 
 const exportDirective = (typeof window !== 'undefined') ? directive : {};
 
-const plugin = {
+export const Plugin = {
     install(Vue) {
         Vue.directive('click-outside', exportDirective);
     },
     exportDirective,
 };
 
-// export default plugin;
-import Vue from 'vue';
-
-Vue.use(plugin);
+export default exportDirective;

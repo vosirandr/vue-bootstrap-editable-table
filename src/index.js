@@ -1,5 +1,3 @@
-import './plugins/click-outside-directive';
-
 import VueEditableTable from './components/editable-table/index.vue';
 import TextColumnType from './components/editable-table/column-types/TextColumnType';
 import DateColumnType from './components/editable-table/column-types/DateColumnType';
