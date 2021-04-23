@@ -9,11 +9,11 @@
 </template>
 
 <script>
-import EditableTable from "./editable-table";
+import {VueEditableTable} from "../../src/index";
 
 export default {
   name: "table-switcher",
-  components: {EditableTable},
+  components: {EditableTable: VueEditableTable},
   props: {
     fields: {type: Array, required: true},
     rows: {type: Array, required: true},

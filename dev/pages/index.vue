@@ -31,7 +31,7 @@
 
 <script>
 import {mapActions, mapGetters} from 'vuex';
-import TableSwitcher from '../../src/components/table-switcher';
+import TableSwitcher from '../components/table-switcher';
 
 import DateColumnType from "../../src/components/editable-table/column-types/DateColumnType";
 import JsonColumnType from "../../src/components/editable-table/column-types/JsonColumnType";
