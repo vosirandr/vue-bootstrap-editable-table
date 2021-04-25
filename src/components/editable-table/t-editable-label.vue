@@ -1,13 +1,13 @@
 <template>
-  <div class="t-editable-label" @click="setActive">
-    <span v-if="!active">{{ value }}</span>
+  <div class="t-editable-label" :class="{'t-editable-label--active': active}" @click="setActive">
+    <span>{{ label }}</span>
     <input
-      v-else
+      v-if="active"
       ref="input"
       v-model="label"
       @focusout="setInactive"
       @keyup.enter="active = false"
-    />
+    >
   </div>
 </template>
 
@@ -40,6 +40,7 @@ export default {
 
 <style>
 .t-editable-label {
+  position: relative;
   max-width: 100%;
   border-bottom: 1px dashed black;
   text-overflow: ellipsis;
@@ -51,14 +52,33 @@ export default {
   background: #ddd;
 }
 
+.t-editable-label span {
+  z-index: 1;
+}
+
 .t-editable-label input {
+  position: absolute;
+  left: 0;
+  top: 0;
   width: 100%;
   padding: 0;
   background: transparent;
   border: none;
+  opacity: 0;
+  z-index: 0;
 }
 
 .t-editable-label input:focus {
   outline: none;
+}
+
+.t-editable-label--active input {
+  z-index: 2;
+  opacity: 1;
+}
+
+.t-editable-label--active span {
+  opacity: 0;
+
 }
 </style>
