@@ -10,9 +10,8 @@
           v-else
           :fields="tableFields"
           :rows="tableRows"
-          :column-types="columnTypes"
+          :cell-editor-component="cellEditorComponent"
           height="500px"
-          general-field="name"
           @change="onChangeValue"
           @change-aggregating="onChangeAggregating"
           @add-row="onAddRow"
@@ -33,13 +32,8 @@
 <script>
 import {mapActions, mapGetters} from 'vuex';
 import TableSwitcher from '../components/table-switcher';
-
-import DateColumnType from "../../src/components/editable-table/column-types/DateColumnType";
-import JsonColumnType from "../../src/components/editable-table/column-types/JsonColumnType";
-import ImageColumnType from "../../src/components/editable-table/column-types/ImageColumnType";
-import NumberColumnType from "../../src/components/editable-table/column-types/NumberColumnType";
-import PercentColumnType from "../../src/components/editable-table/column-types/PercentColumnType";
-import TextColumnType from "../../src/components/editable-table/column-types/TextColumnType";
+import COLUMN_TYPES from '../../src/services/column-types';
+import JsonEditor from '../components/json-editor';
 
 export default {
   components: {
@@ -47,14 +41,6 @@ export default {
   },
   data() {
     return {
-      columnTypes: [
-        TextColumnType,
-        ImageColumnType,
-        NumberColumnType,
-        DateColumnType,
-        PercentColumnType,
-        JsonColumnType,
-      ],
       isLoading: true
     };
   },
@@ -73,6 +59,7 @@ export default {
         this.isLoading = false;
       }
     } catch (error) {
+      // eslint-disable-next-line
       console.error(error);
     }
   },
@@ -95,35 +82,30 @@ export default {
     async onAddRow() {
       await this.dataCreate();
     },
-    async onDelRow(rowName) {
-      await this.dataDelete({name: rowName});
+    async onDelRow(rowId) {
+      await this.dataDelete({id: rowId});
     },
-    async onChangeValue({fieldName, rowName, value}) {
-      await this.dataUpdate({fieldName, rowName, value});
+    async onChangeValue({fieldId, rowId, value}) {
+      await this.dataUpdate({fieldId, rowId, value});
     },
-    async onChangeAggregating({aggregation, fieldName}) {
+    async onChangeAggregating({aggregation, id}) {
       await this.fieldUpdate({
+        id: id,
         fieldName: 'aggregate',
-        rowName: fieldName,
         value: aggregation
       });
     },
-    async onAddCol({type, name}) {
-      await this.fieldCreate({
-        caption: name,
-        type,
-        aggregate: null,
-        width: 100,
-      });
+    async onAddCol({type, title}) {
+      await this.fieldCreate({type, title});
     },
-    async onDelCol(colName) {
-      await this.fieldDelete({name: colName});
+    async onDelCol(id) {
+      await this.fieldDelete({id});
     },
-    async onResizeCol({name, width}) {
-      await this.fieldResize({name, width});
+    async onResizeCol({id, width}) {
+      await this.fieldResize({id, width});
     },
-    async onMoveCol({name, index}) {
-      await this.fieldMove({name, index});
+    async onMoveCol({id, index}) {
+      await this.fieldMove({id, index});
     },
     async onMoveRow({from, to}) {
       await this.dataMove({from, to});
@@ -131,9 +113,16 @@ export default {
     async onUpdateCells(cells) {
       await this.dataBulkUpdate(cells);
     },
-    async onRenameCol({name, caption}) {
-      await this.fieldRename({name, caption});
+    async onRenameCol({id, title}) {
+      await this.fieldRename({id, title});
     },
+
+    cellEditorComponent(column) {
+      if (column.type === COLUMN_TYPES.JSON) {
+        return JsonEditor;
+      }
+      return null;
+    }
   }
 };
 </script>

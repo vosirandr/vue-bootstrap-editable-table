@@ -1,2 +1,2 @@
-export const getField = (fields, name) => fields.find(field => field.name === name);
-export const getFieldIndex = (fields, name) => fields.findIndex(field => field.name === name);
+export const getField = (fields, id) => fields.find(field => field.id === id);
+export const getFieldIndex = (fields, id) => fields.findIndex(field => field.id === id);

@@ -35,10 +35,10 @@
 
 <script>
 import moment from 'moment';
-import tTypedCell from './t-typed-cell';
+import tTypedCell from './t-cell-typed';
 
 export default {
-  name: 't-date-cell',
+  name: 't-cell-date',
   extends: tTypedCell,
   computed: {
     formatValue() {

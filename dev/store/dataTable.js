@@ -1,5 +1,6 @@
 import {db} from '../db';
-import {generateId} from "../../src/helpers";
+import Vue from 'vue';
+import {Row} from '../../src/dto/index';
 
 export const state = () => ({
     items: [],
@@ -10,16 +11,16 @@ export const mutations = {
         state.items.push(data);
     },
     delete(state, query) {
-        const itemIndex = state.items.findIndex(el => el.name === query.name);
+        const itemIndex = state.items.findIndex(el => el.id === query.id);
         if (itemIndex > -1) {
             state.items.splice(itemIndex, 1);
         }
     },
     update(state, payload) {
-        state.items = state.items.map(item => {
-            if (item.name !== payload.rowName) return {...item};
-            return {...item, [payload.fieldName]: payload.value};
-        });
+        const item = state.items.find(row => row.id === payload.rowId);
+        if (item) {
+            Vue.set(item.values, payload.fieldId, payload.value);
+        }
     },
     load(state, data) {
         state.items = [];
@@ -32,14 +33,14 @@ export const mutations = {
         let items = state.items;
         if (Object.keys(payload.query).length) {
             items = state.item.filter(el => {
-                let comparsion = false;
+                let comparison = false;
                 for (const key in payload.query) {
                     if (el.hasOwnProperty(key) && el[key] === payload.query[key]) {
-                        comparsion = true;
+                        comparison = true;
                     }
                 }
 
-                return comparsion;
+                return comparison;
             });
         }
 
@@ -51,7 +52,7 @@ export const mutations = {
     },
     deleteField(state, payload) {
         state.items.forEach(item => {
-            delete item[payload];
+            delete item.values[payload];
         });
     },
     move(state, {from, to}) {
@@ -61,12 +62,20 @@ export const mutations = {
     },
     bulkUpdate(state, records) {
         records.forEach(record => {
-            if (record.name) {
-                const item = state.items.find(el => el.name === record.name);
-                Object.entries(record).forEach(([key, value]) => item[key] = value);
-            } else {
-                state.items.push({...record, name: generateId()});
+            let item;
+            if (record.id) {
+                item = state.items.find(el => el.id === record.id);
             }
+            if (!item) {
+                item = new Row({id: record.id});
+                state.items.push(item);
+            }
+            Object.entries(record).forEach(([key, value]) => {
+                if (key !== 'id') {
+                    const colId = key.split('.')[1];
+                    Vue.set(item.values, colId, value);
+                }
+            });
         });
     }
 };
@@ -78,8 +87,13 @@ export const getters = {
 };
 
 export const actions = {
-    async create({commit}) {
-        let payload = {name: generateId()};
+    async create({commit, getters, rootGetters}) {
+        const fields = rootGetters['fieldTable/items'];
+        let payload = new Row({
+            values: {
+                [fields[0].id]: 'Row ' + (getters['items'].length + 1)
+            }
+        });
 
         const response = await db.post({
             table: 'datas-table',
@@ -101,18 +115,18 @@ export const actions = {
 
         return response.status;
     },
-    async update({commit, rootGetters}, payload) {
+    async update({commit, rootGetters}, {fieldId, rowId, value}) {
         const data = {};
-        data[payload.fieldName] = payload.value;
+        data[`values.${fieldId}`] = value;
 
         const response = await db.put({
             table: 'datas-table',
-            query: {name: payload.rowName},
+            query: {id: rowId},
             payload: data
         });
 
         if (response.status === 'Ok') {
-            commit('update', payload);
+            commit('update', {fieldId, rowId, value});
         }
 
         return response.status;
@@ -129,11 +143,11 @@ export const actions = {
     async deleteField({commit}, payload) {
         const response = await db.deleteColumn({
             table: 'datas-table',
-            query: payload.query.name
+            query: payload.query.id
         });
 
         if (response.status === 'Ok') {
-            commit('deleteField', payload.query.name);
+            commit('deleteField', payload.query.id);
         }
     },
     async move({dispatch, commit}, {from, to}) {

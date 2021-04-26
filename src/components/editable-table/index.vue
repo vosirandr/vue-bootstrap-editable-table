@@ -4,6 +4,7 @@
       <t-head
         class="table-header"
         :fields="tempFields"
+        :first-column-id="firstColumnId"
         @add-col="$emit('add-col', $event)"
         @del-col="$emit('del-col', $event)"
         @rename-col="$emit('rename-col', $event)"
@@ -15,12 +16,13 @@
       <div class="table-body-wrapper" :style="{height}">
         <div class="table-body" v-click-outside="onClickOutside">
           <t-row
-            v-for="(row, i) in rows" :key="String(row.name).replace(/ /g, '_')"
+            v-for="(row, i) in tempRows" :key="row.id"
             :fields="tempFields"
-            :value="row"
-            :editable-cell="editableCell && row.name === editableCell.row ? editableCell : null"
+            :row="row"
+            :editable-cell="editableCell && row.id === editableCell.row ? editableCell : null"
+            :cell-editor-component="cellEditorComponent"
             @switch-edit-mode="switchEditMode"
-            @del-row="onDeleteRow(row.name)"
+            @del-row="onDeleteRow(row.id)"
             @change="onChangeValueInCell"
             @validate="validateCell"
             @dragstart="draggingRow = i"
@@ -30,12 +32,15 @@
         </div>
 
         <t-total
-          :columns="columns"
+          :columns="tempFields"
+          :rows="tempRows"
+          :first-column-id="firstColumnId"
           @change-aggregating="$emit('change-aggregating', $event)"
         />
 
         <t-add-row
-          :fields="fields"
+          :fields="tempFields"
+          :first-column-id="firstColumnId"
           @add-row="$emit('add-row')"
         />
       </div>
@@ -44,14 +49,17 @@
 </template>
 
 <script>
-import deepCopy from 'deepcopy';
 import {getField, getFieldIndex} from '../../helpers/fields';
 import tAddRow from './t-add-row.vue';
 import tTotal from './t-total.vue';
 import tHead from './t-head.vue';
 import tRow from './t-row.vue';
-import ColumnType from './column-types/ColumnType';
 import clickOutsideDirective from '../../directives/click-outside';
+import {Column, Row} from '../../dto';
+import COLUMN_TYPES from '../../services/column-types';
+import ColumnService from '../../services/ColumnService';
+import FieldValidator from '../../services/FieldValidator';
+import FieldStringParser from '../../services/FieldStringParser';
 
 export default {
   name: 'editable-table',
@@ -66,17 +74,17 @@ export default {
   },
   props: {
     fields: {type: Array, required: true},
-    generalField: {type: String, required: true},
     rows: {type: Array, required: true},
-    columnTypes: {type: Array, default: () => []},
-    height: {type: String, default: null},
+    columnTypes: {type: Array, default: () => Object.values(COLUMN_TYPES)},
+    height: {type: String, default: '500px'},
+    cellEditorComponent: {type: Function, default: () => null}
   },
   data() {
     return {
-      tempFields: deepCopy(this.fields),
+      tempFields: this.prepareFields(),
       editableCell: {
-        field: undefined,
-        row: undefined,
+        field: null,
+        row: null,
         isValid: true
       },
       resizingProps: null,
@@ -84,53 +92,56 @@ export default {
     };
   },
   computed: {
-    columns() {
-      return this.tempFields.map((field) => ({
-        ...field,
-        columnType: this.getColumnType(field.type),
-        values: this.rows.map(row => row[field.name]),
-      }));
-    }
+    firstColumnId() {
+      if (this.tempFields.length) {
+        return this.tempFields[0].id;
+      }
+      return null;
+    },
+    tempRows() {
+      return this.rows.map(row => new Row(row));
+    },
   },
   watch: {
     fields: {
       handler() {
-        this.tempFields = deepCopy(this.fields);
+        this.tempFields = this.prepareFields();
       },
-      deep: true,
-    },
+      deep: true
+    }
   },
   methods: {
-    validateCell({fieldName, rowName, value}) {
-      const field = this.getFieldByName(fieldName);
-      const column = this.getColumnType(field.type);
+    prepareFields() {
+      return this.fields.map(field => new Column(field));
+    },
+    validateCell({fieldId, rowId, value}) {
+      const field = this.getFieldById(fieldId);
 
-      if (field.unique && this.rows.some(row => row.name !== rowName && row[fieldName] === value)) {
+      if (field.unique && this.tempRows.some(row => row.id !== rowId && row.values[fieldId].value === value)) {
         this.editableCell.isValid = false;
         return;
       }
 
-      this.editableCell.isValid = column.validate(value);
+      this.editableCell.isValid = (new FieldValidator(field)).validate(value);
     },
     moveRow(rowIndex) {
       if (this.draggingRow === rowIndex) return;
       this.$emit('move-row', {from: this.draggingRow, to: rowIndex});
     },
-    switchEditMode({fieldName, rowName}) {
-      // console.log(`Cell clicked fieldName:${fieldName}, rowName:${rowName}`);
+    switchEditMode({fieldId, rowId}) {
       if (!this.editableCell.isValid) return;
 
-      if (this.editableCell.field === fieldName && this.editableCell.row === rowName) {
+      if (this.editableCell.field === fieldId && this.editableCell.row === rowId) {
         this.editableCell.field = null;
         this.editableCell.row = null;
       } else {
-        this.editableCell.field = fieldName;
-        this.editableCell.row = rowName;
+        this.editableCell.field = fieldId;
+        this.editableCell.row = rowId;
       }
 
     },
-    onDeleteRow(rowName) {
-      this.$emit('del-row', rowName);
+    onDeleteRow(rowId) {
+      this.$emit('del-row', rowId);
     },
     onChangeValueInCell(payload) {
       this.$emit('change', payload);
@@ -142,17 +153,17 @@ export default {
     unEditable() {
       if (!this.editableCell.isValid) return;
 
-      this.editableCell.field = undefined;
-      this.editableCell.row = undefined;
+      this.editableCell.field = null;
+      this.editableCell.row = null;
     },
-    resizeColumn({name, width}) {
-      this.resizingProps = {name, width};
-      const tempField = getField(this.tempFields, name);
+    resizeColumn({id, width}) {
+      this.resizingProps = {id, width};
+      const tempField = getField(this.tempFields, id);
       tempField.width = width;
     },
-    pasteCSV({fieldName, rowName, data}) {
-      const iterate = (table, csv, name, callback) => {
-        const rowIndex = getFieldIndex(table, name);
+    pasteCSV({fieldId, rowId, data}) {
+      const iterate = (table, csv, id, callback) => {
+        const rowIndex = getFieldIndex(table, id);
         for (let iCSV = 0; iCSV < csv.length; iCSV++) {
           const iTable = rowIndex + iCSV;
           callback(iTable, iCSV);
@@ -161,17 +172,16 @@ export default {
 
       const updatedRows = [];
 
-      iterate(this.rows, data, rowName, (iRows, yCSV) => {
-        const updatedRow = {name: this.rows[iRows] && this.rows[iRows].name};
-        updatedRows.push(updatedRow);
-        iterate(this.columns, data[yCSV], fieldName, (iFields, xCSV) => {
-          if (iFields >= this.columns.length) return;
+      iterate(this.rows, data, rowId, (iRows, yCSV) => {
+        const updatedRow = {id: this.rows[iRows] && this.rows[iRows].id};
+        iterate(this.tempFields, data[yCSV], fieldId, (iFields, xCSV) => {
+          if (iFields >= this.tempFields.length) return;
 
-          const column = this.columns[iFields];
+          const column = this.tempFields[iFields];
           const csvValue = data[yCSV][xCSV];
-          const value = column.columnType.convertStringToValue(csvValue);
-          updatedRow[column.name] = value;
+          updatedRow['values.' + column.id] = FieldStringParser.convertToValue(column.type, csvValue);
         });
+        updatedRows.push(updatedRow);
       });
 
       this.$emit('update-cells', updatedRows);
@@ -180,23 +190,17 @@ export default {
       if (!this.resizingProps) return;
       this.$emit('resize-col', this.resizingProps);
     },
-    getFieldByName(fieldName) {
-      return this.fields.find(field => field.name === fieldName);
-    },
-    getColumnType(type) {
-      return this.columnTypes.find(columnType => columnType.type === type);
+    getFieldById(fieldId) {
+      return this.tempFields.find(field => field.id === fieldId);
     },
     getCellComponent(type) {
-      const columnType = this.getColumnType(type);
-      return (columnType || ColumnType).cell;
+      return ColumnService.component(type);
     }
   },
   provide() {
     return {
       columnTypes: this.columnTypes,
-      getColumnType: this.getColumnType,
       getCellComponent: this.getCellComponent,
-      generalField: this.generalField
     };
   },
 };
@@ -237,7 +241,7 @@ export default {
 }
 
 .td:last-child {
-  width: 100px
+  width: 50px
 }
 
 </style>

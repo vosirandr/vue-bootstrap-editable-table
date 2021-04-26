@@ -3,7 +3,7 @@
     class="table-total-cell"
     :width="column.width"
   >
-    <b v-if="column.name === generalField">Total</b>
+    <b v-if="column.id === firstColumnId">Total</b>
 
     <div v-else-if="hasAggregations">
       <span :class="!isAggregationValueValid && 'text-danger'">
@@ -25,7 +25,7 @@
           v-for="aggregation in dropdownList"
           :key="aggregation"
           href="#"
-          @click="onChange(aggregation, column.name)"
+          @click="onChange(aggregation, column.id)"
         >
           {{ aggregation || '-' }}
         </b-dropdown-item>
@@ -36,6 +36,8 @@
 
 <script>
 import tData from './t-data';
+import {Column} from '../../dto';
+import ColumnService from '../../services/ColumnService';
 
 export default {
   name: "t-total-cell",
@@ -43,10 +45,17 @@ export default {
     tData
   },
   props: {
-    column: Object,
+    column: {type: Column, required: true},
+    rows: {type: Array, required: true},
+    firstColumnId: {type: [String, Number], required: true},
   },
-  inject: ['generalField'],
   computed: {
+    values() {
+      return this.rows.reduce((acc, row) => {
+        acc.push(row.values[this.column.id]);
+        return acc;
+      }, []);
+    },
     aggregationName() {
       return this.column.aggregate;
     },
@@ -54,21 +63,27 @@ export default {
       return this.column.columnType;
     },
     hasAggregations() {
-      return this.columnType.hasAggregations();
+      return ColumnService.hasAggregations(this.column.type);
+    },
+    aggregationsService() {
+      return ColumnService.aggregationsFactory(this.column, this.values);
     },
     aggregationValue() {
       if (!this.aggregationName) return null;
-      return this.columnType.aggregate(this.aggregationName, this.column.values);
+      return this.aggregationsService.aggregate(this.aggregationName);
     },
     formattedAggregationValue() {
-      return this.columnType.formatAggregatedValue(this.aggregationName, this.aggregationValue);
+      return this.aggregationsService.formatAggregatedValue(this.aggregationName, this.aggregationValue);
     },
     isAggregationValueValid() {
-      return this.columnType.isAggregatedValueValid(this.aggregationName, this.aggregationValue);
+      return this.aggregationsService.isAggregatedValueValid(this.aggregationName, this.aggregationValue);
     },
     dropdownList() {
-      return [null, ...this.columnType.getAggregationNames()];
+      return [null, ...this.aggregationsService.getAggregationNames()];
     },
+  },
+  mounted() {
+    this.extractDropdownMenu();
   },
   methods: {
     extractDropdownMenu() {
@@ -76,16 +91,13 @@ export default {
       if (!dropdownMenu) return;
       document.body.append(dropdownMenu);
     },
-    onChange(aggregation, fieldName) {
+    onChange(aggregation, id) {
       this.$emit('change-aggregating', {
         aggregation,
-        fieldName
+        id
       });
     },
   },
-  mounted() {
-    this.extractDropdownMenu();
-  }
 };
 </script>
 

@@ -15,7 +15,7 @@
 
     <b-img
       v-else-if="hasImageUrl"
-      :src="value"
+      :src="formatValue"
       :height="imageSize.height"
       :width="imageSize.width"
     />
@@ -23,20 +23,20 @@
 </template>
 
 <script>
-import {isUndefinedOrNullOrEmpty} from '../../../helpers';
-import tTypedCell from './t-typed-cell';
+import {isUndefinedOrNullOrEmpty} from '../../helpers/index';
+import tTypedCell from './t-cell-typed';
 
 const DEFAULT_IMAGE_SIZE = {width: 40, height: 40};
 
 export default {
-  name: 't-image-cell',
+  name: 't-cell-image',
   extends: tTypedCell,
   computed: {
     imageSize() {
       return DEFAULT_IMAGE_SIZE;
     },
     hasImageUrl() {
-      return !isUndefinedOrNullOrEmpty(this.value);
+      return !isUndefinedOrNullOrEmpty(this.formatValue);
     },
   },
 };

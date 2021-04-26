@@ -15,7 +15,7 @@ export default {
   name: 't-data',
   props: {
     empty: {type: Boolean, default: false},
-    width: Number,
+    width: {type: Number, default: 50},
   },
   computed: {
     tdStyle() {

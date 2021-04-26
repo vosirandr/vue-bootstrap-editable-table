@@ -1,40 +1,34 @@
 import {generateId} from "../../src/helpers";
+import Column from '../../src/dto/Column';
+import TYPES from '../../src/services/column-types';
+import Row from '../../src/dto/Row';
+import set from 'lodash/set';
 
-const testFields = [{
-    name: 'name',
-    caption: 'Name',
-    type: 'text',
-    width: 120,
-    unique: true,
-}, {
-    name: 'text',
-    caption: 'Text',
-    type: 'text',
-    width: 200,
-}, {
-    name: 'image',
-    caption: 'Image',
-    type: 'image',
-    width: 80,
-}, {
-    name: 'number',
-    caption: 'Number',
-    type: 'number',
-    width: 80,
-    aggregate: 'sum',
-}];
+const testFields = [
+    new Column({title: 'Name', type: TYPES.TEXT, width: 120, unique: true}),
+    new Column({title: 'Text', type: TYPES.TEXT, width: 200}),
+    new Column({title: 'Image', type: TYPES.URL, width: 80}),
+    new Column({title: 'Number', type: TYPES.DOUBLE, aggregate: 'sum', width: 80}),
+];
 
-const testDatas = [{
-    name: 'Name 1',
-    text: 'Raw description text dfaskfjkadfj;fj fajdf;ajdf;ajaadjf;a',
-    image: '/logo.png',
-    number: 4222545.15,
-}, {
-    name: 'Name 2',
-    text: 'Raw description text 2',
-    image: '',
-    number: 21
-}];
+const testRows = [
+    new Row({
+        values: {
+            [testFields[0].id]: 'Name 1',
+            [testFields[1].id]: 'Raw description text dfaskfjkadfj;fj fajdf;ajdf;ajaadjf;a',
+            [testFields[2].id]: '/logo.png',
+            [testFields[3].id]: 4222545.15,
+        }
+    }),
+    new Row({
+        values: {
+            [testFields[0].id]: 'Name 2',
+            [testFields[1].id]: 'Raw description text 2',
+            [testFields[2].id]: '',
+            [testFields[3].id]: 21,
+        }
+    }),
+];
 
 /* To emulate server delay */
 const SERVER_DELAY = 0;
@@ -56,7 +50,7 @@ function database(tableName) {
         if (table === 'fields-table') {
             testDataSet = [...testFields];
         } else if (table === 'datas-table') {
-            testDataSet = [...testDatas];
+            testDataSet = [...testRows];
         }
 
         localStorage.setItem(table, JSON.stringify(testDataSet));
@@ -82,14 +76,14 @@ function database(tableName) {
     function filter(query) {
         if (Object.keys(query).length) {
             return datas.filter(el => {
-                let comparsion = false;
+                let comparison = false;
                 for (const key in query) {
                     if (el.hasOwnProperty(key) && el[key] === query[key]) {
-                        comparsion = true;
+                        comparison = true;
                     }
                 }
 
-                return comparsion;
+                return comparison;
             });
         } else {
             return datas;
@@ -112,14 +106,14 @@ function database(tableName) {
         }
 
         function comparator(el) {
-            let comparsion = false;
+            let comparison = false;
             for (const key in query) {
                 if (el.hasOwnProperty(key) && el[key] === query[key]) {
-                    comparsion = true;
+                    comparison = true;
                 }
             }
 
-            return comparsion;
+            return comparison;
         }
     }
 
@@ -135,7 +129,7 @@ function database(tableName) {
             if (record) {
                 for (const key in payload) {
                     if (key !== 'index') {
-                        record[key] = payload[key];
+                        set(record, key, payload[key]);
                     }
                 }
 
@@ -189,11 +183,13 @@ function database(tableName) {
             read();
 
             records.forEach(record => {
-                if (record.name) {
-                    const item = datas.find(el => el.name === record.name);
-                    Object.entries(record).forEach(([key, value]) => item[key] = value);
+                if (record.id) {
+                    const item = datas.find(el => el.id === record.id);
+                    Object.entries(record).forEach(([key, value]) => {
+                        set(item, key, value);
+                    });
                 } else {
-                    datas.push({...record, name: generateId()});
+                    datas.push({...record, id: generateId()});
                 }
             });
 
@@ -203,7 +199,7 @@ function database(tableName) {
             read();
 
             datas.forEach(element => {
-                delete element[query];
+                delete element.values[query];
             });
 
             write();
@@ -214,7 +210,7 @@ function database(tableName) {
 }
 
 const responser = function (method, request) {
-    const table = new database(request.table);
+    const table = database(request.table);
 
     if (table) {
         const data = table[method](request.query, request.payload);

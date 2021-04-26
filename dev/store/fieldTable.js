@@ -1,6 +1,7 @@
 import {db} from '../db';
 import {isUndefinedOrNullOrEmpty, generateId, getValueToType} from '../../src/helpers';
 import {getField, getFieldIndex} from "../../src/helpers/fields";
+import Column from '../../src/dto/Column';
 
 export const state = () => ({
     items: [],
@@ -18,34 +19,34 @@ export const mutations = {
         }
     },
     update(state, payload) {
-        const item = state.items.find(el => el.name === payload.rowName);
+        const item = state.items.find(el => el.id === payload.id);
         if (item) {
             item[payload.fieldName] = payload.value;
         }
     },
     delete(state, query) {
-        const itemIndex = state.items.findIndex(el => el.name === query.name);
+        const itemIndex = state.items.findIndex(el => el.id === query.id);
         if (itemIndex > -1) {
             state.items.splice(itemIndex, 1);
         }
     },
-    resize(state, {name, width}) {
-        const field = state.items.find(el => el.name === name);
+    resize(state, {id, width}) {
+        const field = state.items.find(el => el.id === id);
         if (!field) return;
         field.width = width;
     },
-    move(state, {name, index}) {
-        const field = getField(state.items, name);
-        const oldIndex = getFieldIndex(state.items, name);
+    move(state, {id, index}) {
+        const field = getField(state.items, id);
+        const oldIndex = getFieldIndex(state.items, id);
         if (oldIndex === -1) return;
 
         state.items.splice(oldIndex, 1);
         state.items.splice(index, 0, field);
     },
-    rename(state, {name, caption}) {
-        const field = getField(state.items, name);
+    rename(state, {id, title}) {
+        const field = getField(state.items, id);
         if (!field) return;
-        field.caption = caption;
+        field.caption = title;
     },
 };
 
@@ -62,9 +63,7 @@ export const getters = {
 
 export const actions = {
     async create({dispatch, commit}, payload) {
-        const name = generateId();
-        const data = {...payload, name};
-
+        const data = new Column(payload);
         const response = await db.post({
             table: 'fields-table',
             query: {},
@@ -72,17 +71,6 @@ export const actions = {
         });
 
         if (response.status === 'Ok') {
-            const dataUpdate = {};
-            dataUpdate[name] = getValueToType(payload.type);
-
-            let aggregation = null;
-            if (payload.aggregate) {
-                aggregation = {
-                    field: name,
-                    aggregate: payload.aggregate
-                };
-            }
-
             commit('add', data);
         }
 
@@ -94,18 +82,18 @@ export const actions = {
 
         return response.status;
     },
-    async update({commit, getters}, payload) {
+    async update({commit, getters}, {id, fieldName, value}) {
         const data = {};
-        data[payload.fieldName] = payload.value;
+        data[fieldName] = value;
 
         const response = await db.put({
             table: 'fields-table',
-            query: {name: payload.rowName},
+            query: {id},
             payload: data
         });
 
         if (response.status === 'Ok') {
-            commit('update', payload);
+            commit('update', {id, fieldName, value});
         }
 
         return response.status;
@@ -124,37 +112,37 @@ export const actions = {
 
         return response.status;
     },
-    async resize({dispatch, commit}, {name, width}) {
+    async resize({dispatch, commit}, {id, width}) {
         const response = await db.put({
             table: 'fields-table',
-            query: {name},
+            query: {id},
             payload: {width},
         });
 
         if (response.status === 'Ok') {
-            commit('resize', {name, width});
+            commit('resize', {id, width});
         }
     },
-    async move({dispatch, commit}, {name, index}) {
+    async move({dispatch, commit}, {id, index}) {
         const response = await db.put({
             table: 'fields-table',
-            query: {name},
+            query: {id},
             payload: {index},
         });
 
         if (response.status === 'Ok') {
-            commit('move', {name, index});
+            commit('move', {id, index});
         }
     },
-    async rename({dispatch, commit}, {name, caption}) {
+    async rename({dispatch, commit}, {id, title}) {
         const response = await db.put({
             table: 'fields-table',
-            query: {name},
-            payload: {caption},
+            query: {id},
+            payload: {title},
         });
 
         if (response.status === 'Ok') {
-            commit('rename', {name, caption});
+            commit('rename', {id, title});
         }
     },
 };

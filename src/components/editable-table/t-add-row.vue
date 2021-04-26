@@ -4,10 +4,10 @@
       v-for="field in fields"
       :key="field.name"
       :width="field.width"
-      :empty="field.name !== generalField"
+      :empty="field.id !== firstColumnId"
     >
       <b-button
-        v-if="field.name === generalField"
+        v-if="field.id === firstColumnId"
         class="text-decoration-none"
         size="sm"
         variant="link"
@@ -17,8 +17,7 @@
       </b-button>
     </t-data>
 
-    <t-data empty>
-    </t-data>
+    <t-data empty/>
   </div>
 </template>
 
@@ -31,8 +30,8 @@ export default {
     tData
   },
   props: {
-    fields: {type: Array, required: true}
+    fields: {type: Array, required: true},
+    firstColumnId: {type: [String, Number], required: true},
   },
-  inject: ['generalField']
 };
 </script>

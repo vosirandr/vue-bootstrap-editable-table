@@ -1,7 +1,6 @@
 import 'babel-polyfill';
 
 import './plugins/vue-plugins';
-import './plugins/filters';
 
 import Page from './pages/index';
 import storeFactory from './store';

@@ -1,10 +1,10 @@
-import { sort, isUndefinedOrNullOrEmpty } from './index';
+import { sort } from './index';
 
 export const sum = numbers => numbers.reduce((sum, value) => sum + value, 0);
 
-export const min = numbers => numbers.length ? Math.min(...numbers) : undefined;
+export const min = numbers => (numbers.length ? Math.min(...numbers) : undefined);
 
-export const max = numbers => numbers.length ? Math.max(...numbers) : undefined;
+export const max = numbers => (numbers.length ? Math.max(...numbers) : undefined);
 
 export const mean = numbers => {
   if (numbers.length === 0) return undefined;
@@ -24,5 +24,3 @@ export const median = numbers => {
 };
 
 export const count = values => values.length;
-
-export default { sum, min, max, mean, median, count };

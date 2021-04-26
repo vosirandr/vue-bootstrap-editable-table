@@ -48,15 +48,11 @@ export const formatFloat = value => {
     return formatValue;
 };
 
-export const formatPercents = value => isUndefinedOrNullOrEmpty(value)
-    ? ''
-    : `${Math.round(value * 100)}%`;
+export const formatPercents = value => (isUndefinedOrNullOrEmpty(value) ? '' : `${Math.round(value * 100)}%`);
 
-export const unFormatFloat = value => {
-    return Number(String(value).replace(/[\ ,%]/g, ''));
-};
+export const unFormatFloat = value => Number(String(value).replace(/[\ ,%]/g, ''));
 
-export const generateId = () => Math.random().toString(36).substr(2, 8);
+export const generateId = () => Math.random().toString(36).substr(2, 10);
 
 export const validateType = (type, value) => {
     switch (type) {
@@ -91,9 +87,9 @@ export const sort = (a, b) => {
 };
 
 export const sliceWithEllipsis = (string, length) =>
-    string.length <= length
+    (string.length <= length
         ? string
-        : string.slice(0, length) + '…';
+        : string.slice(0, length) + '…');
 
 export const csvToArray = csv => (csv || '')
     .split('\n')

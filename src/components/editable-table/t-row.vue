@@ -10,35 +10,36 @@
     >
       <component
         :is="getCellComponent(firstField.type)"
-        :value="value[firstField.name]"
+        :value="row.values[firstField.id]"
         :field="firstField"
-        :cell="getEditableCellData(firstField.name)"
-        @switch-edit-mode="switchEditMode(firstField.name)"
-        @change="onValueChange($event, firstField.name)"
-        @validate="onValidate(firstField.name, $event)"
+        :cell="getEditableCellData(firstField.id)"
+        :cell-editor-component="cellEditorComponent"
+        @switch-edit-mode="switchEditMode(firstField.id)"
+        @change="onValueChange($event, firstField.id)"
+        @validate="onValidate(firstField.id, $event)"
       />
 
       <div class="t-row-func-buttons-wrapper">
         <move-button @mousedown="readyToDrag = true" @mouseup="readyToDrag = false"/>
-
-        <delete-button @click="onClickDelete(firstField.name)"/>
+        <delete-button @click="onClickDelete(firstField.id)"/>
       </div>
     </t-data>
 
     <t-data
       v-for="field in otherFields"
-      :key="field.name"
+      :key="field.id"
       :width="field.width"
-      @paste.stop="paste(field.name, $event)"
+      @paste.stop="paste(field.id, $event)"
     >
       <component
         :is="getCellComponent(field.type)"
-        :value="value[field.name]"
+        :value="row.values[field.id]"
         :field="field"
-        :cell="getEditableCellData(field.name)"
-        @switch-edit-mode="switchEditMode(field.name)"
-        @change="onValueChange($event, field.name)"
-        @validate="onValidate(field.name, $event)"
+        :cell="getEditableCellData(field.id)"
+        :cell-editor-component="cellEditorComponent"
+        @switch-edit-mode="switchEditMode(field.id)"
+        @change="onValueChange($event, field.id)"
+        @validate="onValidate(field.id, $event)"
       />
     </t-data>
 
@@ -49,8 +50,9 @@
 <script>
 import {csvToArray} from "../../helpers";
 import tData from './t-data.vue';
-import DeleteButton from "../delete-button";
-import MoveButton from "../move-button";
+import DeleteButton from "../elements/delete-button";
+import MoveButton from "../elements/move-button";
+import {Row} from '../../dto';
 
 export default {
   name: 't-row',
@@ -61,8 +63,9 @@ export default {
   },
   props: {
     fields: {type: Array, required: true},
-    value: {type: Object, required: true},
+    row: {type: Row, required: true},
     editableCell: {type: Object, default: null},
+    cellEditorComponent: {type: Function, required: true}
   },
   data() {
     return {
@@ -70,9 +73,6 @@ export default {
     };
   },
   computed: {
-    rowName() {
-      return this.value.name;
-    },
     firstField() {
       return this.fields[0];
     },
@@ -82,28 +82,29 @@ export default {
   },
   inject: ['getCellComponent'],
   methods: {
-    getEditableCellData(fieldName) {
+    getEditableCellData(fieldId) {
       if (!this.editableCell) return null;
-      if (this.editableCell.field !== fieldName) return null;
+      if (this.editableCell.field !== fieldId) return null;
       return this.editableCell;
     },
-    switchEditMode(fieldName) {
-      this.$emit('switch-edit-mode', {fieldName, rowName: this.rowName});
+    switchEditMode(fieldId) {
+      this.$emit('switch-edit-mode', {fieldId, rowId: this.row.id});
     },
-    onValueChange(value, fieldName) {
-      this.$emit('change', {fieldName, rowName: this.rowName, value});
+    onValueChange(value, fieldId) {
+      this.$emit('change', {fieldId, rowId: this.row.id, value});
     },
-    onValidate(fieldName, value) {
-      this.$emit('validate', {fieldName, rowName: this.rowName, value});
+    onValidate(fieldId, value) {
+      this.$emit('validate', {fieldId, rowId: this.row.id, value});
     },
-    onClickDelete(rowName) {
+    onClickDelete() {
       this.$emit('del-row');
     },
-    paste(fieldName, e) {
+    paste(fieldId, e) {
+      debugger;
       const csv = e.clipboardData.getData('text');
       const data = csvToArray(csv);
       if (data.length === 0 || (data.length === 1 && data[0].length === 1)) return;
-      this.$emit('paste-csv', {fieldName, rowName: this.rowName, data});
+      this.$emit('paste-csv', {fieldId, rowId: this.row.id, data});
     }
   }
 };

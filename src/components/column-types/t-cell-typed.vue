@@ -5,13 +5,19 @@
 </template>
 
 <script>
-import TCellFiller from "../t-cell-filler";
+import TCellFiller from "../editable-table/t-cell-filler";
+import Column from '../../dto/Column';
 
 export default {
-  name: 't-typed-cell',
-  props: ['value', 'field', 'cell'],
+  name: 't-cell-typed',
   components: {
     TCellFiller,
+  },
+  props: {
+    field: {type: Column, required: true},
+    value: {type: [Object, String, Number], default: null},
+    cell: {type: Object, default: null},
+    cellEditorComponent: {type: Function, required: true},
   },
   data() {
     return {
@@ -20,7 +26,7 @@ export default {
   },
   computed: {
     formatValue() {
-      if (this.value === undefined) return '';
+      if ([undefined, null].includes(this.value)) return '';
       return this.value;
     },
     isNullIfValid() {
@@ -35,29 +41,20 @@ export default {
     title() {
       return this.isValid ? '' : `Expected data format: ${this.field.type}`;
     },
-  },
-  methods: {
-    setValue(value) {
-      this.localValue = value;
-      if (!this.cell || this.cell.isValid) {
-        const externalValue = this.convertValueToExternal(value);
-        this.$emit('change', externalValue);
-      } else {
-        this.$emit('change', undefined);
-      }
+    editorComponent() {
+      return this.cellEditorComponent(this.field);
     },
-    convertValueToLocal(value) {
-      return value;
-    },
-    convertValueToExternal(value) {
-      return value;
-    },
-    updateLocalValue() {
-      this.localValue = this.convertValueToLocal(this.value);
+    editorComponentBindings(){
+      return {
+        column: this.field,
+        value: this.value,
+        setValue: this.setValue,
+        valid: this.isValid
+      };
     }
   },
   watch: {
-    value() {
+    'value.value'() {
       this.updateLocalValue();
     },
     edit() {
@@ -70,6 +67,26 @@ export default {
   },
   created() {
     this.updateLocalValue();
-  }
+  },
+  methods: {
+    setValue(value) {
+      this.localValue = value;
+      if (!this.cell || this.cell.isValid) {
+        const externalValue = this.convertValueToExternal(value);
+        this.$emit('change', externalValue);
+      } else {
+        this.$emit('change', null);
+      }
+    },
+    convertValueToLocal(value) {
+      return value;
+    },
+    convertValueToExternal(value) {
+      return value;
+    },
+    updateLocalValue() {
+      this.localValue = this.convertValueToLocal(this.value);
+    }
+  },
 };
 </script>

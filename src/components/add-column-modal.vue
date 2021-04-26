@@ -10,9 +10,10 @@
       <b-form-group
         label="Type"
         invalid-feedback="Type is required"
+        :state="validateState('type')"
       >
         <b-form-select
-          v-model="$v.form.type.$model"
+          v-model="form.type"
           :options="typesOptions"
           :state="validateState('type')"
         />
@@ -20,10 +21,11 @@
       <b-form-group
         label="Name"
         invalid-feedback="Name is required"
+        :state="validateState('title')"
       >
         <b-form-input
-          v-model="$v.form.name.$model"
-          :state="validateState('name')"
+          v-model="form.title"
+          :state="validateState('title')"
         />
       </b-form-group>
     </b-form>
@@ -31,46 +33,50 @@
 </template>
 
 <script>
-import {validationMixin} from "vuelidate";
-import {required} from "vuelidate/lib/validators";
 import {capitalize} from "../helpers";
+import COLUMN_TYPES from '../services/column-types';
 
 export default {
   name: 'add-column-modal',
-  mixins: [validationMixin],
   props: {
-    columnTypes: Array,
-    form: Object
+    types: {type: Array, required: true},
+    fieldsLength: {type: Number, required: true}
   },
   data() {
-    return {};
-  },
-  validations: {
-    form: {
-      type: {required},
-      name: {required},
-    }
+    return {
+      form: {
+        type: COLUMN_TYPES.TEXT,
+        title: `Column ${this.fieldsLength + 1}`,
+      }
+    };
   },
   computed: {
-    types() {
-      return this.columnTypes.map(({type}) => type);
-    },
     typesOptions() {
       return this.types.map(type => ({value: type, text: capitalize(type)}));
+    },
+    valid() {
+      return Object.values(COLUMN_TYPES).includes(this.form.type) && String(this.form.title).length >= 1;
     }
   },
   methods: {
     validateState(name) {
-      const {$dirty, $error} = this.$v.form[name];
-      return $dirty ? !$error : null;
+      let hasError = false;
+      switch (name) {
+        case 'type':
+          hasError = !Object.values(COLUMN_TYPES).includes(this.form.type);
+          break;
+        case 'title':
+          hasError = String(this.form.title).length === 0;
+          break;
+      }
+      return hasError ? false : null;
     },
     handleOk(bvModalEvt) {
       bvModalEvt.preventDefault();
       this.submit();
     },
     submit() {
-      this.$v.form.$touch();
-      if (this.$v.form.$anyError) return;
+      if (!this.valid) return;
 
       this.$emit('submit', this.form);
 

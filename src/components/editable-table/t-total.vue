@@ -2,8 +2,10 @@
   <div class="tr table-total">
     <t-total-cell
       v-for="column in columns"
-      :key="column.name"
+      :key="column.id"
       :column="column"
+      :rows="rows"
+      :first-column-id="firstColumnId"
       @change-aggregating="$emit('change-aggregating', $event)"
     />
 
@@ -22,16 +24,15 @@ export default {
     tData
   },
   props: {
-    columns: {
-      type: Array,
-      required: true
-    },
+    columns: {type: Array, required: true},
+    rows: {type: Array, required: true},
+    firstColumnId: {type: [String, Number], required: true},
   },
 };
 </script>
 
 <style>
-  .table-total {
-    min-height: 2rem;
-  }
+.table-total {
+  min-height: 2rem;
+}
 </style>

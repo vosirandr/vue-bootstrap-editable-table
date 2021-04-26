@@ -1,30 +1,21 @@
 <template>
   <t-data
-    :class="[
-      't-head-cell',
-      readyToResize && 't-head-cell--resizing'
-    ]"
+    class="t-head-cell"
     :title="capitalize(field.type)"
     :width="field.width"
-    :draggable="readyToDrag && !readyToResize && field.name !== generalField"
-    @dragstart="$emit('drag', field.name)"
+    :draggable="readyToDrag && !readyToResize && field.id !== firstColumnId"
+    @dragstart="$emit('drag', field.id)"
     @dragover.prevent
-    @drop="$emit('drop', field.name)"
+    @drop="$emit('drop', field.id)"
   >
-    <div
-      v-if="field.name !== 'name'"
-      class="t-head-func-buttons-wrapper"
-    >
-      <move-button @mousedown="readyToDrag = true" @mouseup="readyToDrag = false"/>
-
-      <delete-button @click="$emit('delete', field.name)"/>
+    <div v-if="field.id !== firstColumnId" class="t-head-func-buttons-wrapper">
+      <move-button class="mr-3" @mousedown="readyToDrag = true" @mouseup="readyToDrag = false"/>
+      <delete-button @click="$emit('delete', field.id)"/>
     </div>
 
-    <font-awesome-icon :icon="getColumnType(field.type).icon"/>
-
-    &nbsp;
-
-    <t-editable-label :value="field.caption" @input="$emit('rename', $event)"/>
+    <font-awesome-icon :icon="icon" class="mr-1"/>
+    <t-editable-label :value="field.title" @input="$emit('rename', $event)"/>
+    <div class="t-head-drag-el" @mouseenter="readyToResize=true" @mouseleave="readyToResize=false"/>
   </t-data>
 </template>
 
@@ -32,9 +23,11 @@
 import {capitalize} from "../../helpers";
 import tData from './t-data.vue';
 import tEditableLabel from "./t-editable-label";
-import MoveButton from "../move-button";
-import DeleteButton from "../delete-button";
+import MoveButton from "../elements/move-button";
+import DeleteButton from "../elements/delete-button";
 import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome';
+import ColumnService from '../../services/ColumnService';
+import throttle from 'lodash/throttle';
 
 export default {
   name: "t-head-cell",
@@ -46,10 +39,8 @@ export default {
     FontAwesomeIcon,
   },
   props: {
-    field: {
-      type: Object,
-      required: true
-    },
+    field: {type: Object, required: true},
+    firstColumnId: {type: [String, Number], required: true},
   },
   data() {
     return {
@@ -58,7 +49,11 @@ export default {
       resizingPosition: null,
     };
   },
-  inject: ['getColumnType', 'generalField'],
+  computed: {
+    icon() {
+      return ColumnService.icon(this.field.type);
+    }
+  },
   mounted() {
     this.$el.addEventListener('mousedown', this.onMouseDown);
     window.addEventListener('mousemove', this.onMouseMove);
@@ -78,35 +73,39 @@ export default {
         this.resizingPosition = e.clientX - this.field.width;
       }
     },
-    onMouseMove(e) {
+    onMouseMove: throttle(function (e) {
       if (this.resizingPosition) {
-        this.$emit('resize', e.clientX - this.resizingPosition);
-      } else {
-        this.calcReadyToResize(e);
+        let newWidth = e.clientX - this.resizingPosition;
+        const MIN_WIDTH = 80;
+        if (newWidth < MIN_WIDTH) {
+          newWidth = MIN_WIDTH;
+        }
+        this.$emit('resize', newWidth);
       }
-    },
+    }, 10),
     onMouseUp() {
       if (!this.resizingPosition) return;
       this.resizingPosition = null;
       this.$emit('resize-stop');
-    },
-    calcReadyToResize(e) {
-      const bounds = e.target.getBoundingClientRect();
-      this.readyToResize = bounds.right - e.clientX < 5;
     },
   },
 };
 </script>
 
 <style>
-.t-head-cell--resizing {
-  cursor: col-resize;
-}
-
 .t-head-cell {
   font-size: 14px;
   background-color: #dee2e6;
   padding: 0 5px;
+}
+
+.t-head-drag-el {
+  cursor: col-resize;
+  position: absolute;
+  right: 0;
+  width: 5px;
+  top: 0;
+  height: 100%;
 }
 
 .t-head-func-buttons-wrapper {
@@ -114,12 +113,13 @@ export default {
   position: absolute;
   top: -31px;
   right: 0;
-  width: 100%;
+  left: 0;
   height: 30px;
   background-color: #efefef;
-  justify-content: space-around;
+  justify-content: center;
   align-items: center;
   opacity: 0;
+  z-index: 1;
 }
 
 .t-head-cell:hover .t-head-func-buttons-wrapper {

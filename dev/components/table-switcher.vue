@@ -3,7 +3,7 @@
     <b-button @click="switchMode" size="sm" class="mb-3">
       {{ jsonMode ? 'Return to table view' : 'Switch JSON mode' }}
     </b-button>
-    <editable-table v-if="!jsonMode" :general-field="generalField" :fields="fields" :rows="rows" v-bind="$attrs" v-on="$listeners"/>
+    <editable-table v-if="!jsonMode" :fields="fields" :rows="rows" v-bind="$attrs" v-on="$listeners"/>
     <vue-json-editor v-else :value="json"/>
   </div>
 </template>
@@ -15,7 +15,6 @@ export default {
   name: "table-switcher",
   components: {EditableTable: VueEditableTable},
   props: {
-    generalField: {type: String, required: true},
     fields: {type: Array, required: true},
     rows: {type: Array, required: true},
   },

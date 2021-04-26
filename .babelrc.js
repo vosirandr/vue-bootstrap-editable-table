@@ -6,6 +6,7 @@ module.exports = api => {
   ]
   const plugins = [
     '@babel/plugin-proposal-class-properties',
+    '@babel/plugin-proposal-export-default-from',
   ]
 
   if (process.env.NODE_ENV === 'testing') {
