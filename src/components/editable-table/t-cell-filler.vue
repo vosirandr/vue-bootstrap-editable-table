@@ -13,12 +13,14 @@ export default {
 };
 </script>
 
-<style>
-.t-cell-filler {
-  display: flex;
-  width: 100%;
-  height: 100%;
-  align-items: center;
-  justify-content: center;
+<style lang="scss">
+.b-editable-table-wrapper {
+  .t-cell-filler {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+  }
 }
 </style>

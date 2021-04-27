@@ -110,40 +110,42 @@ export default {
 };
 </script>
 
-<style>
-.tr {
-  width: 100%;
-  display: flex;
-  flex-flow: row nowrap;
-}
+<style lang="scss">
+.b-editable-table-wrapper {
+  .tr {
+    width: 100%;
+    display: flex;
+    flex-flow: row nowrap;
+  }
 
-.striped:nth-of-type(even) {
-  background-color: #ffffff;
-}
+  .striped:nth-of-type(even) > * {
+    background-color: #ffffff;
+  }
 
-.striped:nth-of-type(odd) {
-  background-color: #f8f9fa;
-}
+  .striped:nth-of-type(odd) > * {
+    background-color: #f8f9fa;
+  }
 
-.t-row-func-buttons-wrapper {
-  display: flex;
-  position: absolute;
-  top: 0;
-  right: 100%;
-  width: 50px;
-  height: 100%;
-  margin-right: 1px;
-  background-color: #efefef;
-  justify-content: space-around;
-  align-items: center;
-  opacity: 0;
-}
+  .t-row-func-buttons-wrapper {
+    display: flex;
+    position: absolute;
+    top: 0;
+    right: 100%;
+    width: 50px;
+    height: 100%;
+    margin-right: 1px;
+    background-color: #efefef;
+    justify-content: space-around;
+    align-items: center;
+    opacity: 0;
+  }
 
-.t-row-cell {
-  position: relative;
-}
+  .t-row-cell {
+    position: relative;
+  }
 
-.t-row-cell:hover .t-row-func-buttons-wrapper {
-  opacity: 1;
+  .t-row-cell:hover .t-row-func-buttons-wrapper {
+    opacity: 1;
+  }
 }
 </style>

@@ -27,32 +27,35 @@ export default {
 };
 </script>
 
-<style>
-.td {
-  display: flex;
-  position: relative;
-  word-break: break-word;
-  align-items: center;
-  justify-content: center;
-  /* overflow: auto; */
-  text-overflow: ellipsis;
-  min-width: 0px;
-  min-height: 38px;
-  /* white-space: nowrap; */
-}
+<style lang="scss">
+.b-editable-table-wrapper {
+  .td {
+    display: flex;
+    position: relative;
+    word-break: break-word;
+    align-items: center;
+    justify-content: center;
+    /* overflow: auto; */
+    text-overflow: ellipsis;
+    min-width: 0px;
+    min-height: 38px;
+    /* white-space: nowrap; */
 
-.td-design {
-  border-bottom: 1px solid #d0d0d0;
-  border-right: 1px solid #d0d0d0;
-}
+    &.td-design {
+      border-bottom: 1px solid #d0d0d0;
+      border-right: 1px solid #d0d0d0;
+    }
 
-.td-design:first-child {
-  border-left: 1px solid #d0d0d0;
-}
+    &.td-design:first-child {
+      border-left: 1px solid #d0d0d0;
+    }
+  }
 
-.empty-td-design {
-  background-color: #ffffff;
-  border-bottom: 1px solid transparent;
-  border-right: 1px solid transparent;
+  .td.empty-td-design,
+  .striped .td.empty-td-design {
+    background-color: #ffffff;
+    border-bottom: 1px solid transparent;
+    border-right: 1px solid transparent;
+  }
 }
 </style>

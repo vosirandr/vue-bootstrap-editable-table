@@ -1,8 +1,8 @@
 <template>
-  <div class="table-wrapper">
-    <div class="table">
+  <div class="b-editable-table-wrapper">
+    <div class="b-editable-table">
       <t-head
-        class="table-header"
+        class="b-editable-table-header"
         :fields="tempFields"
         :first-column-id="firstColumnId"
         @add-col="$emit('add-col', $event)"
@@ -13,8 +13,8 @@
         @move-col="$emit('move-col', $event)"
       />
 
-      <div class="table-body-wrapper" :style="{height}">
-        <div class="table-body" v-click-outside="onClickOutside">
+      <div class="b-editable-table-body-wrapper" :style="{height}">
+        <div class="b-editable-table-body" v-click-outside="onClickOutside">
           <t-row
             v-for="(row, i) in tempRows" :key="row.id"
             :fields="tempFields"
@@ -206,26 +206,35 @@ export default {
 };
 </script>
 
-<style>
-.table-wrapper {
+<style lang="scss">
+.b-editable-table-wrapper {
   padding: 2rem 0;
   position: relative;
   max-height: calc(100vh - 4rem);
   overflow-y: auto;
+
+  .td .btn:focus, .btn-focus {
+    box-shadow: none;
+  }
+
+  .td:last-child {
+    width: 50px
+  }
 }
 
-.table-body-wrapper {
+.b-editable-table-body-wrapper {
   overflow: auto;
 }
 
-.table-body-wrapper,
-.table-header {
+.b-editable-table-body-wrapper,
+.b-editable-table-header {
   padding-left: 50px;
 }
 
-.table {
+.b-editable-table {
   /* structure */
-  width: fit-content;
+  //width: fit-content;
+  width: 100%;
   height: 100%;
   /* design */
   font-family: Arial;
@@ -235,13 +244,4 @@ export default {
   justify-content: center;
   text-align: center;
 }
-
-.td .btn:focus, .btn-focus {
-  box-shadow: none;
-}
-
-.td:last-child {
-  width: 50px
-}
-
 </style>

@@ -1,6 +1,6 @@
 <template>
   <t-data
-    class="table-total-cell"
+    class="b-editable-table-total-cell"
     :width="column.width"
   >
     <b v-if="column.id === firstColumnId">Total</b>
@@ -101,17 +101,20 @@ export default {
 };
 </script>
 
-<style>
-.table-total-cell .dropdown {
-  vertical-align: baseline;
-}
+<style lang="scss">
 
-.table-total-cell .dropdown > button {
-  padding: 1px;
-}
+.b-editable-table-total-cell {
+  .dropdown {
+    vertical-align: baseline;
 
-.table-total-cell .dropdown-menu {
-  max-height: 100px;
-  overflow-y: auto;
+    & > button {
+      padding: 1px;
+    }
+  }
+
+  .dropdown-menu {
+    max-height: 100px;
+    overflow-y: auto;
+  }
 }
 </style>

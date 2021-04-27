@@ -96,14 +96,16 @@ export default {
 };
 </script>
 
-<style>
-.th > .td {
-  white-space: normal;
-  justify-content: center;
-  border-top: 1px solid #d0d0d0;
-}
+<style lang="scss">
+.b-editable-table-wrapper {
+  .th > .td {
+    white-space: normal;
+    justify-content: center;
+    border-top: 1px solid #d0d0d0;
+  }
 
-.td__func-buttons-wrapper {
-  background-color: #dee2e6;
+  .td__func-buttons-wrapper {
+    background-color: #dee2e6;
+  }
 }
 </style>

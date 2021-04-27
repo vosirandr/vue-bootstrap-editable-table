@@ -1,5 +1,5 @@
 <template>
-  <div class="tr table-total">
+  <div class="tr b-editable-table-total">
     <t-total-cell
       v-for="column in columns"
       :key="column.id"
@@ -32,7 +32,7 @@ export default {
 </script>
 
 <style>
-.table-total {
+.b-editable-table-total {
   min-height: 2rem;
 }
 </style>
