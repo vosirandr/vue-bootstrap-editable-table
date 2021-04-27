@@ -233,8 +233,8 @@ export default {
 
 .b-editable-table {
   /* structure */
-  //width: fit-content;
-  width: 100%;
+  width: fit-content;
+  min-width: 100%;
   height: 100%;
   /* design */
   font-family: Arial;
