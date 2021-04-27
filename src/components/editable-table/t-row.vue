@@ -13,7 +13,7 @@
         :value="row.values[firstField.id]"
         :field="firstField"
         :cell="getEditableCellData(firstField.id)"
-        :cell-editor-component="cellEditorComponent"
+        :cell-component-resolver="cellComponentResolver"
         @switch-edit-mode="switchEditMode(firstField.id)"
         @change="onValueChange($event, firstField.id)"
         @validate="onValidate(firstField.id, $event)"
@@ -36,7 +36,7 @@
         :value="row.values[field.id]"
         :field="field"
         :cell="getEditableCellData(field.id)"
-        :cell-editor-component="cellEditorComponent"
+        :cell-component-resolver="cellComponentResolver"
         @switch-edit-mode="switchEditMode(field.id)"
         @change="onValueChange($event, field.id)"
         @validate="onValidate(field.id, $event)"
@@ -65,7 +65,7 @@ export default {
     fields: {type: Array, required: true},
     row: {type: Row, required: true},
     editableCell: {type: Object, default: null},
-    cellEditorComponent: {type: Function, required: true}
+    cellComponentResolver: {type: Function, required: true}
   },
   data() {
     return {

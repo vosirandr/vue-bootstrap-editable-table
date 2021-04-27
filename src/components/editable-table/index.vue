@@ -20,7 +20,7 @@
             :fields="tempFields"
             :row="row"
             :editable-cell="editableCell && row.id === editableCell.row ? editableCell : null"
-            :cell-editor-component="cellEditorComponent"
+            :cell-component-resolver="cellComponentResolver"
             @switch-edit-mode="switchEditMode"
             @del-row="onDeleteRow(row.id)"
             @change="onChangeValueInCell"
@@ -77,7 +77,7 @@ export default {
     rows: {type: Array, required: true},
     columnTypes: {type: Array, default: () => Object.values(COLUMN_TYPES)},
     height: {type: String, default: '500px'},
-    cellEditorComponent: {type: Function, default: () => null}
+    cellComponentResolver: {type: Function, default: () => null}
   },
   data() {
     return {

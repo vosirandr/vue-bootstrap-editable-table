@@ -1,5 +1,12 @@
 <template>
+  <component
+    v-if="cellComponent"
+    :is="cellComponent"
+    v-bind="cellComponentBindings"
+    v-on="$listeners"
+  />
   <t-cell-filler
+    v-else
     class="t-date-cell"
     :title="title"
     @click="$emit('switch-edit-mode')"
@@ -29,7 +36,7 @@
       </b-input-group-append>
     </b-input-group>
 
-    <span v-else>{{ formatValue }}</span>
+    <span v-else>{{ valueFormatted }}</span>
   </t-cell-filler>
 </template>
 
@@ -41,7 +48,7 @@ export default {
   name: 't-cell-date',
   extends: tTypedCell,
   computed: {
-    formatValue() {
+    valueFormatted() {
       if (!this.value) return '';
       return moment(this.value).format('D MMM YYYY');
     }

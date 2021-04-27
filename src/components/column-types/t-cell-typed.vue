@@ -1,6 +1,6 @@
 <template>
   <t-cell-filler :title="title">
-    <div>{{ formatValue }}</div>
+    <div>{{ valueFormatted }}</div>
   </t-cell-filler>
 </template>
 
@@ -17,7 +17,7 @@ export default {
     field: {type: Column, required: true},
     value: {type: [Object, String, Number], default: null},
     cell: {type: Object, default: null},
-    cellEditorComponent: {type: Function, required: true},
+    cellComponentResolver: {type: Function, required: true},
   },
   data() {
     return {
@@ -25,7 +25,7 @@ export default {
     };
   },
   computed: {
-    formatValue() {
+    valueFormatted() {
       if ([undefined, null].includes(this.value)) return '';
       return this.value;
     },
@@ -41,20 +41,25 @@ export default {
     title() {
       return this.isValid ? '' : `Expected data format: ${this.field.type}`;
     },
-    editorComponent() {
-      return this.cellEditorComponent(this.field);
+    cellComponent() {
+      return this.cellComponentResolver(this.field);
     },
-    editorComponentBindings(){
-      return {
-        column: this.field,
-        value: this.value,
-        setValue: this.setValue,
-        valid: this.isValid
-      };
+    cellComponentBindings() {
+      if (this.cellComponent) {
+        return {
+          column: this.field,
+          value: this.value,
+          valueFormatted: this.valueFormatted,
+          setValue: this.setValue,
+          isEdit: this.edit,
+          isValid: this.isValid
+        };
+      }
+      return {};
     }
   },
   watch: {
-    'value.value'() {
+    value() {
       this.updateLocalValue();
     },
     edit() {

@@ -1,29 +1,27 @@
 <template>
+  <component
+    v-if="cellComponent"
+    :is="cellComponent"
+    v-bind="cellComponentBindings"
+    v-on="$listeners"
+  />
   <t-cell-filler
+    v-else
     :title="title"
     class="t-text-cell"
     @click="$emit('switch-edit-mode')"
   >
-    <template v-if="edit">
-      <component
-        v-if="editorComponent"
-        :is="editorComponent"
-        v-bind="editorComponentBindings"
-        @input="$emit('validate', $event)"
-      />
-      <b-form-textarea
-        v-else
-        ref="input"
-        v-model="localValue"
-        :state="isNullIfValid"
-        size="sm"
-        @change="setValue"
-        @input="$emit('validate', $event)"
-        @click.stop
-      />
-    </template>
-
-    <span v-else>{{ formatValue }}</span>
+    <b-form-textarea
+      v-if="edit"
+      ref="input"
+      v-model="localValue"
+      :state="isNullIfValid"
+      size="sm"
+      @change="setValue"
+      @input="$emit('validate', $event)"
+      @click.stop
+    />
+    <span v-else>{{ valueFormatted }}</span>
   </t-cell-filler>
 </template>
 

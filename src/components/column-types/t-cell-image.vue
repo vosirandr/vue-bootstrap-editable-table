@@ -1,5 +1,12 @@
 <template>
+  <component
+    v-if="cellComponent"
+    :is="cellComponent"
+    v-bind="cellComponentBindings"
+    v-on="$listeners"
+  />
   <t-cell-filler
+    v-else
     :title="title"
     @click="$emit('switch-edit-mode')"
   >
@@ -15,7 +22,7 @@
 
     <b-img
       v-else-if="hasImageUrl"
-      :src="formatValue"
+      :src="valueFormatted"
       :height="imageSize.height"
       :width="imageSize.width"
     />
@@ -36,7 +43,7 @@ export default {
       return DEFAULT_IMAGE_SIZE;
     },
     hasImageUrl() {
-      return !isUndefinedOrNullOrEmpty(this.formatValue);
+      return !isUndefinedOrNullOrEmpty(this.valueFormatted);
     },
   },
 };

@@ -1,30 +1,28 @@
 <template>
+  <component
+    v-if="cellComponent"
+    :is="cellComponent"
+    v-bind="cellComponentBindings"
+    v-on="$listeners"
+  />
   <t-cell-filler
+    v-else
     class="t-json-value"
     :title="title"
-    @click="editMode = true"
+    @click="$emit('switch-edit-mode')"
   >
-    <template v-if="editMode">
-      <component
-        v-if="editorComponent"
-        :is="editorComponent"
-        v-bind="editorComponentBindings"
-        @input="$emit('validate', $event)"
-        @exit="editMode = false"
-      />
-      <b-form-textarea
-        v-else
-        ref="input"
-        class="t-json-value__format"
-        v-model="val"
-        :state="isNullIfValid"
-        size="sm"
-        @change="setValue"
-        @input="$emit('validate', $event)"
-        @click.stop
-      />
-    </template>
-    <span v-else class="t-json-value__format">{{ formatValue }}</span>
+    <b-form-textarea
+      v-if="edit"
+      ref="input"
+      class="t-json-value__format"
+      :value="val"
+      :state="isNullIfValid"
+      size="sm"
+      @blur="val = $event.target.value"
+      @input="validate"
+      @click.stop
+    />
+    <span v-else class="t-json-value__format">{{ valueFormatted }}</span>
   </t-cell-filler>
 </template>
 
@@ -39,31 +37,35 @@ export default {
     jsonEditor,
   },
   extends: tTypedCell,
-  data() {
-    return {
-      editMode: false
-    };
-  },
   computed: {
     val: {
       get() {
-        return JSON.stringify(this.value, null, 2);
+        return JSON.stringify(this.localValue || {}, null, 2);
       },
       set(v) {
         try {
           this.setValue(JSON.parse(v));
         } catch (e) {
-          this.setValue(null);
+          // nothing
         }
       }
     },
-    formatValue() {
+    valueFormatted() {
       if (!this.value) return '';
-      const jsonString = JSON.stringify(this.value, null, 2);
-      return sliceWithEllipsis(jsonString, 100);
+      return sliceWithEllipsis(this.val, 100);
     }
   },
-  methods: {}
+  methods: {
+    validate(val) {
+      let object;
+      try {
+        object = JSON.parse(val);
+      } catch {
+        object = undefined;
+      }
+      this.$emit('validate', object);
+    }
+  }
 };
 </script>
 

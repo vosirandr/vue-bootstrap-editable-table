@@ -10,7 +10,7 @@
           v-else
           :fields="tableFields"
           :rows="tableRows"
-          :cell-editor-component="cellEditorComponent"
+          :cell-component-resolver="cellComponent"
           height="500px"
           @change="onChangeValue"
           @change-aggregating="onChangeAggregating"
@@ -117,7 +117,7 @@ export default {
       await this.fieldRename({id, title});
     },
 
-    cellEditorComponent(column) {
+    cellComponent(column) {
       if (column.type === COLUMN_TYPES.JSON) {
         return JsonEditor;
       }
