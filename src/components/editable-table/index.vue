@@ -237,7 +237,7 @@ export default {
   min-width: 100%;
   height: 100%;
   /* design */
-  font-family: Arial;
+  font-family: Arial, serif;
   font-size: 1rem;
   margin: 0;
   line-height: 1.5;

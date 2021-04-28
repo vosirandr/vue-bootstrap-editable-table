@@ -7,6 +7,7 @@
 <script>
 import TCellFiller from "../editable-table/t-cell-filler";
 import Column from '../../dto/Column';
+import {Row} from '../../dto/index';
 
 export default {
   name: 't-cell-typed',
@@ -15,6 +16,7 @@ export default {
   },
   props: {
     field: {type: Column, required: true},
+    row: {type: Row, required: true},
     value: {type: [Object, String, Number], default: null},
     cell: {type: Object, default: null},
     cellComponentResolver: {type: Function, required: true},
@@ -48,6 +50,7 @@ export default {
       if (this.cellComponent) {
         return {
           column: this.field,
+          row: this.row,
           value: this.value,
           valueFormatted: this.valueFormatted,
           setValue: this.setValue,
