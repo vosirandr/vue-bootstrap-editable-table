@@ -1,6 +1,8 @@
 # Разработка расширенного конструктора таблицы
 _Задание для фронт-енд разработчика в Conjoint.ly_
 
+See [list of components](./src/components/README.md)
+
 Результатом данного задания должен быть vue-компонент (с сетью вложенных компонентов) в виде конструктора таблицы, который принимает на вход данные и отрисовывает конструктор-таблицу. Часть задания уже выполнена.
 
 <table>
@@ -75,15 +77,10 @@ _Задание для фронт-енд разработчика в Conjoint.ly
 # install dependencies
 $ npm install # Or yarn install
 
-# serve with hot reload at localhost:3000
+# serve with hot reload at localhost:10388
 $ npm run dev
 
 # build for production and launch server
 $ npm run build
-$ npm start
 
-# generate static project
-$ npm run generate
 ```
-
-For detailed explanation on how things work, checkout the [Nuxt.js docs](https://github.com/nuxt/nuxt.js).
