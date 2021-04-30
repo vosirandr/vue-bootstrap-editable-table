@@ -1,7 +1,7 @@
 {
-    "name": "@conjointly/vue-editable-table",
+    "name": "@conjointly-org/vue-editable-table",
     "version": "1.0.0",
-    "description": "Test task application",
+    "description": "Vue editable table for bootstrap layout",
     "author": "Conjoint.ly <support@conjoint.ly>",
     "homepage": "https://github.com/Conjoint-ly/vue-bootstrap-editable-table",
     "private": true,
@@ -17,6 +17,9 @@
         "build": "node build/build-library.js",
         "lint": "eslint --ext .js,.vue --ignore-path .gitignore .",
         "precommit": "npm run lint"
+    },
+    "publishConfig": {
+        "access": "public"
     },
     "dependencies": {
         "@fortawesome/fontawesome-svg-core": "^1.2.34",
