@@ -102,7 +102,6 @@ export default {
       this.$emit('del-row');
     },
     paste(fieldId, e) {
-      debugger;
       const csv = e.clipboardData.getData('text');
       const data = csvToArray(csv);
       if (data.length === 0 || (data.length === 1 && data[0].length === 1)) return;

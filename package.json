@@ -1,6 +1,6 @@
 {
     "name": "@conjointly-org/vue-editable-table",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Vue editable table for bootstrap layout",
     "author": "Conjoint.ly <support@conjoint.ly>",
     "homepage": "https://github.com/Conjoint-ly/vue-bootstrap-editable-table",
