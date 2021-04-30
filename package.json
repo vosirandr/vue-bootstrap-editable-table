@@ -4,7 +4,6 @@
     "description": "Vue editable table for bootstrap layout",
     "author": "Conjoint.ly <support@conjoint.ly>",
     "homepage": "https://github.com/Conjoint-ly/vue-bootstrap-editable-table",
-    "private": true,
     "repository": "Conjoint-ly/vue-bootstrap-editable-table",
     "main": "dist/vue-editable-table.cjs.js",
     "unpkg": "dist/vue-editable-table.umd.min.js",
