@@ -2,7 +2,6 @@
   <div
     class="t-cell-filler"
     v-on="$listeners"
-    tabindex="1"
   >
     <slot />
   </div>
